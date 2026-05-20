@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Privacy Policy for KK Version Control, covering local data storage, Google Drive OAuth scope, no telemetry, remote backends, and user responsibilities.">
+    <meta name="author" content="Godynheil A. Quisto">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#191a1b">
+    <link rel="canonical" href="https://godynheil.github.io/kk/privacy-policy.html">
+    <link rel="icon" href="icon/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png">
+    <link rel="apple-touch-icon" href="icon/apple-touch-icon.png">
+    <link rel="manifest" href="icon/site.webmanifest">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Privacy Policy | KK Version Control">
+    <meta property="og:description" content="How KK Version Control handles local data, Google Drive OAuth, remote backends, and telemetry.">
+    <meta property="og:url" content="https://godynheil.github.io/kk/privacy-policy.html">
+    <meta property="og:image" content="https://godynheil.github.io/kk/icon/android-chrome-512x512.png">
+    <meta property="og:site_name" content="KK Version Control">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Privacy Policy | KK Version Control">
+    <meta name="twitter:description" content="How KK Version Control handles local data, Google Drive OAuth, remote backends, and telemetry.">
+    <meta name="twitter:image" content="https://godynheil.github.io/kk/icon/android-chrome-512x512.png">
+    <title>Privacy Policy | KK Version Control</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #191a1b;
+            color: #bfbfba;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            background-color: #191a1b;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #2a2b2c;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        nav a {
+            color: #3994bc;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        main {
+            flex: 1;
+            padding: 3rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        h1 {
+            color: #bfbfba;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: #bfbfba;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: #bfbfba;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        em {
+            font-style: italic;
+        }
+
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        code {
+            background-color: #2a2b2c;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: #2a2b2c;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        blockquote {
+            border-left: 3px solid #3994bc;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #9a9b9b;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #2a2b2c;
+            margin: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            border: 1px solid #2a2b2c;
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2a2b2c;
+        }
+
+        a {
+            color: #3994bc;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid #2a2b2c;
+            font-size: 0.9rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            justify-items: center;
+            text-align: center;
+        }
+
+        .footer-section {
+            text-align: center;
+        }
+
+        .footer-section h4 {
+            color: #bfbfba;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            margin-left: 0;
+            margin-bottom: 0;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: #9a9b9b;
+        }
+
+        .footer-section a:hover {
+            color: #3994bc;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #2a2b2c;
+            color: #6a6b6c;
+        }
+
+        .footer-bottom p {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 600px) {
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            main {
+                padding: 2rem 1.5rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            <li><a href="terms-of-service.html">Terms of Service</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>KK Privacy Policy</h1>
+
+        <p><strong>Effective Date:</strong> May 21, 2026<br>
+        <strong>Licensor:</strong> Godynheil A. Quisto - <a href="mailto:godynheil@quisto.ph">godynheil@quisto.ph</a></p>
+
+        <hr>
+
+        <h2>1. Overview</h2>
+        <p>KK ("KK Version Control") is a source-available command-line tool for large-file version control, distributed under the <strong>Business Source License 1.1 (BSL 1.1)</strong>. It operates entirely on your local machine and your chosen storage backends. There is no centralized "KK Service," and the Licensor does not collect, transmit, or store any personal data, repository data, or usage information.</p>
+
+        <hr>
+
+        <h2>2. What Data KK Stores - and Where</h2>
+        <p>All data processed by KK is stored either on your local device or on the remote storage backends that <strong>you</strong> configure and control. The following local paths are created inside your project's <code>.kk/</code> directory and your OS user configuration directory:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Contents</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>.kk/git/</code></td>
+                    <td>Embedded bare Git repository (commit history, tree objects, refs)</td>
+                </tr>
+                <tr>
+                    <td><code>.kk/objects/</code></td>
+                    <td>SHA-256-addressed large-file blob cache</td>
+                </tr>
+                <tr>
+                    <td><code>.kk/config.json</code></td>
+                    <td>Remote backend configuration (types, folder IDs, auth file paths)</td>
+                </tr>
+                <tr>
+                    <td><code>.kk/tracks.json</code></td>
+                    <td>Glob patterns of tracked large-file paths</td>
+                </tr>
+                <tr>
+                    <td><code>.kk/repo.json</code></td>
+                    <td>Repository metadata (repo ID, name, creation timestamp)</td>
+                </tr>
+                <tr>
+                    <td><code>.kk/logs/</code></td>
+                    <td>Local operational log files</td>
+                </tr>
+                <tr>
+                    <td><code>.kk/tmp/</code></td>
+                    <td>Temporary staging files (created and deleted during operations)</td>
+                </tr>
+                <tr>
+                    <td><code>&lt;OS config dir&gt;/KK/gdrive/&lt;name&gt;.json</code></td>
+                    <td>Google Drive OAuth tokens (see Section 4)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <blockquote>
+            On Windows the OS config dir is <code>%APPDATA%</code>. On macOS/Linux it is <code>~/.config</code>.
+        </blockquote>
+
+        <p>The Licensor has no access to any of these locations. All data remains exclusively under your control.</p>
+
+        <hr>
+
+        <h2>3. No Telemetry</h2>
+        <p>KK collects <strong>zero</strong> telemetry, analytics, crash reports, usage statistics, or diagnostics of any kind. The codebase contains no network calls to the Licensor's infrastructure, no "phone-home" behavior, and no third-party tracking SDKs.</p>
+
+        <hr>
+
+        <h2>4. Google Drive OAuth & Bundled Client ID</h2>
+
+        <h3>4.1 Bundled OAuth Application</h3>
+        <p>When you run <code>kk setup gdrive</code>, KK uses a <strong>bundled default Google OAuth Client ID</strong> to initiate the authorization flow on your behalf. This Client ID identifies the KK application registered in Google Cloud Console. It does <strong>not</strong> grant the Licensor any access to your Google account or files - it is solely used to identify the application during the standard OAuth 2.0 consent flow.</p>
+
+        <p>You may supply your own OAuth credentials at any time by setting the following environment variables before running <code>kk setup gdrive</code>:</p>
+
+        <pre><code>KK_GOOGLE_CLIENT_ID=&lt;your-client-id&gt;
+KK_GOOGLE_CLIENT_SECRET=&lt;your-client-secret&gt;</code></pre>
+
+        <h3>4.2 How the OAuth Flow Works</h3>
+        <p>KK implements the OAuth 2.0 Authorization Code Grant with <strong>PKCE</strong> (Proof Key for Code Exchange, RFC 7636) and CSRF state validation:</p>
+        <ol>
+            <li>A temporary local HTTP server is opened on <code>127.0.0.1</code> at a <strong>randomly chosen ephemeral port</strong> to receive the redirect callback. This port is never exposed beyond your local machine.</li>
+            <li>Your browser is directed to Google's authorization endpoint.</li>
+            <li>After you grant consent, Google redirects back to <code>127.0.0.1</code> with an authorization code.</li>
+            <li>KK exchanges the code for tokens directly with Google (<code>oauth2.googleapis.com</code>) - no proxy, no Licensor server is involved.</li>
+            <li>The local HTTP server is shut down immediately after the callback is received.</li>
+        </ol>
+
+        <h3>4.3 Scopes Requested</h3>
+        <p>KK requests only the <code>https://www.googleapis.com/auth/drive.file</code> scope. This restricts KK's access to <strong>only the files and folders that KK itself creates</strong> in your Google Drive. It cannot read, modify, or delete any other files in your Drive.</p>
+
+        <h3>4.4 Token Storage</h3>
+        <p>The resulting access token and refresh token are written to your OS user configuration directory (e.g., <code>%APPDATA%\KK\gdrive\default.json</code> on Windows) with restrictive file permissions (<code>0600</code> - readable only by your user account). These tokens are <strong>never transmitted to the Licensor or any third party</strong>.</p>
+
+        <hr>
+
+        <h2>5. Other Remote Backends</h2>
+        <p>KK supports additional remote backends that you configure:</p>
+        <ul>
+            <li><strong>Local / NAS:</strong> Files are transferred directly over your local filesystem or network share. No external network traffic.</li>
+            <li><strong>rclone:</strong> KK invokes the <code>rclone</code> binary installed on your system as a subprocess. Any data transmitted goes directly between your machine and the rclone-configured destination. KK does not intercept or log the transferred data. Consult <a href="https://rclone.org/">rclone's documentation</a> for your specific remote.</li>
+            <li><strong>SSH (planned):</strong> Not yet implemented. This policy will be updated when SSH support is added.</li>
+        </ul>
+
+        <p>You are solely responsible for securing credentials (OAuth tokens, passwords, SSH keys) for all configured backends. Please consult the privacy policies of any third-party services you connect.</p>
+
+        <hr>
+
+        <h2>6. Your Responsibilities</h2>
+        <p>Consistent with the BSL 1.1 <strong>Assumption of Risk</strong> clause, you acknowledge that:</p>
+        <ul>
+            <li>You are solely responsible for backing up your data and verifying that the Software performs correctly in your environment.</li>
+            <li>Unauthorized access to your remote environments caused by compromised local tokens or misconfigured access controls is your responsibility.</li>
+            <li>The Licensor has no ability to recover, restore, or access your data.</li>
+        </ul>
+
+        <hr>
+
+        <h2>7. Children's Privacy</h2>
+        <p>KK is a developer tool not intended for use by persons under 13 years of age (or the applicable age of digital consent in your jurisdiction). The Licensor does not knowingly collect data from minors.</p>
+
+        <hr>
+
+        <h2>8. Disclaimer of Liability</h2>
+        <p><strong>THE LICENSED WORK IS PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTY OF ANY KIND, WHETHER EXPRESS, IMPLIED, STATUTORY, OR OTHERWISE.</strong></p>
+
+        <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSOR SHALL NOT BE LIABLE FOR ANY CLAIM, DAMAGE, LOSS, COST, EXPENSE, OR LIABILITY ARISING FROM THE USE OF THE SOFTWARE. THIS INCLUDES, BUT IS NOT LIMITED TO, DATA LOSS, ASSET CORRUPTION, SECURITY INCIDENTS, UNAUTHORIZED ACCESS, OR DISRUPTION FROM THIRD-PARTY SERVICES.</p>
+
+        <p>If liability cannot be fully excluded under applicable law, the Licensor's total cumulative liability shall not exceed the greater of: (1) the amount you paid to the Licensor in the twelve months before the claim arose, or (2) <strong>USD $100</strong>.</p>
+
+        <p>Full warranty disclaimers and liability limitations are detailed in the <code>LICENSE.MD</code> file.</p>
+
+        <hr>
+
+        <h2>9. Changes to This Policy</h2>
+        <p>Revisions will be committed directly to the project repository with a dated commit message. Continued use of the Software after a revision constitutes acceptance of the updated policy.</p>
+
+        <hr>
+
+        <h2>10. Contact</h2>
+        <p>For privacy-related inquiries or legal notices, contact:</p>
+
+        <p><strong>Godynheil A. Quisto</strong><br>
+        <a href="mailto:godynheil@quisto.ph">godynheil@quisto.ph</a></p>
+
+        <p>For general questions or bug reports, please open an issue in the public project repository.</p>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#how-it-works">How It Works</a></li>
+                    <li><a href="index.html#pricing">Pricing / Licensing</a></li>
+                    <li><a href="https://github.com/godynheil/kk">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="terms-of-service.html">Terms of Service</a></li>
+                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <ul>
+                    <li><a href="mailto:godynheil@quisto.ph">godynheil@quisto.ph</a></li>
+                    <li><a href="https://github.com/godynheil/kk/issues">GitHub Issues</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
+            <p>KK Version Control is distributed under the Business Source License 1.1.</p>
+            <p>"KK", "KK Version Control", and "kk" are trademarks of Godynheil A. Quisto.</p>
+        </div>
+    </footer>
+</body>
+</html>
