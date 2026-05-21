@@ -1,4 +1,4 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
 
-Sitemap: https://godynheil.github.io/kk/sitemap.xml
+Sitemap: https://kkvcs.com/sitemap.xml
