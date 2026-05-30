@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="KK Glossary - canonical definitions for terms used throughout KK's code, documentation, and UI."
+    />
+    <meta name="author" content="Godynheil A. Quisto" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#191a1b" />
+    <link rel="canonical" href="https://kkvcs.com/docs/glossary/" />
+    <link rel="icon" href="/icon/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icon/favicon-16x16.png"
+    />
+    <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
+    <link rel="manifest" href="/icon/site.webmanifest" />
+    <link rel="stylesheet" href="/css/core.css" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Glossary | KK Version Control System" />
+    <meta
+      property="og:description"
+      content="Canonical definitions for KK terminology."
+    />
+    <meta property="og:url" content="https://kkvcs.com/docs/glossary/" />
+    <meta
+      property="og:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <meta property="og:site_name" content="KK Version Control System" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Glossary | KK Version Control System" />
+    <meta
+      name="twitter:description"
+      content="Canonical definitions for KK terminology."
+    />
+    <meta
+      name="twitter:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <title>Glossary | KK Version Control System</title>
+    <link rel="stylesheet" href="/css/pages/docs-glossary.css" />
+    <script src="/js/copy-code.js" defer></script>
+  </head>
+  <body>
+    <nav aria-label="Main navigation">
+      <div class="container">
+        <a href="/" class="logo">KK Version Control System</a>
+        <ul>
+          <li><a href="/#how-it-works">How It Works</a></li>
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#backends">Backends</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/docs/" class="active">Documentation</a></li>
+          <li>
+            <a href="https://github.com/godynheil/kk" rel="noopener noreferrer"
+              >GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main>
+      <h1>KK Glossary</h1>
+      <p>
+        Canonical definitions for terms used throughout KK's code,
+        documentation, and UI.
+      </p>
+
+      <ul class="term-list">
+        <li class="term-item">
+          <div class="term-name">Driver</div>
+          <div class="term-definition">
+            A pluggable implementation of the
+            <code>remote.Driver</code> interface that knows how to store and
+            retrieve KK objects, manifests, project files, and history bundles
+            on a specific storage destination. The three built-in drivers are
+            <code>local</code> (filesystem / NAS), <code>rclone</code> (any
+            rclone-supported provider), and <code>drive</code> (native Google
+            Drive).
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Git Remote</div>
+          <div class="term-definition">
+            A standard Git hosting URL (GitHub, GitLab, Gitea, etc.) added via
+            <code>kk remote add git</code>. KK uses it to push and pull
+            <strong>pointer history</strong> only — large-file blobs never
+            travel through a git remote.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">History Bundle</div>
+          <div class="term-definition">
+            A standard <code>git bundle</code> file containing commit history
+            for one or more branches. When no git remote is configured, KK
+            stores bundles in
+            <code>&lt;driver&gt;/&lt;project&gt;/history/&lt;branch&gt;/</code>
+            so teammates can restore full git history via
+            <code>kk clone --history</code> or <code>kk fetch</code>.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">History State</div>
+          <div class="term-definition">
+            <code>.kk/history-state.json</code> — records which history bundle
+            was last applied from each remote, so <code>kk fetch</code> /
+            <code>kk pull</code>
+            downloads only new incremental bundles.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">KK Remote</div>
+          <div class="term-definition">
+            A named, user-configured entry in <code>.kk/config.json</code> that
+            pairs a human-readable name with a driver type and its settings
+            (path, folder ID, credentials, roles, etc.). Managed with
+            <code>kk remote add / list / remove</code>.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Local Cache</div>
+          <div class="term-definition">
+            The <code>.kk/objects/</code> directory on the local machine — a
+            local copy of objects fetched from or staged for upload to a driver.
+            <code>kk pull-file</code> populates it;
+            <code>kk objects prune</code>
+            cleans it.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Manifest</div>
+          <div class="term-definition">
+            A per-project JSON file
+            (<code>manifests/&lt;repo_id&gt;.json</code>) on the driver that
+            lists every object the driver currently holds for this project. Used
+            by <code>kk status</code>, <code>kk fsck</code>, and future UI
+            tooling.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Object / OID</div>
+          <div class="term-definition">
+            A content-addressed binary blob stored in the driver under
+            <code>objects/&lt;oid[:2]&gt;/&lt;oid[2:4]&gt;/&lt;oid&gt;</code>.
+            The OID is the lowercase hex SHA-256 digest of the file's content.
+            Identical content across any project, branch, or machine always maps
+            to the same OID.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Pointer</div>
+          <div class="term-definition">
+            A small text file (stored in git history) that replaces a large
+            binary. It records the file's SHA-256 OID, byte size, and the
+            original filename. KK substitutes the real file for the pointer on
+            demand (<code>kk pull-file</code>).
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Project Mirror</div>
+          <div class="term-definition">
+            The full copy of the committed working tree (source files, pointer
+            files, and <code>.kk/</code> metadata) that
+            <code>kk push</code> synchronises to the driver's project folder.
+            Excludes <code>objects/</code>, <code>manifests/</code>,
+            <code>tmp/</code>, <code>logs/</code>, and <code>git/</code>.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Push State</div>
+          <div class="term-definition">
+            <code>.kk/push-state.json</code> — records the last HEAD commit
+            successfully pushed to each named remote, enabling incremental
+            <code>kk push</code> to upload only the files changed since that
+            commit.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Refs Snapshot</div>
+          <div class="term-definition">
+            A <code>refs.json</code> file stored alongside history bundles. It
+            records the ordered bundle list, the current branch-tip SHAs, and
+            the <code>base_ref</code> used to build the next incremental bundle.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Repo ID</div>
+          <div class="term-definition">
+            A UUID generated once at <code>kk init</code> and stored in
+            <code>.kk/repo.json</code>. Mirrors also contain this file;
+            <code>kk push</code> uses it to detect project-name collisions
+            before overwriting a remote folder.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Stage</div>
+          <div class="term-definition">
+            The KK staging area, analogous to git's index.
+            <code>kk add</code> converts tracked large files to pointers and
+            adds them (along with all other files) to the embedded git index
+            inside <code>.kk/git/</code>.
+          </div>
+        </li>
+
+        <li class="term-item">
+          <div class="term-name">Track</div>
+          <div class="term-definition">
+            Marking a file-glob pattern (e.g. <code>*.psd</code>,
+            <code>Content/**/*.uasset</code>) so KK automatically converts
+            matching files to pointers when staging with <code>kk add</code>.
+            Managed with <code>kk track</code> / <code>kk untrack</code>.
+          </div>
+        </li>
+      </ul>
+
+      <hr />
+
+      <h2>See Also</h2>
+
+      <ul>
+        <li>
+          <a href="/docs/how-it-works/">How It Works</a> — end-to-end workflow
+        </li>
+        <li>
+          <a href="/docs/git-remote/">Git Remote Integration</a> — Git remotes
+          vs object storage
+        </li>
+        <li>
+          <a href="/docs/how-to/">How To Guide</a> — step-by-step user guides
+        </li>
+      </ul>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="https://github.com/godynheil/kk">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Documentation</h4>
+          <ul>
+            <li><a href="/docs/installation/">Installation</a></li>
+            <li><a href="/docs/how-to/">How To Guide</a></li>
+            <li><a href="/docs/glossary/">Glossary</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/terms-of-service/">Terms of Service</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/license/">License</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
+        <p>
+          KK Version Control System is distributed under the Modified GNU
+          General Public License, Version 2.0.
+        </p>
+        <p>
+          "KK", "KK Version Control System", and "kk" are trademarks of
+          Godynheil A. Quisto.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

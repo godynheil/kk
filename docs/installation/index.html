@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Installation guide for KK Version Control System - prerequisites, Git, Go toolchain, rclone setup, and building from source."
+    />
+    <meta name="author" content="Godynheil A. Quisto" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#191a1b" />
+    <link rel="canonical" href="https://kkvcs.com/docs/installation/" />
+    <link rel="icon" href="/icon/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icon/favicon-16x16.png"
+    />
+    <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
+    <link rel="manifest" href="/icon/site.webmanifest" />
+    <link rel="stylesheet" href="/css/core.css" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Installation Guide | KK Version Control System"
+    />
+    <meta
+      property="og:description"
+      content="Step-by-step installation guide for KK Version Control System."
+    />
+    <meta property="og:url" content="https://kkvcs.com/docs/installation/" />
+    <meta
+      property="og:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <meta property="og:site_name" content="KK Version Control System" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Installation Guide | KK Version Control System"
+    />
+    <meta
+      name="twitter:description"
+      content="Step-by-step installation guide for KK Version Control System."
+    />
+    <meta
+      name="twitter:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <title>Installation Guide | KK Version Control System</title>
+    <link rel="stylesheet" href="/css/pages/docs-installation.css" />
+    <script src="/js/copy-code.js" defer></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+      <div class="container">
+        <a href="/" class="logo">KK Version Control System</a>
+        <ul>
+          <li><a href="/#how-it-works">How It Works</a></li>
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#backends">Backends</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/docs/" class="active">Documentation</a></li>
+          <li>
+            <a href="https://github.com/godynheil/kk" rel="noopener noreferrer"
+              >GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <h1>Installation & Setup</h1>
+      <p>
+        This document collects everything needed to get KK working on a
+        developer machine: Git, the KK CLI (build or download), and the optional
+        <code>rclone</code> binary used for cloud remotes.
+      </p>
+
+      <div class="toc">
+        <h3>Contents</h3>
+        <ul>
+          <li><a href="#prerequisites">Prerequisites</a></li>
+          <li><a href="#install-git">1) Install Git</a></li>
+          <li>
+            <a href="#install-go">2) Install Go (required to build KK)</a>
+          </li>
+          <li>
+            <a href="#install-rclone"
+              >3) Optional: Install rclone (for rclone-backed remotes)</a
+            >
+          </li>
+          <li>
+            <a href="#developer-tools"
+              >4) Developer extras required by Makefile (Windows build
+              specifics)</a
+            >
+          </li>
+          <li><a href="#build-kk">5) Build KK (from source)</a></li>
+          <li>
+            <a href="#prebuilt-kk"
+              >5a) Use a prebuilt executable (recommended for regular users)</a
+            >
+          </li>
+          <li>
+            <a href="#install-path">6) Install kk on your PATH (convenience)</a>
+          </li>
+          <li><a href="#configure-remote">7) Configure a remote in KK</a></li>
+          <li>
+            <a href="#smoke-tests"
+              >8) Running smoke tests and Makefile targets</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h3>Supported Platforms</h3>
+        <ul>
+          <li>Windows (PowerShell / Git Bash / WSL)</li>
+          <li>macOS</li>
+          <li>Linux</li>
+        </ul>
+
+        <h3>Quick Checks</h3>
+        <p>Verify these are available before proceeding:</p>
+        <pre><code>git --version
+go version
+rclone version   # optional</code></pre>
+      </div>
+
+      <hr id="prerequisites" />
+
+      <h2>Prerequisites</h2>
+      <ul>
+        <li><strong>Git</strong> (core dependency)</li>
+        <li>
+          <strong>Go toolchain</strong> (Go 1.23 or newer as declared in
+          <code>go.mod</code>)
+        </li>
+        <li>
+          <strong>Optional:</strong> <code>rclone</code> (for rclone-backed
+          remotes such as Google Drive or MEGA)
+        </li>
+        <li>
+          <strong>Optional developer tools:</strong>
+          <code>goversioninfo</code> (Windows resource generation),
+          <code>golangci-lint</code>, <code>make</code>
+        </li>
+      </ul>
+
+      <hr id="install-git" />
+
+      <h2>1) Install Git</h2>
+
+      <h3>Windows</h3>
+      <p>
+        Download and install from
+        <a href="https://git-scm.com/download/win">git-scm.com</a>. Choose
+        options that add Git to your PATH.
+      </p>
+
+      <h3>macOS</h3>
+      <p>
+        Install via Homebrew <code>brew install git</code> or from
+        <a href="https://git-scm.com">git-scm.com</a>.
+      </p>
+
+      <h3>Linux</h3>
+      <p>
+        Use your distro package manager, e.g. <code>sudo apt install git</code>.
+      </p>
+
+      <h3>Verify</h3>
+      <pre><code>git --version</code></pre>
+
+      <hr id="install-go" />
+
+      <h2>2) Install Go (required to build KK)</h2>
+
+      <p>
+        Download from <a href="https://go.dev/dl/">go.dev/dl/</a> and install a
+        Go version &gt;= 1.23 as declared in <code>go.mod</code>.
+      </p>
+
+      <ul>
+        <li><strong>Windows:</strong> Use the MSI installer</li>
+        <li>
+          <strong>macOS:</strong> Use the pkg or Homebrew
+          <code>brew install go</code>
+        </li>
+        <li>
+          <strong>Linux:</strong> Use your distro package manager or download
+          the tarball
+        </li>
+      </ul>
+
+      <h3>Verify</h3>
+      <pre><code>go version</code></pre>
+
+      <hr id="install-rclone" />
+
+      <h2>3) Optional: Install rclone (for rclone-backed remotes)</h2>
+
+      <p>
+        <code>rclone</code> is optional if you only use local/NAS remotes or
+        native Google Drive via <code>kk setup gdrive</code>. If you plan to use
+        MEGA, S3-like providers, Dropbox, OneDrive, SFTP, or Google Drive via
+        rclone, install <code>rclone</code>:
+      </p>
+
+      <h3>Windows</h3>
+      <p>
+        Download &amp; unpack from
+        <a href="https://rclone.org/downloads/">rclone.org/downloads</a> or use
+        Chocolatey/Scoop:
+      </p>
+      <pre><code># Chocolatey (if installed)
+choco install rclone
+# or Scoop
+scoop install rclone</code></pre>
+
+      <h3>macOS / Linux</h3>
+      <pre><code># macOS
+brew install rclone
+
+# Linux - follow https://rclone.org/install/</code></pre>
+
+      <h3>Configure a remote (example: Google Drive)</h3>
+      <pre><code>rclone config
+rclone lsd gdrive:
+rclone mkdir gdrive:KK</code></pre>
+
+      <hr id="developer-tools" />
+
+      <h2>
+        4) Developer extras required by <code>Makefile</code> (Windows build
+        specifics)
+      </h2>
+
+      <h3>goversioninfo</h3>
+      <p>
+        The Makefile runs <code>goversioninfo</code> inside
+        <code>cmd/kk</code> to create a Windows resource
+        (<code>resource.syso</code>) from <code>versioninfo.json</code>. Install
+        it if you need to run <code>make build</code> on Windows:
+      </p>
+      <pre><code>go install github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest</code></pre>
+
+      <h3>golangci-lint (optional)</h3>
+      <p>Used by <code>make lint</code>/CI:</p>
+      <pre><code>go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest</code></pre>
+
+      <h3>make</h3>
+      <p>
+        On Windows, use Git Bash/MSYS2/WSL or install GNU Make (<code
+          >choco install make</code
+        >) or run the build commands manually.
+      </p>
+
+      <hr id="build-kk" />
+
+      <h2>5) Build KK (from source)</h2>
+
+      <p>From the repository root:</p>
+
+      <h3>Windows (PowerShell)</h3>
+      <pre><code># Option A: direct build
+go build -o kk.exe ./cmd/kk
+
+# Option B: use Makefile (preferred for resource embedding)
+make build</code></pre>
+
+      <h3>macOS / Linux</h3>
+      <pre><code>go build -o kk ./cmd/kk
+# or
+make build</code></pre>
+
+      <h3>After build, run:</h3>
+      <pre><code># Windows
+./kk.exe --version
+
+# macOS/Linux
+./kk --version</code></pre>
+
+      <hr id="prebuilt-kk" />
+
+      <h2>5a) Use a prebuilt executable (recommended for regular users)</h2>
+
+      <p>
+        If you don't want to build from source, use a prebuilt <code>kk</code>
+        executable. This may be shipped with the project or distributed via
+        release artifacts.
+      </p>
+
+      <h3>Windows (prebuilt <code>kk.exe</code>)</h3>
+      <pre><code># Run directly
+.\kk.exe --version
+
+# Register the binary's folder on your user PATH (idempotent)
+.\kk.exe install-path
+
+# Or manually copy to a permanent folder
+New-Item -ItemType Directory -Force "$env:USERPROFILE\bin"
+Copy-Item .\kk.exe "$env:USERPROFILE\bin\kk.exe"
+# Add to user PATH if not already present
+[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$env:USERPROFILE\bin", "User")</code></pre>
+
+      <h3>macOS / Linux</h3>
+      <pre><code>chmod +x kk
+sudo mv kk /usr/local/bin/kk
+kk --version</code></pre>
+
+      <h3>Security Notes</h3>
+      <ul>
+        <li>Prefer official release artifacts from a trusted publisher</li>
+        <li>Verify checksums or signatures if published</li>
+        <li>Consider building from source if the source is untrusted</li>
+      </ul>
+
+      <hr id="install-path" />
+
+      <h2>6) Install <code>kk</code> on your PATH (convenience)</h2>
+
+      <p>
+        The project provides <code>kk install-path</code> which edits your user
+        PATH on Windows:
+      </p>
+
+      <pre><code># Build first
+go build -o kk.exe .\cmd\kk
+
+# Install on PATH
+.\kk.exe install-path
+
+# Open a new terminal and verify
+Get-Command kk
+kk --version</code></pre>
+
+      <p>
+        On macOS/Linux you may run <code>./kk install-path</code> or manually
+        copy the binary to a directory on your PATH (e.g.,
+        <code>/usr/local/bin</code>).
+      </p>
+
+      <hr id="configure-remote" />
+
+      <h2>7) Configure a remote in KK</h2>
+
+      <h3>Option A — Native Google Drive (recommended, no rclone needed)</h3>
+
+      <p>
+        <code>kk setup gdrive</code> handles OAuth, creates the
+        <code>KK/</code> root folder on Drive, and registers the remote in
+        <code>.kk/config.json</code>
+        automatically.
+      </p>
+
+      <pre><code># Run once inside your kk repo (opens a browser for Google OAuth)
+kk setup gdrive
+
+# When prompted, give the profile a name (e.g. "work" or "personal")
+# The default name is "default" — just press Enter to accept
+
+# Output example:
+# Connect Google Drive
+# Opening browser for authorization...
+# kk: Google Drive auth saved to ~/.config/KK/gdrive/default.json
+# kk: Drive project folder-id: 1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u
+# kk: Run 'kk push' to create the project folder on Drive.
+#     Share the project folder ID with teammates so they can clone:
+#     kk clone drive:1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u
+# Remote ready.</code></pre>
+
+      <h3>Multiple Drive Remotes</h3>
+
+      <pre><code># First Drive remote
+kk setup gdrive --name drive1 --account personal
+
+# Second Drive remote (uses drive1's folder structure as base)
+kk setup gdrive --name drive2 --account work
+
+# Third Drive remote with specific folder
+kk setup gdrive --name backup --folder ABC123 --account shared</code></pre>
+
+      <h3>Shared Drives or externally shared folders</h3>
+
+      <pre><code>kk setup gdrive --scope full</code></pre>
+
+      <div class="warning-box">
+        <strong>🔴 CRITICAL SECURITY WARNING</strong>
+        <p>
+          The <code>--scope full</code> flag grants KK permission to access
+          <strong>ALL files in your entire Google Drive</strong>, including
+          personal documents, photos, and sensitive data.
+        </p>
+        <p><strong>Only use this scope if:</strong></p>
+        <ul>
+          <li>You need to access Shared Drives or externally shared folders</li>
+          <li>
+            <strong>You fully trust the KK binary</strong> you are running
+          </li>
+          <li>
+            You verified the binary is from
+            <a
+              href="https://github.com/quisto-ph/kk/releases"
+              rel="noopener noreferrer"
+              >official releases</a
+            >
+            or reviewed the
+            <a href="https://github.com/quisto-ph/kk" rel="noopener noreferrer"
+              >source code</a
+            >
+          </li>
+        </ul>
+        <p>
+          <strong
+            >Never use binaries from untrusted sources with this flag.</strong
+          >
+          See
+          <a href="/privacy-policy/#google-drive-oauth">Privacy Policy</a> for
+          complete security details.
+        </p>
+      </div>
+
+      <blockquote>
+        <strong>Note:</strong> <code>kk setup gdrive</code> registers the remote
+        for you. You do <strong>not</strong> need to run
+        <code>kk remote add</code>
+        separately when using the native Drive backend.
+      </blockquote>
+
+      <h3>Option B — Google Drive via rclone</h3>
+
+      <p>
+        Use this if you already use rclone or want more control over the rclone
+        config.
+      </p>
+
+      <h4>Step 1 — configure rclone</h4>
+      <pre><code>rclone config
+# Suggested values:
+#   name>    gdrive
+#   storage> drive
+#   scope>   drive</code></pre>
+
+      <h4>Step 2 — add the remote to KK</h4>
+      <pre><code># --remote must point to the PROJECT folder, not just a KK root
+# Minimal form — only required flags
+kk remote add rclone gdrive --remote gdrive:KK/MyGame --push true --pull true
+
+# Full form — with optional metadata
+kk remote add rclone gdrive \
+  --display-name "Google Drive" \
+  --role primary \
+  --provider google-drive \
+  --binary rclone \
+  --remote gdrive:KK/MyGame \
+  --verify-mode download \
+  --priority 20 \
+  --pull true \
+  --push true \
+  --tag cloud</code></pre>
+
+      <h3>Local NAS / external drive</h3>
+
+      <pre><code># --path must point to the PROJECT folder, not just a KK root
+kk remote add local nas --path /Volumes/NAS/KK/MyGame --push true --pull true</code></pre>
+
+      <hr id="smoke-tests" />
+
+      <h2>8) Running smoke tests and Makefile targets</h2>
+
+      <ul>
+        <li>
+          The project provides <code>scripts/smoke-test.sh</code> (Bash-based —
+          run from Git Bash or WSL on Windows)
+        </li>
+      </ul>
+
+      <h3>Makefile useful targets</h3>
+
+      <pre><code>make build   # compile (runs goversioninfo on Windows)
+make test    # go test ./...
+make smoke   # ./scripts/smoke-test.sh
+make fmt     # gofmt -w ./cmd ./internal
+make lint    # golangci-lint run ./...
+make clean   # remove built artifacts</code></pre>
+
+      <h3>Troubleshooting</h3>
+
+      <ul>
+        <li>
+          <strong>PATH issues:</strong> Ensure <code>$GOPATH/bin</code> or
+          <code>$(go env GOBIN)</code> is on your PATH
+        </li>
+        <li>
+          <strong>goversioninfo not found:</strong> Install or run
+          <code>go build -o kk.exe ./cmd/kk</code> directly (skips resource
+          embedding)
+        </li>
+        <li>
+          <strong><code>make</code> on Windows:</strong> Use Git Bash, WSL, or
+          run build commands manually
+        </li>
+        <li>
+          <strong>rclone remotes fail:</strong> Test with
+          <code>rclone lsd &lt;remote&gt;:</code>
+        </li>
+      </ul>
+
+      <hr />
+
+      <h2>Further Reading</h2>
+
+      <ul>
+        <li>
+          <a href="/docs/how-to/">How To Guide</a> — Step-by-step guides for
+          common workflows
+        </li>
+        <li>
+          <a href="/docs/how-it-works/">How It Works</a> — Technical internals
+          and object lifecycle
+        </li>
+        <li>
+          <a href="https://github.com/godynheil/kk">GitHub Repository</a> —
+          Source code and issue tracker
+        </li>
+      </ul>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="https://github.com/godynheil/kk">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Documentation</h4>
+          <ul>
+            <li><a href="/docs/installation/">Installation</a></li>
+            <li><a href="/docs/how-to/">How To Guide</a></li>
+            <li><a href="/docs/glossary/">Glossary</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/terms-of-service/">Terms of Service</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/license/">License</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
+        <p>
+          KK Version Control System is distributed under the Modified GNU
+          General Public License, Version 2.0.
+        </p>
+        <p>
+          "KK", "KK Version Control System", and "kk" are trademarks of
+          Godynheil A. Quisto.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

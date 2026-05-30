@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="How KK works - technical internals of the hidden Git database, pointer files, object storage, and clone mechanics."
+    />
+    <meta name="author" content="Godynheil A. Quisto" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#191a1b" />
+    <link rel="canonical" href="https://kkvcs.com/docs/how-it-works/" />
+    <link rel="icon" href="/icon/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icon/favicon-16x16.png"
+    />
+    <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
+    <link rel="manifest" href="/icon/site.webmanifest" />
+    <link rel="stylesheet" href="/css/core.css" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="How It Works | KK Version Control System"
+    />
+    <meta
+      property="og:description"
+      content="Technical internals of KK's architecture and workflow."
+    />
+    <meta property="og:url" content="https://kkvcs.com/docs/how-it-works/" />
+    <meta
+      property="og:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <meta property="og:site_name" content="KK Version Control System" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="How It Works | KK Version Control System"
+    />
+    <meta
+      name="twitter:description"
+      content="Technical internals of KK's architecture and workflow."
+    />
+    <meta
+      name="twitter:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <title>How It Works | KK Version Control System</title>
+    <link rel="stylesheet" href="/css/pages/docs-how-it-works.css" />
+    <script src="/js/copy-code.js" defer></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+      <div class="container">
+        <a href="/" class="logo">KK Version Control System</a>
+        <ul>
+          <li><a href="/#how-it-works">How It Works</a></li>
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#backends">Backends</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/docs/" class="active">Documentation</a></li>
+          <li>
+            <a href="https://github.com/godynheil/kk" rel="noopener noreferrer"
+              >GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <h1>How KK Works</h1>
+      <p>
+        KK is a wrapper around Git. It does not replace Git history. It controls
+        how large files enter the repository.
+      </p>
+
+      <div class="info-box">
+        <strong>Scope:</strong> KK is a client-side file management and
+        large-object storage tool. It does <strong>not</strong> require GitHub,
+        GitLab, or any other git hosting service. There is no server and no pull
+        requests. Git history stays local by default. Optionally, you can push
+        pointer history to a GitHub / GitLab remote with
+        <code>kk remote add git</code> — binary objects are always stored
+        separately on your KK storage driver.
+      </div>
+
+      <h2>Daily workflow</h2>
+
+      <pre><code>┌──────────────────────────────────────────────────────────────────┐
+│  Machine A (author)                                              │
+│                                                                  │
+│  kk add .          → stage files, convert large ones to pointers│
+│  kk commit -m "…"  → record snapshot in local git history       │
+│  kk push           → upload file mirror + large objects          │
+│                           │                                      │
+└───────────────────────────┼──────────────────────────────────────┘
+                            │  driver (Google Drive / NAS / rclone)
+┌───────────────────────────┼──────────────────────────────────────┐
+│  Machine B (teammate)     │                                      │
+│                           ▼                                      │
+│  kk clone &lt;spec&gt;   → download mirror, create local git commit   │
+│  kk pull-file .    → materialise all large files on demand      │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘</code></pre>
+
+      <h3>Push (Machine A)</h3>
+      <pre><code>kk add .
+kk commit -m "update assets"
+kk push                    # syncs file mirror + uploads large objects</code></pre>
+
+      <p><code>kk push</code> does three things:</p>
+      <ol>
+        <li>
+          Mirrors the committed project files to
+          <code>&lt;driver&gt;/&lt;ProjectName&gt;/</code>
+        </li>
+        <li>Uploads any new SHA-256 objects for large files</li>
+        <li>
+          Pushes pointer history to any push-enabled <code>type=git</code> KK
+          remote
+        </li>
+      </ol>
+
+      <h3>Pull (Machine B)</h3>
+
+      <h4>First time on a new machine:</h4>
+      <pre><code>kk clone drive:&lt;project-folder-id&gt; --pull
+# or
+kk clone local:/Volumes/NAS/KK/MyGame --pull</code></pre>
+
+      <h4>After the project is already cloned — get latest large files:</h4>
+      <pre><code>kk pull-file .          # download and materialise all pointer files</code></pre>
+
+      <div class="info-box">
+        <strong>⚠️ Important:</strong> <code>kk pull</code> is not the command
+        for syncing large files. <code>kk pull</code> wraps
+        <code>git pull</code> and only syncs git commit history from a git
+        remote. In a KK-only workflow with no git remote configured,
+        <code>kk pull</code> instead downloads and merges history bundles from
+        the object storage remote automatically. Use
+        <code>kk pull-file .</code> to download large files at any time.
+      </div>
+
+      <h2>Hidden Git database</h2>
+
+      <p>
+        KK stores the Git database in <code>.kk/git</code> and calls Git with:
+      </p>
+
+      <pre><code>git --git-dir=.kk/git --work-tree=. &lt;command&gt;</code></pre>
+
+      <p>
+        That lets KK keep the project root free of a <code>.git/</code> folder
+        while still using Git's proven history model.
+      </p>
+
+      <h2>Pointer files</h2>
+
+      <p>Tracked large files are replaced by text pointers before staging:</p>
+
+      <pre><code>version kk-lfs-1.0.0
+oid sha256:&lt;hash&gt;
+size &lt;bytes&gt;</code></pre>
+
+      <p>
+        The real bytes are stored in <code>.kk/objects</code> under a
+        content-addressed path.
+      </p>
+
+      <h2>Download on demand</h2>
+
+      <p>
+        A checked-out project can contain only pointer files.
+        <code>kk pull-file path</code> downloads and verifies the real object
+        only when needed.
+      </p>
+
+      <h3>Materialise a single file</h3>
+      <pre><code>kk pull-file Assets/cinematic.mp4</code></pre>
+
+      <h3>Materialise everything at once</h3>
+      <pre><code>kk pull-file .          # materialize all pointer files
+kk pull-file --all      # identical to .</code></pre>
+
+      <h3>Materialise a directory subtree</h3>
+      <pre><code>kk pull-file Assets/         # only pointer files under Assets/</code></pre>
+
+      <h2>Adding a Google Drive remote</h2>
+
+      <p>
+        KK supports two Google Drive drivers. Pick one — you don't need both.
+      </p>
+
+      <h3>Native Google Drive (<code>drive</code> — recommended)</h3>
+
+      <pre><code>kk setup gdrive</code></pre>
+
+      <p>
+        This authenticates with Google, creates the
+        <code>KK/&lt;ProjectName&gt;/</code> folder on Drive, and registers the
+        remote.
+      </p>
+
+      <h3>Google Drive via rclone (<code>rclone</code>)</h3>
+
+      <p>
+        Requires <a href="https://rclone.org">rclone</a> installed and a Drive
+        remote configured.
+      </p>
+
+      <pre><code># Minimal:
+kk remote add rclone gdrive --remote gdrive:KK/MyGame --push true --pull true</code></pre>
+
+      <h2>Adding a Git remote (GitHub / GitLab / Gitea)</h2>
+
+      <h3>Add a git remote</h3>
+      <pre><code>kk remote add git github https://github.com/org/repo.git</code></pre>
+
+      <p>
+        KK will then automatically push the lightweight pointer history to that
+        remote on every <code>kk push</code>.
+      </p>
+
+      <h2>⚠️ No server-side deletion tracking</h2>
+
+      <div class="info-box">
+        <strong>Warning:</strong> KK does not host or control your storage
+        driver. All files — project mirrors, large-file objects, and manifests —
+        live directly on your chosen storage driver. KK itself runs no server.
+      </div>
+
+      <p><strong>This means:</strong></p>
+      <ul>
+        <li>
+          Anyone with write access to your driver folder can delete, overwrite,
+          or corrupt objects
+        </li>
+        <li>KK will not be notified of external deletions</li>
+        <li>
+          <strong>Recommendations:</strong> Restrict folder access, keep a local
+          copy, audit periodically with <code>kk fsck</code>
+        </li>
+      </ul>
+
+      <h2>Commit history without GitHub / GitLab</h2>
+
+      <p>
+        KK can store and sync the full Git commit history through your existing
+        object-storage remote — with no GitHub / GitLab account required.
+      </p>
+
+      <h3>How it works — incremental bundles</h3>
+
+      <p>
+        KK uses native <strong>git bundles</strong> to pack and transport
+        history:
+      </p>
+
+      <pre><code>&lt;remote-root&gt;/
+  history/
+    refs.json            ← branch tips + bundle list metadata
+    main/
+      full.bundle          ← complete history up to the first push
+      inc-000001.bundle    ← incremental: commits since full.bundle
+      inc-000002.bundle    ← incremental: commits since inc-000001</code></pre>
+
+      <h3>Fetch history (no merge)</h3>
+      <pre><code>kk fetch</code></pre>
+
+      <h3>Pull history (fetch + merge)</h3>
+      <pre><code>kk pull                # fetch history bundles then merge current branch
+kk pull --no-merge     # fetch bundles only — review before merging</code></pre>
+
+      <h3>Clone with full history</h3>
+      <pre><code>kk clone local:/Volumes/NAS/KK/MyGame --history
+kk clone drive:&lt;folder-id&gt; --history --pull</code></pre>
+
+      <h2>Deduplication and retention</h2>
+
+      <p>
+        Large objects are content-addressed by SHA-256. If two branches point to
+        the same file bytes, they share the same object. Objects are retained
+        while any reachable Git commit still contains a pointer to them.
+      </p>
+
+      <hr />
+
+      <h2>See Also</h2>
+
+      <ul>
+        <li><a href="/docs/glossary/">Glossary</a> — term definitions</li>
+        <li>
+          <a href="/docs/git-remote/">Git Remote Integration</a> — how KK works
+          with and without Git remotes
+        </li>
+        <li>
+          <a href="/docs/how-to/">How To Guide</a> — step-by-step user guides
+        </li>
+      </ul>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="https://github.com/godynheil/kk">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Documentation</h4>
+          <ul>
+            <li><a href="/docs/installation/">Installation</a></li>
+            <li><a href="/docs/how-to/">How To Guide</a></li>
+            <li><a href="/docs/glossary/">Glossary</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/terms-of-service/">Terms of Service</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/license/">License</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
+        <p>
+          KK Version Control System is distributed under the Modified GNU
+          General Public License, Version 2.0.
+        </p>
+        <p>
+          "KK", "KK Version Control System", and "kk" are trademarks of
+          Godynheil A. Quisto.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

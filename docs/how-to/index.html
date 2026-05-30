@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="How to use KK Version Control System - step-by-step guides for initialization, remotes, cloning, and daily workflows."
+    />
+    <meta name="author" content="Godynheil A. Quisto" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#191a1b" />
+    <link rel="canonical" href="https://kkvcs.com/docs/how-to/" />
+    <link rel="icon" href="/icon/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icon/favicon-16x16.png"
+    />
+    <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
+    <link rel="manifest" href="/icon/site.webmanifest" />
+    <link rel="stylesheet" href="/css/core.css" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="How To Guide | KK Version Control System"
+    />
+    <meta
+      property="og:description"
+      content="Step-by-step guides for common KK workflows."
+    />
+    <meta property="og:url" content="https://kkvcs.com/docs/how-to/" />
+    <meta
+      property="og:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <meta property="og:site_name" content="KK Version Control System" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="How To Guide | KK Version Control System"
+    />
+    <meta
+      name="twitter:description"
+      content="Step-by-step guides for common KK workflows."
+    />
+    <meta
+      name="twitter:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <title>How To Guide | KK Version Control System</title>
+    <link rel="stylesheet" href="/css/pages/docs-how-to.css" />
+    <script src="/js/copy-code.js" defer></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+      <div class="container">
+        <a href="/" class="logo">KK Version Control System</a>
+        <ul>
+          <li><a href="/#how-it-works">How It Works</a></li>
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#backends">Backends</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/docs/" class="active">Documentation</a></li>
+          <li>
+            <a href="https://github.com/godynheil/kk" rel="noopener noreferrer"
+              >GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main id="main-content">
+      <h1>How To Guide</h1>
+      <p>
+        A simple guide for regular users to get started with KK for managing
+        large files in game projects.
+      </p>
+
+      <div class="toc">
+        <h3>Contents</h3>
+        <ul>
+          <li>
+            <a href="#initialize-new-project">Initialize a new project</a>
+          </li>
+          <li>
+            <a href="#add-git-remote">Add a GitHub/GitLab/Gitea remote</a>
+          </li>
+          <li><a href="#google-drive-only">Use Google Drive only</a></li>
+          <li>
+            <a href="#multiple-backends"
+              >Use Google Drive and Rclone (multiple backends)</a
+            >
+          </li>
+          <li>
+            <a href="#multiple-drive-remotes"
+              >Use multiple Google Drive remotes</a
+            >
+          </li>
+          <li><a href="#clone-project">Clone a project</a></li>
+          <li>
+            <a href="#shared-drive"
+              >Share Drive folder requiring full access scope</a
+            >
+          </li>
+          <li>
+            <a href="#migrate-modes"
+              >Migrate between Git remote and storage-bundle modes</a
+            >
+          </li>
+          <li><a href="#daily-workflow">Daily Workflow</a></li>
+          <li><a href="#troubleshooting">Troubleshooting</a></li>
+          <li><a href="#commands">Commands Reference</a></li>
+        </ul>
+      </div>
+
+      <hr id="initialize-new-project" />
+
+      <h2>Initialize a new project</h2>
+      <p>Create a new KK repository in your project directory:</p>
+      <pre><code>cd MyGame
+kk init</code></pre>
+
+      <p>This creates:</p>
+      <ul>
+        <li>
+          <code>.kk/git/</code> - Git database (instead of <code>.git/</code>)
+        </li>
+        <li><code>.kk/objects/</code> - Local cache for large files</li>
+        <li><code>.kk/config.json</code> - KK configuration</li>
+        <li><code>.kk/tracks.json</code> - File patterns to track</li>
+        <li><code>.kkignore</code> - Files KK should ignore</li>
+      </ul>
+
+      <hr id="add-git-remote" />
+
+      <h2>Add a GitHub/GitLab/Gitea remote</h2>
+
+      <p>
+        KK can sync pointer history to git hosting services while storing large
+        files separately.
+      </p>
+
+      <h3>Add GitHub remote</h3>
+      <pre><code>kk remote add git github https://github.com/your-username/MyGame.git</code></pre>
+
+      <h3>Add GitLab remote</h3>
+      <pre><code>kk remote add git gitlab https://gitlab.com/your-username/MyGame.git</code></pre>
+
+      <h3>Add Gitea remote (self-hosted)</h3>
+      <pre><code>kk remote add git gitea https://git.example.com/your-username/MyGame.git</code></pre>
+
+      <h3>Set as default remote</h3>
+      <pre><code>kk remote set-default github</code></pre>
+
+      <h3>Verify remote</h3>
+      <pre><code>kk remote check github
+# ok github  git remote configured (https://github.com/your-username/MyGame.git)</code></pre>
+
+      <hr id="google-drive-only" />
+
+      <h2>Use Google Drive only</h2>
+
+      <p>The simplest setup - store everything on Google Drive.</p>
+
+      <h3>Step 1: Initialize your project</h3>
+      <pre><code>cd MyGame
+kk init</code></pre>
+
+      <p>This creates the KK directory structure with embedded Git database.</p>
+
+      <h3>Step 2: Set up Google Drive</h3>
+      <pre><code>kk setup gdrive</code></pre>
+
+      <p>
+        This opens a browser for OAuth authorization. After successful
+        authorization:
+      </p>
+      <pre><code># kk: Google Drive auth saved to ~/.config/KK/gdrive/default.json
+# kk: Drive remote 'gdrive' configured with folder-id: 1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u
+# kk: Run 'kk push' to upload your project to Drive.
+#     Share the project folder ID with teammates so they can clone:
+#     kk clone drive:1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u
+# Remote ready.</code></pre>
+
+      <div class="info-box">
+        <p><strong>Tip: Finding your folder ID manually</strong></p>
+        <p>To find the folder ID in Google Drive:</p>
+        <ol>
+          <li>Open the folder in Google Drive in your browser</li>
+          <li>
+            Look at the URL — it will be in the format:
+            <code
+              >https://drive.google.com/drive/folders/&lt;FOLDER_ID&gt;</code
+            >
+          </li>
+          <li>
+            Copy the <code>&lt;FOLDER_ID&gt;</code> portion (a long alphanumeric
+            string)
+          </li>
+        </ol>
+        <p>
+          Example: In
+          <code
+            >https://drive.google.com/drive/folders/1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u</code
+          >, the folder ID is <code>1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u</code>.
+        </p>
+      </div>
+
+      <h3>Step 3: Track large files</h3>
+      <pre><code>kk track "*.mp4" "*.png" "*.fbx" "*.zip"</code></pre>
+
+      <h3>Step 4: Work normally</h3>
+      <pre><code># Add large files (converts to pointers)
+kk add Assets/cinematic.mp4
+
+# Commit
+kk commit -m "add cinematic"
+
+# Push to Drive
+kk push</code></pre>
+
+      <h3>Step 5: Share with teammates</h3>
+      <p>
+        <strong>Why sharing is required:</strong> Google Drive folders created
+        by KK are owned by your Google account. For teammates to clone and sync
+        files from this folder, you must explicitly share it with their Google
+        accounts through Google Drive's sharing settings.
+      </p>
+      <p><strong>How to share:</strong></p>
+      <ol>
+        <li>
+          Open Google Drive and locate the KK folder (usually named after your
+          project)
+        </li>
+        <li>Right-click the folder and select "Share"</li>
+        <li>
+          Add your teammates' Google account email addresses with "Editor"
+          permissions
+        </li>
+        <li>Share the folder ID with your team</li>
+      </ol>
+
+      <p>Once shared, teammates can clone the repository using:</p>
+      <pre><code>kk clone drive:&lt;folder-id&gt; --pull</code></pre>
+
+      <div class="info-box">
+        <p>
+          <strong>⚠️ Important - Scope Requirements:</strong>
+        </p>
+        <p>
+          By default, KK uses the <code>drive.file</code> scope, which
+          <strong>only allows access to files KK creates</strong>. Since your
+          teammates did not create the shared folder, they must use the
+          <strong>full drive scope</strong> to clone it.
+        </p>
+        <p><strong>Teammates must run:</strong></p>
+        <pre
+          class="my-05"
+        ><code>kk setup gdrive --scope full</code></pre>
+
+        <div class="warning-box">
+          <strong>🔴 CRITICAL SECURITY WARNING</strong>
+          <p>
+            The <code>--scope full</code> flag grants KK access to
+            <strong>ALL files in your entire Google Drive</strong>, not just
+            KK folders.
+          </p>
+          <p><strong>Only use if you:</strong></p>
+          <ul>
+            <li>Need access to shared folders you didn't create</li>
+            <li>
+              <strong>Fully trust the KK binary</strong> with complete Drive
+              access
+            </li>
+            <li>
+              Verified the binary is official or reviewed the
+              <a
+                href="https://github.com/quisto-ph/kk"
+                rel="noopener noreferrer"
+                >source code</a
+              >
+            </li>
+          </ul>
+          <p>
+            See our
+            <a href="/privacy-policy/#google-drive-oauth">Privacy Policy</a>
+            for complete security details and how to revoke permissions.
+          </p>
+        </div>
+        <p class="mt-05">
+          This grants KK permission to access shared folders and Shared Drives.
+          <strong>Security note:</strong> <code>--scope full</code> allows KK to
+          access all files in the user's Google Drive, not just KK-created
+          files. See our
+          <a href="/privacy-policy/#google-drive-oauth">Privacy Policy</a> for
+          details about scope permissions and security implications.
+        </p>
+      </div>
+
+      <div class="info-box">
+        <p><strong>Troubleshooting:</strong></p>
+        <ul class="mt-05">
+          <li>
+            <strong>Error: "Folder not found" or "Permission denied"</strong> →
+            Teammate needs to use <code>--scope full</code> (see above)
+          </li>
+          <li>
+            <strong>Error: "Access denied"</strong> → Check that the folder is
+            shared with the teammate's exact Google account email
+          </li>
+          <li>
+            <strong>Clone succeeds but no files download</strong> → Run
+            <code>kk pull</code> after cloning to fetch the latest objects
+          </li>
+        </ul>
+      </div>
+
+      <hr id="multiple-backends" />
+
+      <h2>Use Google Drive and Rclone (multiple backends)</h2>
+
+      <p>
+        Use multiple storage providers for redundancy - one Drive remote, one
+        rclone remote (could be Dropbox, MEGA, S3, etc.).
+      </p>
+
+      <h4>Step 1: Configure Google Drive</h4>
+      <pre><code>kk setup gdrive --name personal</code></pre>
+
+      <h4>Step 2: Configure rclone</h4>
+      <p>First, set up your rclone remote (one-time):</p>
+      <pre><code>rclone config
+# Follow prompts to create a remote named "mega" for MEGA, "s3" for S3, etc.</code></pre>
+
+      <p>Then add it to KK:</p>
+      <pre><code>kk remote add rclone mega --remote mega:KK/MyGame --push true --pull true</code></pre>
+
+      <h4>Step 3: Configure default remote and priority</h4>
+      <pre><code># Set primary storage
+kk remote set-default personal
+
+# Check configuration
+kk remote list</code></pre>
+
+      <p>Your <code>.kk/config.json</code> will have:</p>
+      <ul>
+        <li><code>personal</code> (Drive) with priority 20 (default)</li>
+        <li><code>mega</code> (rclone) with priority 50 (backup)</li>
+      </ul>
+
+      <p>
+        When pulling, KK tries remotes in priority order and falls back if one
+        fails.
+      </p>
+
+      <h4>Step 4: Push to all remotes</h4>
+      <pre><code>kk push --all-remotes</code></pre>
+
+      <p>This uploads to all push-enabled remotes.</p>
+
+      <hr id="multiple-drive-remotes" />
+
+      <h2>Use multiple Google Drive remotes</h2>
+
+      <p>Store your project on multiple Google Drive accounts or folders.</p>
+
+      <h3>Scenario: Personal + Work Drive</h3>
+      <pre><code># First Drive - personal account
+kk setup gdrive --name drive1 --account personal
+
+# Second Drive - work account
+kk setup gdrive --name drive2 --account work
+
+# Third Drive - shared folder with team
+kk setup gdrive --name shared --folder ABC123XYZ --account work</code></pre>
+
+      <p>Each remote gets its own configuration:</p>
+      <pre><code>kk remote list
+# drive1  type=drive display_name="Google Drive"
+# drive2  type=drive display_name="Google Drive"
+# shared  type=drive display_name="Google Drive"</code></pre>
+
+      <h3>Push to specific remote</h3>
+      <pre><code>kk push --remote drive1</code></pre>
+
+      <h3>Push to all Drive remotes</h3>
+      <pre><code>kk push --all-remotes</code></pre>
+
+      <h3>Set default remote</h3>
+      <pre><code>kk remote set-default drive1</code></pre>
+
+      <hr id="clone-project" />
+
+      <h2>Clone a project</h2>
+
+      <h3>Clone from Google Drive</h3>
+      <p>Get the folder ID from the project owner, then:</p>
+      <pre><code>kk clone drive:&lt;folder-id&gt; --pull</code></pre>
+
+      <p>
+        The <code>--pull</code> flag automatically downloads and materializes
+        large files.
+      </p>
+
+      <h3>Clone from local NAS</h3>
+      <pre><code>kk clone local:/Volumes/NAS/KK/MyGame --pull</code></pre>
+
+      <h3>Clone from rclone</h3>
+      <pre><code>kk clone rclone:gdrive:KK/MyGame --pull</code></pre>
+
+      <h3>Clone with Git remote history</h3>
+      <p>If the project uses a Git remote for pointer history:</p>
+      <pre><code>kk clone git:https://github.com/user/repo.git --pull
+kk clone git:https://gitlab.com/user/repo.git --branch feature-or-test --pull</code></pre>
+
+      <h3>Clone into current directory</h3>
+      <p>Use <code>--here</code> to clone without creating a subdirectory:</p>
+      <pre><code>kk clone drive:&lt;folder-id&gt; --here --pull</code></pre>
+
+      <p>The directory must be empty (except for the kk binary).</p>
+
+      <hr id="shared-drive" />
+
+      <h2>Share Drive folder requiring full access scope</h2>
+
+      <p>
+        Some Google Drive configurations require full drive access, especially
+        when:
+      </p>
+      <ul>
+        <li>Working with Shared Drives (Team Drives)</li>
+        <li>Using folders shared by others with restricted privacy settings</li>
+      </ul>
+
+      <h3>Step 1: Authorize with full scope</h3>
+      <pre><code>kk setup gdrive --scope full</code></pre>
+
+      <div class="warning-box">
+        <strong>🔴 CRITICAL SECURITY WARNING</strong>
+        <p>
+          The <code>--scope full</code> flag grants KK permission to access
+          <strong>ALL files in your entire Google Drive</strong>, including
+          personal documents, photos, and sensitive data.
+        </p>
+        <p><strong>Only use this scope if:</strong></p>
+        <ul>
+          <li>You need to access Shared Drives or externally shared folders</li>
+          <li>
+            <strong>You fully trust the KK binary</strong> you are running
+          </li>
+          <li>
+            You verified the binary is from
+            <a
+              href="https://github.com/quisto-ph/kk/releases"
+              rel="noopener noreferrer"
+              >official releases</a
+            >
+            or reviewed the
+            <a
+              href="https://github.com/quisto-ph/kk"
+              rel="noopener noreferrer"
+              >source code</a
+            >
+          </li>
+        </ul>
+        <p>
+          <strong>Never use binaries from untrusted sources with this
+          flag.</strong>
+          See
+          <a href="/privacy-policy/#google-drive-oauth">Privacy Policy</a> for
+          security details.
+        </p>
+      </div>
+
+      <p>
+        This requests the
+        <code>https://www.googleapis.com/auth/drive</code> scope.
+      </p>
+
+      <h3>Step 2: Clone the project</h3>
+      <p>Teammates must also authorize with full scope before cloning:</p>
+      <pre><code># Each teammate runs once:
+kk setup gdrive --auth-only --scope full --account &lt;profile-name&gt;
+
+# Then clone:
+kk clone drive:&lt;folder-id&gt; --account &lt;profile-name&gt;</code></pre>
+
+      <div class="warning-box">
+        <strong>🔴 Security Reminder:</strong> All teammates using
+        <code>--scope full</code> must trust the KK binary. Only use official
+        releases or verified source builds.
+      </div>
+
+      <h3>Multiple accounts with full scope</h3>
+      <pre><code># Authorize work account with full scope
+kk setup gdrive --auth-only --scope full --account work
+
+# Authorize personal account with full scope
+kk setup gdrive --auth-only --scope full --account personal
+
+# List all accounts
+kk accounts</code></pre>
+
+      <hr id="migrate-modes" />
+
+      <h2>Migrate between Git remote and storage-bundle modes</h2>
+
+      <p>
+        KK supports two distinct modes for managing and syncing commit history.
+        You can migrate between them at any time:
+      </p>
+
+      <ul>
+        <li>
+          <strong>Storage bundles:</strong> History is bundled and uploaded to
+          object remotes. Active when no <code>git</code>-type remote is
+          configured.
+        </li>
+        <li>
+          <strong>Git remote:</strong> History is pushed and pulled directly
+          to/from a Git hosting service.
+        </li>
+      </ul>
+
+      <h3>Storage bundles to Git remote (<code>to-git</code>)</h3>
+
+      <p>
+        If you started with storage bundles and now want to collaborate via
+        GitHub:
+      </p>
+      <pre><code>kk remote migrate to-git github https://github.com/your-username/MyGame.git</code></pre>
+
+      <p>
+        This verifies connectivity, adds the git remote, and pushes all local
+        branches.
+      </p>
+
+      <h3>Git remote to Storage bundles (<code>to-storage</code>)</h3>
+
+      <p>
+        If you want to move away from Git hosting and rely solely on object
+        storage:
+      </p>
+      <pre><code>kk remote migrate to-storage</code></pre>
+
+      <p>
+        This uploads the full history bundle chain to your push-enabled object
+        remotes and removes the Git remote configuration.
+      </p>
+
+      <hr id="daily-workflow" />
+
+      <h2>Daily Workflow</h2>
+
+      <pre><code># Track new large file types
+kk track "*.ogg" "*.wav"
+
+# Add files (converts large ones to pointers)
+kk add .
+
+# Commit changes
+kk commit -m "update assets"
+
+# Push to default remote
+kk push
+
+# Or push to specific remote
+kk push --remote drive2
+
+# Or push to all remotes
+kk push --all-remotes</code></pre>
+
+      <hr id="troubleshooting" />
+
+      <h2>Troubleshooting</h2>
+
+      <h3>Account expired</h3>
+      <p>If you see authentication errors:</p>
+      <pre><code># Re-authenticate
+kk setup gdrive --account &lt;profile-name&gt;</code></pre>
+
+      <h3>Remote not accessible</h3>
+      <pre><code>kk remote check &lt;remote-name&gt;</code></pre>
+
+      <h3>Missing large files</h3>
+      <pre><code># Check object status
+kk fsck
+
+# Download missing files
+kk pull-file .</code></pre>
+
+      <h3>List all configured remotes</h3>
+      <pre><code>kk remote list</code></pre>
+
+      <hr id="commands" />
+
+      <h2>Commands Reference</h2>
+
+      <pre><code># Project management
+kk init                                          # Initialize new KK repo
+kk status [--json]                               # Show repo status
+kk track "&lt;pattern&gt;"                            # Track file patterns
+kk track list                                   # List tracked patterns
+kk untrack "&lt;pattern&gt;"                          # Untrack pattern
+
+# File operations
+kk add &lt;file&gt;...                                # Add files (large → pointers)
+kk commit -m "message"                          # Commit changes
+kk push [--remote &lt;name&gt;] [--all-remotes]       # Push to remotes
+kk pull                                          # Pull from git remote or history bundles
+kk pull-file [--force] &lt;file&gt;...                 # Download large files
+kk dematerialize &lt;file&gt;...                      # Revert to pointer
+
+# Remotes
+kk setup gdrive [--name &lt;name&gt;] [--account &lt;profile&gt;] [--folder &lt;folder-id&gt;] [--scope file|full] [--auth-only]
+kk accounts [--json]                           # List Drive accounts
+kk accounts --delete &lt;profile&gt; [--json]          # Delete account
+kk remote add &lt;type&gt; &lt;name&gt; [options]           # Add remote
+kk remote list [--json]                         # List remotes
+kk remote set-default &lt;name&gt;                    # Set default remote
+kk remote check &lt;name&gt; [--json]                  # Check remote
+kk remote remove &lt;name&gt;                         # Remove remote
+kk remote rename &lt;old&gt; &lt;new&gt;                      # Rename remote
+kk remote migrate &lt;to-git|to-storage&gt; [options]  # Migrate history storage mode
+
+# Clone
+kk clone &lt;spec&gt; [--dest &lt;dir&gt;] [--remote-name &lt;name&gt;] [--pull] [--history] [--account &lt;profile&gt;] [--here]</code></pre>
+
+      <hr />
+
+      <h2>Quick Reference Card</h2>
+
+      <h3>Personal project with Drive backup:</h3>
+      <pre><code>kk init
+kk setup gdrive
+kk track "*.mp4"
+kk add . && kk commit -m "init" && kk push</code></pre>
+
+      <h3>Team project with multiple remotes:</h3>
+      <pre><code>kk init
+kk setup gdrive --name drive1 --account team
+kk remote add rclone backup --remote mega:KK/Project --push true --pull true
+kk remote set-default drive1
+kk track "*.fbx"
+kk add . && kk commit -m "init" && kk push --all-remotes</code></pre>
+
+      <h3>Clone teammate's project:</h3>
+      <pre><code>kk clone drive:&lt;folder-id&gt; --account work --pull
+cd MyGame
+kk pull-file .</code></pre>
+
+      <h3>Connect to shared folder with full scope:</h3>
+      <pre><code>kk setup gdrive --name shared --folder &lt;folder-id&gt; --scope full --account work</code></pre>
+
+      <div class="warning-box">
+        <strong>🔴 Warning:</strong> <code>--scope full</code> grants full
+        Google Drive access. Only use with trusted binaries from
+        <a
+          href="https://github.com/quisto-ph/kk/releases"
+          rel="noopener noreferrer"
+          >official sources</a
+        >.
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="https://github.com/godynheil/kk">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Documentation</h4>
+          <ul>
+            <li><a href="/docs/installation/">Installation</a></li>
+            <li><a href="/docs/how-to/">How To Guide</a></li>
+            <li><a href="/docs/glossary/">Glossary</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/terms-of-service/">Terms of Service</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/license/">License</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
+        <p>
+          KK Version Control System is distributed under the Modified GNU
+          General Public License, Version 2.0.
+        </p>
+        <p>
+          "KK", "KK Version Control System", and "kk" are trademarks of
+          Godynheil A. Quisto.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

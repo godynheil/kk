@@ -1,741 +1,728 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="KK is a source-available, Git-compatible CLI for solo game developers and teams that stores large assets in cloud or local storage with verification and deduplication." />
-  <meta name="author" content="Godynheil A. Quisto" />
-  <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#191a1b" />
-  <link rel="canonical" href="https://kkvcs.com/" />
-  <link rel="icon" href="/icon/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png" />
-  <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
-  <link rel="manifest" href="/icon/site.webmanifest" />
-  <meta property="og:type" content="website" />
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:site_name" content="KK Version Control System" />
-  <meta property="og:title" content="KK Version Control System" />
-  <meta property="og:description" content="Git-compatible large-file version control for solo game developers and teams, with verified cloud or local storage." />
-  <meta property="og:url" content="https://kkvcs.com/" />
-  <meta property="og:image:secure_url" content="https://kkvcs.com/icon/android-chrome-512x512.png" />
-  <meta property="og:image" content="https://kkvcs.com/icon/android-chrome-512x512.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="512" />
-  <meta property="og:image:height" content="512" />
-  <meta property="og:image:alt" content="KK Version Control System logo" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="KK Version Control System" />
-  <meta name="twitter:description" content="Git-compatible large-file version control for solo game developers and teams, with verified cloud or local storage." />
-  <meta name="twitter:image" content="https://kkvcs.com/icon/android-chrome-512x512.png" />
-  <meta name="twitter:image:alt" content="KK Version Control System logo" />
-  <title>KK Version Control System | Large-File Version Control for Game Developers</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background-color: #191a1b;
-      color: #bfbfba;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    nav {
-      background-color: #191a1b;
-      padding: 1rem 2rem;
-      border-bottom: 1px solid #2a2b2c;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    nav .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-weight: 700;
-      font-size: 1.5rem;
-      color: #bfbfba;
-      text-decoration: none;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    nav a {
-      color: #3994bc;
-      text-decoration: none;
-      font-weight: 500;
-      transition: opacity 0.2s;
-    }
-
-    nav a:hover {
-      opacity: 0.8;
-    }
-
-    main {
-      flex: 1;
-    }
-
-    section {
-      padding: 4rem 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    h1 {
-      color: #bfbfba;
-      margin-bottom: 1rem;
-      font-size: 3rem;
-      line-height: 1.2;
-    }
-
-    h2 {
-      color: #bfbfba;
-      margin-top: 3rem;
-      margin-bottom: 1.5rem;
-      font-size: 2.25rem;
-    }
-
-    h3 {
-      color: #bfbfba;
-      margin-bottom: 0.75rem;
-      font-size: 1.25rem;
-    }
-
-    p {
-      margin-bottom: 1rem;
-      max-width: 700px;
-    }
-
-    strong {
-      font-weight: 600;
-    }
-
-    em {
-      font-style: italic;
-      color: #9a9b9b;
-    }
-
-    a {
-      color: #3994bc;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .hero {
-      padding: 6rem 2rem;
-      text-align: center;
-    }
-
-    .hero h1 {
-      font-size: 3.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .hero p {
-      margin: 0 auto 2rem;
-      font-size: 1.25rem;
-    }
-
-    .badge {
-      display: inline-block;
-      background-color: #2a2b2c;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      font-size: 0.875rem;
-      margin: 1rem 0;
-      color: #bfbfba;
-    }
-
-    .terminal {
-      background-color: #0d0e0f;
-      border: 1px solid #2a2b2c;
-      border-radius: 8px;
-      padding: 1.5rem;
-      text-align: left;
-      margin: 2rem auto;
-      max-width: 600px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      overflow-x: auto;
-    }
-
-    .terminal code {
-      color: #bfbfba;
-    }
-
-    .terminal .comment {
-      color: #6a6b6c;
-    }
-
-    .terminal .command {
-      color: #3994bc;
-    }
-
-    .stats-bar {
-      background-color: #2a2b2c;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .stats-bar span {
-      font-weight: 500;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.2s;
-      margin: 0.5rem;
-    }
-
-    .btn-primary {
-      background-color: #3994bc;
-      color: #191a1b;
-    }
-
-    .btn-primary:hover {
-      background-color: #2e7a9c;
-    }
-
-    .btn-secondary {
-      background-color: transparent;
-      color: #3994bc;
-      border: 2px solid #3994bc;
-    }
-
-    .btn-secondary:hover {
-      background-color: rgba(57, 148, 188, 0.1);
-    }
-
-    .btn-disabled {
-      background-color: #2a2b2c;
-      color: #6a6b6c;
-      cursor: not-allowed;
-      border: none;
-    }
-
-    .btn-disabled:hover {
-      background-color: #2a2b2c;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .feature-card {
-      background-color: #2a2b2c;
-      padding: 1.5rem;
-      border-radius: 8px;
-    }
-
-    .feature-card h3 {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .problem-section {
-      text-align: center;
-      max-width: 700px;
-    }
-
-    .problem-section p {
-      margin: 0 auto 1rem;
-    }
-
-    .how-it-works {
-      max-width: 800px;
-    }
-
-    .step {
-      margin-bottom: 1.5rem;
-      padding-left: 1.5rem;
-      border-left: 3px solid #3994bc;
-    }
-
-    .step strong {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 2rem 0;
-    }
-
-    th, td {
-      border: 1px solid #2a2b2c;
-      padding: 1rem;
-      text-align: left;
-    }
-
-    th {
-      background-color: #2a2b2c;
-    }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .pricing-card {
-      background-color: #2a2b2c;
-      padding: 2rem;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .pricing-card h3 {
-      margin-bottom: 1rem;
-    }
-
-    .pricing-card ul {
-      text-align: left;
-      margin: 1.5rem 0;
-      padding-left: 1.5rem;
-    }
-
-    .pricing-card li {
-      margin-bottom: 0.5rem;
-    }
-
-    .privacy-section {
-      text-align: center;
-      max-width: 700px;
-    }
-
-    .faq-item {
-      margin-bottom: 1.5rem;
-    }
-
-    .faq-item strong {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: #bfbfba;
-    }
-
-    .cta-banner {
-      text-align: center;
-      background-color: #2a2b2c;
-      border-radius: 12px;
-      padding: 3rem 2rem;
-    }
-
-    .cta-banner h2 {
-      margin-top: 0;
-    }
-
-    footer {
-      padding: 3rem 2rem;
-      border-top: 1px solid #2a2b2c;
-      font-size: 0.9rem;
-    }
-
-    .footer-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      justify-items: center;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .footer-section {
-      text-align: center;
-    }
-
-    .footer-section h4 {
-      color: #bfbfba;
-      margin-bottom: 1rem;
-    }
-
-    .footer-section ul {
-      list-style: none;
-    }
-
-    .footer-section li {
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-section a {
-      color: #9a9b9b;
-    }
-
-    .footer-section a:hover {
-      color: #3994bc;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      padding-top: 2rem;
-      border-top: 1px solid #2a2b2c;
-      color: #6a6b6c;
-    }
-
-    .footer-bottom p {
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    code {
-      background-color: #2a2b2c;
-      padding: 0.2rem 0.4rem;
-      border-radius: 3px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
-    }
-
-    @media (max-width: 768px) {
-      nav .container {
-        flex-direction: column;
-        gap: 1rem;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="KK is a source-available, Git-compatible CLI for solo game developers and teams that stores large assets in cloud or local storage with verification and deduplication."
+    />
+    <meta
+      name="keywords"
+      content="kk, kk vcs, kk version control, kk version control system, version control, git lfs alternative, large file storage, game development, binary asset management, git compatible"
+    />
+    <meta name="author" content="Godynheil A. Quisto" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#191a1b" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' https:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self';"
+    />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta
+      http-equiv="Permissions-Policy"
+      content="accelerometer=(), camera=(), microphone=(), geolocation=()"
+    />
+    <link rel="canonical" href="https://kkvcs.com/" />
+    <link rel="icon" href="/icon/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icon/favicon-16x16.png"
+    />
+    <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
+    <link rel="manifest" href="/icon/site.webmanifest" />
+    <link rel="stylesheet" href="/css/core.css" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="KK VCS - Version Control System" />
+    <meta property="og:title" content="KK VCS - Version Control System" />
+    <meta
+      property="og:description"
+      content="KK VCS is a Git-compatible large-file version control system for solo game developers and teams, with verified cloud or local storage."
+    />
+    <meta property="og:url" content="https://kkvcs.com/" />
+    <meta
+      property="og:image:secure_url"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <meta
+      property="og:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="512" />
+    <meta property="og:image:height" content="512" />
+    <meta property="og:image:alt" content="KK Version Control System logo" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="KK VCS - Version Control System" />
+    <meta
+      name="twitter:description"
+      content="KK VCS is a Git-compatible large-file version control system for solo game developers and teams, with verified cloud or local storage."
+    />
+    <meta
+      name="twitter:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <meta name="twitter:image:alt" content="KK Version Control System logo" />
+    <title>
+      KK VCS - Version Control System for Game Developers | Git-Compatible Large File Storage
+    </title>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "KK Version Control System",
+        "alternateName": ["KK VCS", "KK"],
+        "url": "https://kkvcs.com",
+        "logo": "https://kkvcs.com/icon/android-chrome-512x512.png",
+        "description": "Git-compatible large-file version control for solo game developers and teams",
+        "sameAs": ["https://github.com/godynheil/kk"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Support",
+          "email": "godynheil@quisto.ph"
+        }
       }
+    </script>
 
-      nav ul {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1rem;
-        font-size: 0.9rem;
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "KK Version Control System",
+        "alternateName": ["KK VCS", "KK"],
+        "description": "Source-available, Git-compatible CLI for solo game developers and teams that stores large assets in cloud or local storage with verification and deduplication",
+        "url": "https://kkvcs.com",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Windows, macOS, Linux",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
       }
+    </script>
 
-      .hero h1 {
-        font-size: 2.5rem;
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does KK replace Git?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. KK wraps Git. Your Git history, branches, tags, and commits are all standard Git and can be used with any Git host (GitHub, GitLab, Bitbucket, Gitea, etc.)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need a KK server or account?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. KK is a local CLI tool. There are no KK servers, no KK accounts, and no subscription required for non-commercial use."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is KK different from Git LFS?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Git LFS requires a dedicated LFS server (or a SaaS LFS host). KK stores objects in any location you configure - a local folder, Google Drive, NAS, MEGA, or any rclone backend. KK also embeds its own Git repository so it doesn't depend on your host's LFS support."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is KK open source?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "KK is source-available under the Modified GNU General Public License, Version 2.0 (Modified GPL 2.0). Non-production use is free. Each version converts to Apache 2.0 four years after its release. Commercial Production Use requires a separate license."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What data does KK send to the developer?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "None. KK has zero telemetry. It collects no analytics, crash reports, usage statistics, or diagnostics of any kind."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens to my Google Drive credentials?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "OAuth tokens are stored only on your local machine with restrictive file permissions. They are never transmitted to the KK developer or any third party."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use my own Google OAuth credentials?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Set KK_GOOGLE_CLIENT_ID and KK_GOOGLE_CLIENT_SECRET environment variables before running kk setup gdrive."
+            }
+          }
+        ]
       }
-
-      .hero p {
-        font-size: 1rem;
-      }
-
-      .stats-bar {
-        gap: 1rem;
-        font-size: 0.9rem;
-      }
-
-      section {
-        padding: 3rem 1.5rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <nav>
-    <div class="container">
-      <a href="/" class="logo">KK Version Control System</a>
-      <ul>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#backends">Backends</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="https://github.com/godynheil/kk">GitHub</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <main>
-    <!-- Hero Section -->
-    <section class="hero">
-      <h1>Large-File Version Control,<br>Built for Game Developers.</h1>
-      <p>KK keeps your source code in Git and your large binary assets - textures, models, audio, video - safely stored, SHA-256 verified, and simple enough for solo developers to run without extra infrastructure.</p>
-      <div class="badge">Best for solo devs | Source-available | No telemetry | No cloud required</div>
-      <div style="margin-top: 2rem;">
-        <span class="btn btn-disabled">Coming Soon</span>
-        <a href="https://github.com/godynheil/kk" class="btn btn-secondary">View on GitHub</a>
-      </div>
-      <div class="terminal">
-        <code><span class="comment"># Initialize KK in your project</span><br>
-        <span class="command">$</span> kk init<br><br>
-        <span class="comment"># Track large binary files</span><br>
-        <span class="command">$</span> kk track "*.psd" "*.fbx" "*.wav" "*.mp4"<br><br>
-        <span class="comment"># Stage and commit your assets</span><br>
-        <span class="command">$</span> kk add .<br>
-        <span class="command">$</span> kk commit -m "feat(assets): add character rig v2"<br><br>
-        <span class="comment"># Push to Google Drive or your NAS</span><br>
-        <span class="command">$</span> kk push</code>
-      </div>
-    </section>
-
-    <!-- Stats Bar -->
-    <div class="stats-bar">
-      <span>SHA-256 Verified</span>
-      <span>Solo Dev Friendly</span>
-      <span>Zero Telemetry</span>
-      <span>Multi-Remote</span>
-      <span>Git Compatible</span>
-    </div>
-
-    <!-- Problem Section -->
-    <section class="problem-section">
-      <h2>Git Was Not Built for Large Files.</h2>
-      <p>Textures, 3D models, audio banks, and video files break standard Git repositories. Commits slow to a crawl. Clones balloon in size. History becomes unmanageable.</p>
-      <p>Git LFS helps - but it requires a separate server, introduces locking complexity, and still doesn't give you the flexibility to push to your own storage.</p>
-      <p>KK solves this without extra servers, without a SaaS bill, and without sacrificing your Git workflow.</p>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features">
-      <h2>Everything Git Handles, Plus Everything It Doesn't.</h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <h3>Git-Native Workflow</h3>
-          <p>KK wraps Git. Your branches, merges, commits, tags, and history stay exactly where they belong - in a standard Git repository. KK adds large-file management on top, not in the way.</p>
-        </div>
-        <div class="feature-card">
-          <h3>SHA-256 Asset Verification</h3>
-          <p>Every large file is stored as a content-addressed object identified by its SHA-256 hash and byte size. Uploads and downloads are verified automatically. Corruption is detected before it silently reaches your team.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Bring Your Own Storage</h3>
-          <p>Push to Google Drive, a NAS, a local folder, MEGA, or any rclone-supported destination. No vendor lock-in. No monthly SaaS fee. No server to maintain. Your assets live where you decide.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Multi-Remote Support</h3>
-          <p>Configure multiple remotes - a fast local NAS for the studio and Google Drive as an offsite backup. KK can push to all of them and pull from the best available source automatically.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Pointer-Based History</h3>
-          <p>Git commits a tiny pointer file for each large asset - not the raw bytes. Your repository stays lean. Large objects are pulled on demand, only when needed.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Deduplication</h3>
-          <p>Objects are stored once per unique SHA-256 hash. The same texture used across ten commits is stored exactly once on your remote. Storage costs stay low.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Integrity Checking</h3>
-          <p>Run <code>kk fsck</code> to verify that every object referenced by your Git history is present and intact - locally and on your remote. Catch missing or corrupted assets before a deadline.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Zero Telemetry</h3>
-          <p>KK never phones home. No analytics, no crash reports, no usage tracking. The Licensor has zero visibility into your projects, your files, or your workflows.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="how-it-works">
-      <h2>Simple by Design.</h2>
-      <div class="step">
-        <strong>Step 1 - Initialize</strong>
-        <p>Run <code>kk init</code> in your project root. KK creates a local .kk/ directory containing a bare Git repository and an object cache.</p>
-      </div>
-      <div class="step">
-        <strong>Step 2 - Track Your Asset Types</strong>
-        <p>Tell KK which file patterns are large assets: <code>kk track "*.psd" "*.fbx" "*.wav"</code>. KK writes glob patterns to .kk/tracks.json and updates .gitattributes automatically.</p>
-      </div>
-      <div class="step">
-        <strong>Step 3 - Stage and Commit</strong>
-        <p><code>kk add .</code> stages your changes. <code>kk commit</code> creates a Git commit with pointer files for tracked assets and full file content for everything else.</p>
-      </div>
-      <div class="step">
-        <strong>Step 4 - Connect a Remote</strong>
-        <p><code>kk setup gdrive</code> walks you through Google Drive authorization in your browser using OAuth 2.0 with PKCE. Or configure a local path or rclone remote manually.</p>
-      </div>
-      <div class="step">
-        <strong>Step 5 - Push and Pull</strong>
-        <p><code>kk push</code> uploads new objects to your remote(s) and syncs the manifest. <code>kk pull</code> downloads missing objects to your local cache on demand.</p>
-      </div>
-      <div class="step">
-        <strong>Step 6 - Verify Anytime</strong>
-        <p><code>kk fsck</code> verifies every object referenced by your history is present and intact - locally and on the remote.</p>
-      </div>
-    </section>
-
-    <!-- Backends Section -->
-    <section id="backends">
-      <h2>Works With the Storage You Already Have.</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Backend</th>
-            <th>Status</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Google Drive</strong></td>
-            <td>Native</td>
-            <td>OAuth 2.0 + PKCE, drive.file scope only</td>
-          </tr>
-          <tr>
-            <td><strong>Local / NAS</strong></td>
-            <td>Native</td>
-            <td>Direct filesystem path - no internet required</td>
-          </tr>
-          <tr>
-            <td><strong>rclone (any)</strong></td>
-            <td>Via rclone</td>
-            <td>MEGA, S3, Backblaze B2, Dropbox, OneDrive, SFTP, and 70+ more</td>
-          </tr>
-          <tr>
-            <td><strong>SSH</strong></td>
-            <td>Planned</td>
-            <td>Coming in a future release</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing">
-      <h2>Free for Personal and Indie Use. Commercial Use Requires a License.</h2>
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <h3>Free - Non-Production Use</h3>
-          <ul>
-            <li>Personal projects</li>
-            <li>Learning and education</li>
-            <li>Academic research</li>
-            <li>Development and testing</li>
-            <li>Noncommercial indie development</li>
-            <li>Full source code available</li>
-            <li>Not for commercial production use</li>
-          </ul>
-          <span class="btn btn-disabled">Coming Soon</span>
-        </div>
-        <div class="pricing-card">
-          <h3>Commercial License - Studios & Teams</h3>
-          <ul>
-            <li>All Free tier features</li>
-            <li>Commercial Production Use permitted</li>
-            <li>Production pipelines and studio workflows</li>
-            <li>Client work and revenue-generating projects</li>
-            <li>Custom terms available</li>
-            <li>Priority contact</li>
-          </ul>
-          <a href="mailto:godynheil@quisto.ph" class="btn btn-secondary">Contact for Licensing -></a>
-        </div>
-        <div class="pricing-card">
-          <h3>Future: Apache 2.0</h3>
-          <p>Each version of KK automatically becomes available under the Apache License 2.0 - four years after its first public release. No action required.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- Privacy Section -->
-    <section class="privacy-section">
-      <h2>Your Data Is Yours. Always.</h2>
-      <p>KK runs entirely on your machine.</p>
-      <p>No data is sent to KK servers - because there are no KK servers. Your files, your credentials, your repository history, and your project metadata never leave your local machine or your chosen storage backend.</p>
-      <p>Google Drive OAuth tokens are stored locally with 0600 file permissions. KK requests only the drive.file scope - it can only see files it creates.</p>
-      <p><a href="/privacy-policy/">Read the full Privacy Policy -></a></p>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="faq">
-      <h2>Frequently Asked Questions</h2>
-      <div class="faq-item">
-        <strong>Q: Does KK replace Git?</strong>
-        <p>No. KK wraps Git. Your Git history, branches, tags, and commits are all standard Git and can be used with any Git host (GitHub, GitLab, Bitbucket, Gitea, etc.).</p>
-      </div>
-      <div class="faq-item">
-        <strong>Q: Do I need a KK server or account?</strong>
-        <p>No. KK is a local CLI tool. There are no KK servers, no KK accounts, and no subscription required for non-commercial use.</p>
-      </div>
-      <div class="faq-item">
-        <strong>Q: How is KK different from Git LFS?</strong>
-        <p>Git LFS requires a dedicated LFS server (or a SaaS LFS host). KK stores objects in any location you configure - a local folder, Google Drive, NAS, MEGA, or any rclone backend. KK also embeds its own Git repository so it doesn't depend on your host's LFS support.</p>
-      </div>
-      <div class="faq-item">
-        <strong>Q: Is KK open source?</strong>
-        <p>KK is source-available under the Business Source License 1.1 (BSL 1.1). Non-production use is free. Each version converts to Apache 2.0 four years after its release. Commercial Production Use requires a separate license.</p>
-      </div>
-      <div class="faq-item">
-        <strong>Q: What data does KK send to the developer?</strong>
-        <p>None. KK has zero telemetry. It collects no analytics, crash reports, usage statistics, or diagnostics of any kind.</p>
-      </div>
-      <div class="faq-item">
-        <strong>Q: What happens to my Google Drive credentials?</strong>
-        <p>OAuth tokens are stored only on your local machine (<code>%APPDATA%\KK\gdrive\</code> on Windows, <code>~/.config/KK/gdrive/</code> on macOS/Linux) with restrictive file permissions. They are never transmitted to the KK developer or any third party.</p>
-      </div>
-      <div class="faq-item">
-        <strong>Q: Can I use my own Google OAuth credentials?</strong>
-        <p>Yes. Set <code>KK_GOOGLE_CLIENT_ID</code> and <code>KK_GOOGLE_CLIENT_SECRET</code> environment variables before running <code>kk setup gdrive</code>.</p>
-      </div>
-    </section>
-
-    <!-- CTA Banner -->
-    <section>
-      <div class="cta-banner">
-        <h2>Start Managing Your Assets Properly.</h2>
-        <p>Free for personal and indie use. Commercial licenses available.</p>
-        <div style="margin-top: 1.5rem;">
-          <span class="btn btn-disabled">Coming Soon</span>
-          <a href="https://github.com/godynheil/kk" class="btn btn-secondary">View on GitHub</a>
-          <a href="mailto:godynheil@quisto.ph" class="btn btn-secondary">Commercial Licensing -></a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-content">
-      <div class="footer-section">
-        <h4>Product</h4>
+    </script>
+    <link rel="stylesheet" href="/css/pages/home.css" />
+    <script src="/js/copy-code.js" defer></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+      <div class="container">
+        <a href="/" class="logo">KK Version Control System</a>
         <ul>
-          <li><a href="#features">Features</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#pricing">Pricing / Licensing</a></li>
-          <li><a href="https://github.com/godynheil/kk">GitHub</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#backends">Backends</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="/docs/">Documentation</a></li>
+          <li>
+            <a href="https://github.com/godynheil/kk" rel="noopener noreferrer"
+              >GitHub</a
+            >
+          </li>
         </ul>
       </div>
-      <div class="footer-section">
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="/terms-of-service/">Terms of Service</a></li>
-          <li><a href="/privacy-policy/">Privacy Policy</a></li>
-        </ul>
+    </nav>
+
+    <main id="main-content">
+      <section class="hero">
+        <h1>KK VCS: Large-File Version Control<br />Built for Game Developers</h1>
+        <p>
+          KK (KK Version Control System) keeps your source code in Git and your
+          large binary assets - textures, models, audio, video - safely stored,
+          SHA-256 verified, and simple enough for solo developers to run without
+          extra infrastructure.
+        </p>
+        <div class="badge">
+          Best for solo devs | Source-available | No telemetry | No cloud
+          required
+        </div>
+        <div class="mt-2">
+          <span
+            class="btn btn-disabled"
+            role="button"
+            aria-disabled="true"
+            tabindex="-1"
+            >Coming Soon</span
+          >
+          <a
+            href="https://github.com/godynheil/kk"
+            class="btn btn-secondary"
+            rel="noopener noreferrer"
+            >View on GitHub</a
+          >
+        </div>
+
+        <div id="how-it-works" class="how-it-works mt-3">
+          <h2>Simple by Design.</h2>
+          <div class="step">
+            <strong>Step 1 - Initialize</strong>
+            <p>
+              Run <code>kk init</code> in your project root. KK creates a local
+              .kk/ directory containing a bare Git repository and an object
+              cache.
+            </p>
+          </div>
+          <div class="step">
+            <strong>Step 2 - Track Your Asset Types</strong>
+            <p>
+              Tell KK which file patterns are large assets:
+              <code>kk track "*.psd" "*.fbx" "*.wav"</code>. KK writes glob
+              patterns to .kk/tracks.json and updates .gitattributes
+              automatically.
+            </p>
+          </div>
+          <div class="step">
+            <strong>Step 3 - Stage and Commit</strong>
+            <p>
+              <code>kk add .</code> stages your changes.
+              <code>kk commit</code> creates a Git commit with pointer files for
+              tracked assets and full file content for everything else.
+            </p>
+          </div>
+          <div class="step">
+            <strong>Step 4 - Connect a Remote</strong>
+            <p>
+              <code>kk setup gdrive</code> walks you through Google Drive
+              authorization in your browser using OAuth 2.0 with PKCE. Or
+              configure a local path or rclone remote manually.
+            </p>
+          </div>
+          <div class="step">
+            <strong>Step 5 - Push and Pull</strong>
+            <p>
+              <code>kk push</code> uploads new objects to your remote(s) and
+              syncs the manifest. <code>kk pull</code> downloads missing objects
+              to your local cache on demand.
+            </p>
+          </div>
+          <div class="step">
+            <strong>Step 6 - Verify Anytime</strong>
+            <p>
+              <code>kk fsck</code> verifies every object referenced by your
+              history is present and intact - locally and on the remote.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="stats-bar">
+        <span>SHA-256 Verified</span>
+        <span>Solo Dev Friendly</span>
+        <span>Zero Telemetry</span>
+        <span>Multi-Remote</span>
+        <span>Git Compatible</span>
       </div>
-      <div class="footer-section">
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:godynheil@quisto.ph">godynheil@quisto.ph</a></li>
-          <li><a href="https://github.com/godynheil/kk/issues">GitHub Issues</a></li>
-        </ul>
+
+      <section id="features">
+        <h2>Everything Git Handles, Plus Everything It Doesn't.</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <h3>Git-Native Workflow</h3>
+            <p>
+              KK wraps Git. Your branches, merges, commits, tags, and history
+              stay exactly where they belong - in a standard Git repository. KK
+              adds large-file management on top, not in the way.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>SHA-256 Asset Verification</h3>
+            <p>
+              Every large file is stored as a content-addressed object
+              identified by its SHA-256 hash and byte size. Uploads and
+              downloads are verified automatically. Corruption is detected
+              before it silently reaches your team.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Bring Your Own Storage</h3>
+            <p>
+              Push to Google Drive, a NAS, a local folder, MEGA, or any
+              rclone-supported destination. No vendor lock-in. No monthly SaaS
+              fee. No server to maintain. Your assets live where you decide.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Multi-Remote Support</h3>
+            <p>
+              Configure multiple remotes - a fast local NAS for the studio and
+              Google Drive as an offsite backup. KK can push to all of them and
+              pull from the best available source automatically.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Pointer-Based History</h3>
+            <p>
+              Git commits a tiny pointer file for each large asset - not the raw
+              bytes. Your repository stays lean. Large objects are pulled on
+              demand, only when needed.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Deduplication</h3>
+            <p>
+              Objects are stored once per unique SHA-256 hash. The same texture
+              used across ten commits is stored exactly once on your remote.
+              Storage costs stay low.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Integrity Checking</h3>
+            <p>
+              Run <code>kk fsck</code> to verify that every object referenced by
+              your Git history is present and intact - locally and on your
+              remote. Catch missing or corrupted assets before a deadline.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Zero Telemetry</h3>
+            <p>
+              KK never phones home. No analytics, no crash reports, no usage
+              tracking. The Licensor has zero visibility into your projects,
+              your files, or your workflows.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="backends">
+        <h2>Works With the Storage You Already Have</h2>
+        <p class="mb-1-5">
+          Choose from native integrations or connect to 70+ storage providers via
+          rclone.
+        </p>
+        <table>
+          <caption class="visually-hidden">
+            Storage backend compatibility table
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Backend</th>
+              <th scope="col">Status</th>
+              <th scope="col">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Google Drive</th>
+              <td>Native</td>
+              <td>OAuth 2.0 + PKCE, drive.file scope only</td>
+            </tr>
+            <tr>
+              <th scope="row">Local / NAS</th>
+              <td>Native</td>
+              <td>Direct filesystem path - no internet required</td>
+            </tr>
+            <tr>
+              <th scope="row">rclone (any)</th>
+              <td>Via rclone</td>
+              <td>
+                MEGA, S3, Backblaze B2, Dropbox, OneDrive, SFTP, and 70+ more
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">SSH</th>
+              <td>Planned</td>
+              <td>Coming in a future release</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="pricing">
+        <h2>
+          Free for Personal and Indie Use. Commercial Use Requires a License.
+        </h2>
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <h3>Free - Non-Production Use</h3>
+            <ul>
+              <li>Personal projects</li>
+              <li>Learning and education</li>
+              <li>Academic research</li>
+              <li>Development and testing</li>
+              <li>Noncommercial indie development</li>
+              <li>Full source code available</li>
+              <li>Not for commercial production use</li>
+            </ul>
+            <span
+              class="btn btn-disabled"
+              role="button"
+              aria-disabled="true"
+              tabindex="-1"
+              >Coming Soon</span
+            >
+          </div>
+          <div class="pricing-card">
+            <h3>Commercial License - Studios & Teams</h3>
+            <ul>
+              <li>All Free tier features</li>
+              <li>Commercial Production Use permitted</li>
+              <li>Production pipelines and studio workflows</li>
+              <li>Client work and revenue-generating projects</li>
+              <li>Custom terms available</li>
+              <li>Priority contact</li>
+            </ul>
+            <a href="mailto:godynheil@quisto.ph" class="btn btn-secondary"
+              >Contact for Licensing -></a
+            >
+          </div>
+          <div class="pricing-card">
+            <h3>Future: Apache 2.0</h3>
+            <p>
+              Each version of KK automatically becomes available under the
+              Apache License 2.0 - four years after its first public release. No
+              action required.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="privacy-section">
+        <h2>Your Data Is Yours. Always.</h2>
+        <p>KK runs entirely on your machine.</p>
+        <p>
+          No data is sent to KK servers - because there are no KK servers. Your
+          files, your credentials, your repository history, and your project
+          metadata never leave your local machine or your chosen storage
+          backend.
+        </p>
+        <p>
+          Google Drive OAuth tokens are stored locally with 0600 file
+          permissions. KK requests only the drive.file scope - it can only see
+          files it creates.
+        </p>
+        <p><a href="/privacy-policy/">Read the full Privacy Policy -></a></p>
+      </section>
+
+      <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <dl>
+          <div class="faq-item">
+            <dt>Q: Does KK replace Git?</dt>
+            <dd>
+              No. KK wraps Git. Your Git history, branches, tags, and commits
+              are all standard Git and can be used with any Git host (GitHub,
+              GitLab, Bitbucket, Gitea, etc.).
+            </dd>
+          </div>
+          <div class="faq-item">
+            <dt>Q: Do I need a KK server or account?</dt>
+            <dd>
+              No. KK is a local CLI tool. There are no KK servers, no KK
+              accounts, and no subscription required for non-commercial use.
+            </dd>
+          </div>
+          <div class="faq-item">
+            <dt>Q: How is KK different from Git LFS?</dt>
+            <dd>
+              Git LFS requires a dedicated LFS server (or a SaaS LFS host). KK
+              stores objects in any location you configure - a local folder,
+              Google Drive, NAS, MEGA, or any rclone backend. KK also embeds its
+              own Git repository so it doesn't depend on your host's LFS
+              support.
+            </dd>
+          </div>
+          <div class="faq-item">
+            <dt>Q: Is KK open source?</dt>
+            <dd>
+              KK is source-available under the Modified GNU General Public
+              License, Version 2.0 (Modified GPL 2.0). Non-production use is
+              free. Each version converts to Apache 2.0 four years after its
+              release. Commercial Production Use requires a separate license.
+            </dd>
+          </div>
+          <div class="faq-item">
+            <dt>Q: What data does KK send to the developer?</dt>
+            <dd>
+              None. KK has zero telemetry. It collects no analytics, crash
+              reports, usage statistics, or diagnostics of any kind.
+            </dd>
+          </div>
+          <div class="faq-item">
+            <dt>Q: What happens to my Google Drive credentials?</dt>
+            <dd>
+              OAuth tokens are stored only on your local machine (<code
+                >%APPDATA%\KK\gdrive\</code
+              >
+              on Windows, <code>~/.config/KK/gdrive/</code> on macOS/Linux) with
+              restrictive file permissions. They are never transmitted to the KK
+              developer or any third party.
+            </dd>
+          </div>
+          <div class="faq-item">
+            <dt>Q: Can I use my own Google OAuth credentials?</dt>
+            <dd>
+              Yes. Set <code>KK_GOOGLE_CLIENT_ID</code> and
+              <code>KK_GOOGLE_CLIENT_SECRET</code> environment variables before
+              running <code>kk setup gdrive</code>.
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="problem-section">
+        <h2>Git Was Not Built for Large Files.</h2>
+        <p>
+          Textures, 3D models, audio banks, and video files break standard Git
+          repositories by bloating their history and making clones unmanageably
+          large.
+        </p>
+        <p>
+          Git LFS (Large File Storage) is the industry standard for handling
+          large files in Git. However, it requires Git hosting providers that
+          support LFS (often incurring additional storage fees), relies on
+          servers implementing the specialized Git LFS API, and doesn't natively
+          target standard consumer cloud services or local network storage.
+        </p>
+        <p>
+          KK is not a full or general-purpose replacement for Git LFS. Instead,
+          it is an alternative designed for a different usecase: it allows solo
+          developers and small teams to store large assets directly on storage
+          they already own (such as Google Drive, a local NAS, or any cloud
+          provider supported by rclone) without hosting separate LFS
+          infrastructure.
+        </p>
+      </section>
+
+      <section class="who-section">
+        <h2>Not for Everyone.<br />Built for Teams with Storage Constraints.</h2>
+        <p>
+          <strong
+            >KK is not meant to be useful to everyone.</strong
+          >
+          If your project has no large files, no storage constraints, and no
+          reason to separate source history from asset storage, it is probably
+          not for you.
+        </p>
+        <p>
+          It is built for developers and small indie teams with a lot of
+          storage, limited infrastructure, or a preference to avoid setting up
+          and maintaining SaaS or dedicated file servers. Some teams already have
+          a NAS, Google Drive, MEGA, S3, Backblaze B2, or another storage target
+          available, and only need Git to track the regular files, project
+          history, and small pointer files.
+        </p>
+        <p>
+          This is useful when a repository contains source code beside heavy
+          assets: game projects, art-heavy prototypes, video/audio work, modding
+          projects, machine-learning datasets, local tools, build artifacts, or
+          any workflow where binary files are too large or too frequently
+          changing to keep directly inside Git history.
+        </p>
+        <p>
+          It also fits teams that want a simple, inspectable setup: Git for
+          commits and collaboration, ordinary storage for large objects, and no
+          requirement to adopt a specific hosting platform just to move files
+          around. A solo developer might use Google Drive. A small studio might
+          use a NAS. A distributed team might use rclone to push to S3, B2, MEGA,
+          or another backend they already pay for.
+        </p>
+        <p>
+          KK does not try to turn GitHub or GitLab into asset storage. Those
+          providers are best used for normal source files, reviews, issues, CI,
+          and the pointer files that describe which large objects belong to each
+          commit. The actual large objects stay outside the Git provider, where
+          storage is cheaper, easier to replace, and under your control.
+        </p>
+        <p>
+          <strong>That is the point of KK:</strong> Git providers such as GitHub,
+          GitLab, Bitbucket, or Gitea can keep doing what they are good at, while
+          the heavy binary objects live on the storage backend you choose.
+        </p>
+      </section>
+
+      <section>
+        <div class="cta-banner">
+          <h2>Start Managing Your Assets Properly.</h2>
+          <p>Free for personal and indie use. Commercial licenses available.</p>
+          <div class="mt-1-5">
+            <span
+              class="btn btn-disabled"
+              role="button"
+              aria-disabled="true"
+              tabindex="-1"
+              >Coming Soon</span
+            >
+            <a
+              href="https://github.com/godynheil/kk"
+              class="btn btn-secondary"
+              rel="noopener noreferrer"
+              >View on GitHub</a
+            >
+            <a href="mailto:godynheil@quisto.ph" class="btn btn-secondary"
+              >Commercial Licensing -></a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#pricing">Pricing / Licensing</a></li>
+            <li>
+              <a
+                href="https://github.com/godynheil/kk"
+                rel="noopener noreferrer"
+                >GitHub</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Documentation</h4>
+          <ul>
+            <li><a href="/docs/installation/">Installation</a></li>
+            <li><a href="/docs/how-to/">How To Guide</a></li>
+            <li><a href="/docs/glossary/">Glossary</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/terms-of-service/">Terms of Service</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/license/">License</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Contact</h4>
+          <ul>
+            <li>
+              <a href="mailto:godynheil@quisto.ph">godynheil@quisto.ph</a>
+            </li>
+            <li>
+              <a href="https://github.com/godynheil/kk/issues">GitHub Issues</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
-      <p>KK Version Control System is distributed under the Business Source License 1.1.</p>
-      <p>"KK", "KK Version Control System", and "kk" are trademarks of Godynheil A. Quisto.</p>
-    </div>
-  </footer>
-</body>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
+        <p>
+          KK Version Control System is distributed under the Modified GNU
+          General Public License, Version 2.0.
+        </p>
+        <p>
+          "KK", "KK Version Control System", and "kk" are trademarks of
+          Godynheil A. Quisto.
+        </p>
+      </div>
+    </footer>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const sections = document.querySelectorAll('#how-it-works, #features, #backends, #pricing, #faq');
+        const navLinks = document.querySelectorAll('nav ul a');
+
+        // Scroll spy function
+        const scrollSpy = () => {
+          let currentSectionId = '';
+          const scrollPosition = window.scrollY + 120; // offset for sticky nav
+
+          sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+              currentSectionId = section.getAttribute('id');
+            }
+          });
+
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            const href = link.getAttribute('href');
+            if (href === `#${currentSectionId}` || href === `/#${currentSectionId}`) {
+              link.classList.add('active');
+            }
+          });
+        };
+
+        window.addEventListener('scroll', scrollSpy);
+        scrollSpy(); // Initial call
+      });
+    </script>
+  </body>
 </html>

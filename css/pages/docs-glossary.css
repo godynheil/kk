@@ -1,0 +1,169 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #191a1b;
+  color: #bfbfba;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+    sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 3rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+h1 {
+  color: #bfbfba;
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  line-height: 1.2;
+}
+
+h2 {
+  color: #bfbfba;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+strong {
+  font-weight: 600;
+}
+
+code {
+  background-color: #2a2b2c;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-family: "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #2a2b2c;
+  margin: 2rem 0;
+}
+
+a {
+  color: #3994bc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.term-list {
+  list-style: none;
+  margin-left: 0;
+  margin-top: 2rem;
+}
+
+.term-item {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #2a2b2c;
+}
+
+.term-item:last-child {
+  border-bottom: none;
+}
+
+.term-name {
+  font-size: 1.3rem;
+  color: #3994bc;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.term-definition {
+  color: #bfbfba;
+  line-height: 1.7;
+}
+
+.term-definition code {
+  color: #9a9b9b;
+  background-color: #1e1f1f;
+}
+
+footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid #2a2b2c;
+  font-size: 0.9rem;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.footer-section {
+  text-align: center;
+}
+
+.footer-section h4 {
+  color: #bfbfba;
+  margin-bottom: 1rem;
+}
+
+.footer-section ul {
+  list-style: none;
+  margin-left: 0;
+  margin-bottom: 0;
+}
+
+.footer-section li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-section a {
+  color: #9a9b9b;
+}
+
+.footer-section a:hover {
+  color: #3994bc;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid #2a2b2c;
+  color: #6a6b6c;
+}
+
+.footer-bottom p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  main {
+    padding: 2rem 1.5rem;
+  }
+}

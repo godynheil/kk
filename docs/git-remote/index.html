@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="How KK works with and without Git remotes - code files vs large files handling, repository structure, and common workflows."
+    />
+    <meta name="author" content="Godynheil A. Quisto" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#191a1b" />
+    <link rel="canonical" href="https://kkvcs.com/docs/git-remote/" />
+    <link rel="icon" href="/icon/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icon/favicon-16x16.png"
+    />
+    <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
+    <link rel="manifest" href="/icon/site.webmanifest" />
+    <link rel="stylesheet" href="/css/core.css" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Git Remote Integration | KK Version Control System"
+    />
+    <meta
+      property="og:description"
+      content="How KK works with and without Git remotes, code vs large files handling, and migration between modes."
+    />
+    <meta property="og:url" content="https://kkvcs.com/docs/git-remote/" />
+    <meta
+      property="og:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <meta property="og:site_name" content="KK Version Control System" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Git Remote Integration | KK Version Control System"
+    />
+    <meta
+      name="twitter:description"
+      content="How KK works with and without Git remotes, code vs large files handling, and migration between modes."
+    />
+    <meta
+      name="twitter:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <title>Git Remote Integration | KK Version Control System</title>
+    <link rel="stylesheet" href="/css/pages/docs-git-remote.css" />
+    <script src="/js/copy-code.js" defer></script>
+  </head>
+  <body>
+    <nav aria-label="Main navigation">
+      <div class="container">
+        <a href="/" class="logo">KK Version Control System</a>
+        <ul>
+          <li><a href="/#how-it-works">How It Works</a></li>
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#backends">Backends</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/docs/" class="active">Documentation</a></li>
+          <li>
+            <a href="https://github.com/godynheil/kk" rel="noopener noreferrer"
+              >GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main>
+      <h1>Git Remote Integration</h1>
+      <p>
+        How KK handles remote storage with and without Git remotes, and how code
+        files versus large files are managed.
+      </p>
+
+      <div class="toc">
+        <h3>Table of Contents</h3>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li>
+            <a href="#how-kk-works-without-git-remotes"
+              >How KK Works Without Git Remotes</a
+            >
+          </li>
+          <li>
+            <a href="#how-kk-works-with-git-remotes"
+              >How KK Works With Git Remotes</a
+            >
+          </li>
+          <li>
+            <a href="#code-files-vs-large-files">Code Files vs Large Files</a>
+          </li>
+          <li><a href="#repository-structure">Repository Structure</a></li>
+          <li><a href="#common-workflows">Common Workflows</a></li>
+          <li>
+            <a href="#migrating-between-history-modes"
+              >Migrating Between History Modes</a
+            >
+          </li>
+          <li><a href="#configuration">Configuration</a></li>
+        </ul>
+      </div>
+
+      <hr />
+
+      <h2 id="overview">Overview</h2>
+
+      <p>
+        KK is a version control system designed for projects with large binary
+        assets. It combines:
+      </p>
+
+      <ul>
+        <li>
+          <strong>Git</strong> for version controlling code and pointer files
+        </li>
+        <li>
+          <strong>Object Remotes</strong> (local, rclone, Google Drive) for
+          storing large binary files
+        </li>
+      </ul>
+
+      <p>When you work with KK:</p>
+      <ul>
+        <li>
+          <strong>Code files</strong> are stored directly in git as regular
+          files
+        </li>
+        <li>
+          <strong>Large files</strong> are converted to lightweight
+          <strong>pointer files</strong> in git
+        </li>
+        <li>The actual binary content is stored on object remotes</li>
+      </ul>
+
+      <hr />
+
+      <h2 id="how-kk-works-without-git-remotes">
+        How KK Works Without Git Remotes
+      </h2>
+
+      <h3>Repository Setup</h3>
+
+      <p>Without git remotes, KK uses only object remotes for collaboration:</p>
+
+      <pre><code>kk init
+kk setup gdrive        # or: kk remote add rclone backup --remote gdrive:KK/MyGame</code></pre>
+
+      <h3>How Files Are Handled</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>File Type</th>
+            <th>Stored In</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Code files</td>
+            <td><code>.kk/git</code> (git objects)</td>
+            <td><code>main.go</code>, <code>script.py</code></td>
+          </tr>
+          <tr>
+            <td>Large files</td>
+            <td>Object remote (Drive/rclone/local)</td>
+            <td><code>video.mp4</code>, <code>model.fbx</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Pushing Without Git Remotes</h3>
+
+      <p>When you run <code>kk push</code>:</p>
+
+      <ol>
+        <li>
+          <strong>Pointer History</strong>: Git history is bundled and uploaded
+          to object remotes
+        </li>
+        <li>
+          <strong>Large Files</strong>: Binary objects are uploaded to object
+          remotes
+        </li>
+        <li>
+          <strong>Project Files</strong>: Project metadata and config are synced
+        </li>
+      </ol>
+
+      <pre><code>kk push
+# → Uploads binary objects to object remote(s)
+# → Bundles and uploads git history to object remote(s)
+# → Syncs project files to object remote(s)</code></pre>
+
+      <h3>Pulling Without Git Remotes</h3>
+
+      <p>When you run <code>kk pull</code>:</p>
+
+      <ol>
+        <li>
+          <strong>History</strong>: Downloads and applies history bundles from
+          object remotes
+        </li>
+        <li>
+          <strong>Large Files</strong>: Downloads binary objects to
+          <code>.kk/objects/</code>
+        </li>
+        <li>
+          <strong>Materialization</strong>: Expands pointer files to their
+          actual content
+        </li>
+      </ol>
+
+      <pre><code>kk pull
+# → Downloads and applies history bundles
+# → Downloads binary objects
+# → Materializes pointer files</code></pre>
+
+      <h3>Cloning Without Git Remotes</h3>
+
+      <pre><code>kk clone rclone:gdrive:KK/MyGame
+# or
+kk clone drive:&lt;folder-id&gt;
+# or
+kk clone local:/path/to/project</code></pre>
+
+      <p><strong>Process:</strong></p>
+      <ol>
+        <li>Downloads project files from object remote</li>
+        <li>Creates KK directory structure</li>
+        <li>Downloads binary objects (if <code>--pull</code> specified)</li>
+        <li>Initializes <code>.kk/git</code> with bundled history</li>
+      </ol>
+
+      <hr />
+
+      <h2 id="how-kk-works-with-git-remotes">How KK Works With Git Remotes</h2>
+
+      <h3>Repository Setup</h3>
+
+      <p>With git remotes, KK uses a hybrid approach:</p>
+
+      <pre><code>kk init
+kk remote add git origin https://github.com/org/repo.git
+kk setup gdrive        # Object remote for large files</code></pre>
+
+      <h3>Adding a Git Remote</h3>
+
+      <pre><code>kk remote add git origin https://github.com/org/repo.git</code></pre>
+
+      <p>KK will:</p>
+      <ol>
+        <li>
+          <strong>Verify connectivity</strong> by running
+          <code>git ls-remote</code>
+        </li>
+        <li>Add the remote to <code>.kk/git/config</code></li>
+        <li>Store metadata in <code>.kk/config.json</code></li>
+      </ol>
+
+      <h3>How Files Are Handled</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>File Type</th>
+            <th>Stored In</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Code files</td>
+            <td>Git remote (GitHub/GitLab/Gitea)</td>
+            <td><code>main.go</code>, <code>script.py</code></td>
+          </tr>
+          <tr>
+            <td>Large files</td>
+            <td>Pointer files in git + binaries on object remote</td>
+            <td><code>video.mp4</code> → pointer in git, binary on Drive</td>
+          </tr>
+          <tr>
+            <td><code>.kk/config.json</code></td>
+            <td>Git remote</td>
+            <td>Remote configurations</td>
+          </tr>
+          <tr>
+            <td><code>.kk/tracks.json</code></td>
+            <td>Git remote</td>
+            <td>File tracking patterns</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>What Gets Pushed to Git vs Object Remotes</h3>
+
+      <p><strong>Git remote receives:</strong></p>
+      <ul>
+        <li>
+          All source code files (based on <code>codeExtensions</code> map)
+        </li>
+        <li>Pointer files (text references to large files)</li>
+        <li>
+          Configuration files (<code>.kk/config.json</code>,
+          <code>.kk/tracks.json</code>)
+        </li>
+        <li>Git history</li>
+      </ul>
+
+      <p><strong>Object remote receives:</strong></p>
+      <ul>
+        <li>Binary content of large files</li>
+        <li>Manifests tracking what objects exist</li>
+        <li>(Optional) History bundles if no git remote exists</li>
+      </ul>
+
+      <h3>Pushing With Git Remotes</h3>
+
+      <p>When you run <code>kk push</code>:</p>
+
+      <pre><code>kk push
+# → Syncs pointer history to git remote (git push)
+# → Uploads binary objects to object remote(s)
+# → (Optional) History bundles if no git remote</code></pre>
+
+      <h3>Pulling With Git Remotes</h3>
+
+      <p>When you run <code>kk pull</code>:</p>
+
+      <pre><code>kk pull
+# → Pulls pointer history from git remote (git pull)
+# → Downloads binary objects from object remote(s)
+# → Materializes pointer files</code></pre>
+
+      <h3>Cloning From Git</h3>
+
+      <pre><code>kk clone git:https://github.com/org/repo.git
+kk clone git:https://github.com/org/repo.git --pull
+kk clone git:https://github.com/org/repo.git --account myprofile --pull
+kk clone git:https://gitlab.com/org/repo.git --branch kk-test --pull</code></pre>
+
+      <p><strong>Process:</strong></p>
+      <ol>
+        <li>
+          <strong>Git clone</strong>: Uses standard git to clone the repository
+        </li>
+        <li>
+          <strong>File copy</strong>: Copies files (excluding
+          <code>.git</code> directory) to destination
+        </li>
+        <li>
+          <strong>KK setup</strong>: Initializes KK structure if not present
+        </li>
+        <li>
+          <strong>Remote config</strong>: Adds git remote to
+          <code>.kk/git</code>
+        </li>
+        <li>
+          <strong>Object check</strong>: Verifies object remotes accessibility
+        </li>
+        <li>
+          <strong>Materialization</strong>: Downloads and expands pointer files
+          (if <code>--pull</code>)
+        </li>
+      </ol>
+
+      <p><strong>What you get:</strong></p>
+      <ul>
+        <li>All source code files as regular files</li>
+        <li>Pointer files for large assets</li>
+        <li><code>.kk/config.json</code> with remote configurations</li>
+        <li><code>.kk/tracks.json</code> with tracking patterns</li>
+      </ul>
+
+      <hr />
+
+      <h2 id="code-files-vs-large-files">Code Files vs Large Files</h2>
+
+      <h3>Code Files</h3>
+
+      <p>
+        Code files are defined by the <code>codeExtensions</code> map in
+        <code>internal/core/code.go</code>. These files are
+        <strong>always stored as regular files in git</strong>:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Extensions</th>
+            <th>Language</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>.go</code></td>
+            <td>Go</td>
+          </tr>
+          <tr>
+            <td><code>.py</code></td>
+            <td>Python</td>
+          </tr>
+          <tr>
+            <td><code>.js</code>, <code>.jsx</code></td>
+            <td>JavaScript</td>
+          </tr>
+          <tr>
+            <td><code>.ts</code>, <code>.tsx</code></td>
+            <td>TypeScript</td>
+          </tr>
+          <tr>
+            <td><code>.rs</code></td>
+            <td>Rust</td>
+          </tr>
+          <tr>
+            <td><code>.cpp</code>, <code>.c</code>, <code>.h</code></td>
+            <td>C/C++</td>
+          </tr>
+          <tr>
+            <td><code>.java</code></td>
+            <td>Java</td>
+          </tr>
+          <tr>
+            <td><code>.php</code></td>
+            <td>PHP</td>
+          </tr>
+          <tr>
+            <td><code>.rb</code></td>
+            <td>Ruby</td>
+          </tr>
+          <tr>
+            <td><code>.swift</code></td>
+            <td>Swift</td>
+          </tr>
+          <tr>
+            <td><code>.kt</code></td>
+            <td>Kotlin</td>
+          </tr>
+          <tr>
+            <td><code>.md</code></td>
+            <td>Markdown</td>
+          </tr>
+          <tr>
+            <td><code>.json</code>, <code>.yaml</code>, <code>.toml</code></td>
+            <td>Config files</td>
+          </tr>
+          <tr>
+            <td><code>.txt</code>, <code>.csv</code>, <code>.tsv</code></td>
+            <td>Plain text files</td>
+          </tr>
+          <tr>
+            <td><code>.log</code></td>
+            <td>Log files</td>
+          </tr>
+          <tr>
+            <td><code>.tex</code>, <code>.rst</code>, <code>.adoc</code></td>
+            <td>Documentation formats</td>
+          </tr>
+          <tr>
+            <td>
+              <code>.properties</code>, <code>.cfg</code>, <code>.conf</code>
+            </td>
+            <td>Configuration files</td>
+          </tr>
+          <tr>
+            <td><code>.pem</code>, <code>.crt</code>, <code>.key</code></td>
+            <td>Certificate/Key files</td>
+          </tr>
+          <tr>
+            <td><code>.nix</code></td>
+            <td>Nix expressions</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>... and 100+ more extensions.</p>
+
+      <h3>Large Files (Pointers)</h3>
+
+      <p>
+        Files that match patterns in <code>.kk/tracks.json</code> and are
+        <strong>NOT code files</strong> are converted to pointers:
+      </p>
+
+      <p><strong>Pointer format:</strong></p>
+      <pre><code>version kk-lfs-1.0.0
+oid sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+size 104857600</code></pre>
+
+      <p><strong>Example tracking patterns:</strong></p>
+      <pre><code>{
+  "patterns": [
+    "*.mp4",
+    "*.wav",
+    "*.mp3",
+    "*.png",
+    "*.jpg",
+    "*.jpeg",
+    "*.psd",
+    "*.fbx",
+    "*.obj",
+    "*.blend",
+    "*.zip",
+    "*.tar.gz"
+  ]
+}</code></pre>
+
+      <h3>Adding Files</h3>
+
+      <pre><code># Add code file - stored as regular file
+kk add src/main.go
+# Output: code src/main.go (storing as regular file)
+
+# Add large file - converted to pointer
+kk add Assets/video.mp4
+# Output: large Assets/video.mp4 -> sha256:9f86... (104857600 bytes)</code></pre>
+
+      <h3>Why This Matters</h3>
+
+      <ul>
+        <li>
+          <strong>GitHub/GitLab/Gitea</strong> can see your source code normally
+        </li>
+        <li>
+          <strong>Repository size stays small</strong> - only text files in git
+        </li>
+        <li><strong>Large files</strong> are accessible from object remotes</li>
+        <li>
+          <strong>Collaborators</strong> can clone with regular git and get
+          code, then use KK for assets
+        </li>
+      </ul>
+
+      <hr />
+
+      <h2 id="repository-structure">Repository Structure</h2>
+
+      <pre><code>MyProject/
+├── .kk/                          # KK metadata
+│   ├── git/                      # KK's internal git repository
+│   │   ├── HEAD
+│   │   ├── objects/              # Git objects
+│   │   ├── refs/                 # Git references
+│   │   └── config                # Git config (includes git remotes)
+│   ├── objects/                  # Local cache of large files
+│   │   └── ab/cd/&lt;hash&gt;         # Content-addressed storage
+│   ├── config.json               # Remote configurations
+│   ├── tracks.json               # File tracking patterns
+│   ├── repo.json                 # Repository metadata (repo_id, name)
+│   ├── tmp/                      # Temporary files
+│   └── logs/                     # Operation logs
+├── .kkignore                     # Exclusion patterns
+├── src/                          # Source code (stored in git)
+│   └── main.go
+├── Assets/                       # Large assets (pointers in git)
+│   ├── video.mp4                 # Pointer file
+│   └── model.fbx                 # Pointer file
+└── README.md                     # Documentation (stored in git)</code></pre>
+
+      <hr />
+
+      <h2 id="common-workflows">Common Workflows</h2>
+
+      <h3>Scenario 1: Solo Developer, Local Storage</h3>
+
+      <pre><code># Initialize
+kk init
+kk track "*.mp4" "*.fbx" "*.blend"
+
+# Work
+kk add src/main.go Assets/video.mp4
+kk commit -m "Add video player"
+
+# Backup to NAS
+kk remote add local nas --path /Volumes/NAS/KK/MyProject
+kk push --remote nas</code></pre>
+
+      <h3>Scenario 2: Team with GitHub + Google Drive</h3>
+
+      <pre><code># Initialize (developer 1)
+kk init
+kk remote add git origin https://github.com/team/project.git
+kk setup gdrive
+kk track "*.mp4" "*.fbx" "*.blend"
+
+# Work
+kk add src/main.go Assets/video.mp4
+kk commit -m "Initial commit"
+kk push  # Pushes code to GitHub, binaries to Drive
+
+# Clone (developer 2)
+kk clone git:https://github.com/team/project.git --pull
+# → Gets code from GitHub
+# → Downloads binaries from Drive</code></pre>
+
+      <h3>Scenario 3: Team Without GitHub</h3>
+
+      <pre><code># Initialize
+kk init
+kk setup gdrive
+
+# Work
+kk add src/main.go Assets/video.mp4
+kk commit -m "Initial commit"
+kk push  # Pushes everything to Drive (includes history bundles)
+
+# Clone
+kk clone drive:&lt;folder-id&gt; --pull
+# → Gets everything from Drive</code></pre>
+
+      <h3>Scenario 4: Using Existing Git Repository</h3>
+
+      <pre><code># Clone existing repo
+git clone https://github.com/team/project.git
+cd project
+
+# Initialize KK
+kk init --here
+
+# Setup remotes
+kk remote add git origin https://github.com/team/project.git
+kk setup gdrive
+
+# Track large files
+kk track "*.mp4" "*.fbx"
+
+# Add files
+kk add .  # Code files stay regular, large files become pointers
+kk commit -m "Add large assets with KK"
+kk push</code></pre>
+
+      <hr />
+
+      <h2 id="migrating-between-history-modes">
+        Migrating Between History Modes
+      </h2>
+
+      <p>
+        KK stores commit history in exactly one of two modes. You can switch at
+        any time using <code>kk remote migrate</code>.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th>Active when</th>
+            <th>History travels via</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Storage bundles</strong></td>
+            <td>No <code>type=git</code> remote in config</td>
+            <td>
+              <code>full.bundle</code> + <code>inc-*.bundle</code> on your
+              object remote
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Git remote</strong></td>
+            <td>A <code>type=git</code> remote exists</td>
+            <td>
+              <code>git push</code> / <code>git pull</code> to GitHub, GitLab,
+              etc.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="info-box">
+        <strong>Safe by default:</strong> No history is lost in either
+        direction. Migration uploads a fresh bundle chain before modifying any
+        config; if config write fails, <code>to-git</code> rolls back the
+        <code>.kk/git</code> remote entry.
+      </div>
+
+      <h3>Scenario 5: Storage bundles → GitHub (<code>to-git</code>)</h3>
+
+      <p>
+        A solo developer has been using Google Drive bundles. The team grows and
+        wants GitHub for code review.
+      </p>
+
+      <pre><code># Step 1 — verify current mode (no git remote listed)
+kk remote list
+# default: nas
+# nas type=local provider=nas pull=true push=true priority=10
+
+# Step 2 — migrate (connectivity is checked before any config changes)
+kk remote migrate to-git github https://github.com/acme/my-game.git</code></pre>
+
+      <p><strong>Output:</strong></p>
+      <pre><code>kk: checking git remote accessibility...
+kk: pushing all local branches to "github"...
+To https://github.com/acme/my-game.git
+ * [new branch]  main -> main
+ * [new branch]  feature/ai -> feature/ai
+kk: [github] all branches pushed
+
+kk: migration complete → git remote "github" registered (https://github.com/acme/my-game.git)
+kk: future 'kk push' will sync pointer history to "github" via git push
+kk: existing history bundles on object remote(s) are kept but will not be extended</code></pre>
+
+      <pre><code># Step 3 — confirm new state
+kk remote list
+# default: nas
+# nas    type=local provider=nas    pull=true push=true priority=10
+# github type=git  provider=github  url=https://github.com/acme/my-game.git push=true pull=true
+
+# Step 4 — from now on, kk push syncs via git push
+kk push
+# kk: [github] syncing pointer history to git remote...
+# kk: [github] pointer history synced
+# kk: [nas] ...
+
+# Step 5 — teammates clone from GitHub
+kk clone git:https://github.com/acme/my-game.git --pull</code></pre>
+
+      <h4>If auth isn't set up yet</h4>
+
+      <p>
+        <code>kk remote migrate to-git</code> registers the remote even if the
+        initial push fails (e.g. SSH key not yet added to GitHub). The recovery
+        command is printed:
+      </p>
+
+      <pre><code>kk: warning: initial git push failed: exit status 128
+kk:          Once auth is set up, run:
+kk:          git --git-dir=.kk/git push --all github</code></pre>
+
+      <h3>Scenario 6: GitHub → Storage bundles (<code>to-storage</code>)</h3>
+
+      <p>The team is leaving GitHub and going to a self-hosted NAS only.</p>
+
+      <pre><code># Step 1 — verify current mode
+kk remote list
+# default: github
+# github type=git  provider=github  url=https://github.com/acme/my-game.git push=true pull=true
+# nas    type=local provider=nas    pull=true push=true priority=10
+
+# Step 2 — preview the migration (shows what will change, asks to confirm)
+kk remote migrate to-storage</code></pre>
+
+      <p><strong>Output:</strong></p>
+      <pre><code>kk: This will:
+kk:   1. Upload a full history bundle to: nas
+kk:   2. Remove git remote(s): github (https://github.com/acme/my-game.git)
+kk:   Future 'kk push' will upload incremental bundles instead of using git push.
+
+Proceed? [y/N] y
+kk: creating initial history bundle(s)...
+kk: [nas] creating history bundle (full.bundle)...
+kk: [nas] uploading history bundle...
+kk: [nas] history pushed (full.bundle, 2 branch(es))
+kk: default remote set to "nas"
+
+kk: migration complete → commit history will now travel via storage bundles
+kk: teammates can restore history with: kk clone &lt;spec&gt; --history</code></pre>
+
+      <pre><code># Step 3 — confirm new state
+kk remote list
+# default: nas
+# nas type=local provider=nas pull=true push=true priority=10
+
+# Step 4 — future pushes create incremental bundles automatically
+kk push
+# kk: [nas] creating history bundle (inc-000001.bundle)...
+# kk: [nas] history pushed (inc-000001.bundle, 2 branch(es))
+
+# Step 5 — teammates clone from NAS with full history
+kk clone local:/NAS/KK/my-game --history --pull</code></pre>
+
+      <h4>Targeting one git remote when multiple exist</h4>
+
+      <pre><code># Remove only the gitlab remote; keep github
+kk remote migrate to-storage --remote gitlab --yes
+
+# After this, github still exists and handles history;
+# gitlab is removed from both .kk/git and .kk/config.json</code></pre>
+
+      <h4>Scripted / non-interactive use</h4>
+
+      <pre><code># Skip the confirmation prompt (useful in CI or automation)
+kk remote migrate to-storage --yes</code></pre>
+
+      <h3>Idempotency & Safety Guarantees</h3>
+
+      <p>
+        Both commands are <strong>safe to run more than once</strong>. If the
+        project is already in the target mode, the command prints a notice and
+        exits cleanly — no error, no changes.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Situation</th>
+            <th>Behaviour</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <code>to-git</code> — a git remote <strong>already exists</strong>
+            </td>
+            <td>
+              <strong>No-op</strong> — prints names of existing git remote(s)
+              and exits with success
+            </td>
+          </tr>
+          <tr>
+            <td><code>to-git</code> — git URL unreachable</td>
+            <td>Error — config is <strong>not changed</strong></td>
+          </tr>
+          <tr>
+            <td>
+              <code>to-git</code> — initial <code>git push --all</code> fails
+            </td>
+            <td>
+              Non-fatal warning + manual recovery command printed; remote stays
+              registered
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code>to-storage</code> — <strong>no git remote exists</strong>
+            </td>
+            <td>
+              <strong>No-op</strong> — prints "already in storage-bundle mode"
+              and exits with success
+            </td>
+          </tr>
+          <tr>
+            <td><code>to-storage</code> — no non-git push remote found</td>
+            <td>Error — nowhere to store the bundles</td>
+          </tr>
+          <tr>
+            <td><code>to-storage</code> — bundle upload fails</td>
+            <td>
+              Error — config is <strong>not changed</strong> (history is safe)
+            </td>
+          </tr>
+          <tr>
+            <td>User answers <code>N</code> at the confirm prompt</td>
+            <td>Cancelled — no changes made</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr />
+
+      <h2 id="configuration">Configuration</h2>
+
+      <h3><code>.kk/config.json</code></h3>
+
+      <pre><code>{
+  "version": "kk-local-config-1.0.0",
+  "default_remote": "origin",
+  "remotes": {
+    "origin": {
+      "type": "git",
+      "url": "https://github.com/org/repo.git",
+      "provider": "github",
+      "pull": true,
+      "push": true,
+      "tags": ["git"]
+    },
+    "gdrive-backup": {
+      "type": "drive",
+      "drive_folder_id": "1ABC...",
+      "drive_auth_path": "...",
+      "provider": "google-drive",
+      "pull": true,
+      "push": true,
+      "priority": 10
+    },
+    "nas": {
+      "type": "local",
+      "path": "/Volumes/NAS/KK/MyProject",
+      "verify_mode": "local-hash",
+      "pull": true,
+      "push": true,
+      "priority": 20
+    }
+  }
+}</code></pre>
+
+      <h3>Remote Types</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Used For</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>git</code></td>
+            <td>Git hosting (GitHub, GitLab, Gitea)</td>
+            <td>Pointer history, code files</td>
+          </tr>
+          <tr>
+            <td><code>drive</code></td>
+            <td>Google Drive</td>
+            <td>Large file storage</td>
+          </tr>
+          <tr>
+            <td><code>rclone</code></td>
+            <td>Any rclone-supported storage</td>
+            <td>Large file storage</td>
+          </tr>
+          <tr>
+            <td><code>local</code></td>
+            <td>Local filesystem or network share</td>
+            <td>Large file storage</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Remote Priority</h3>
+
+      <p>
+        Lower numbers = higher priority. KK tries remotes in order when
+        downloading objects:
+      </p>
+
+      <pre><code>priority: 10  → Studio NAS (fast, local)
+priority: 20  → Google Drive (slower, cloud)
+priority: 50  → Archive storage (slowest)</code></pre>
+
+      <hr />
+
+      <h2>See Also</h2>
+
+      <ul>
+        <li>
+          <a href="/docs/how-it-works/">How It Works</a> — end-to-end workflow
+          and internals
+        </li>
+        <li><a href="/docs/glossary/">Glossary</a> — term definitions</li>
+        <li>
+          <a href="/docs/how-to/">How To Guide</a> — step-by-step user guides
+        </li>
+      </ul>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="https://github.com/godynheil/kk">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Documentation</h4>
+          <ul>
+            <li><a href="/docs/installation/">Installation</a></li>
+            <li><a href="/docs/how-to/">How To Guide</a></li>
+            <li><a href="/docs/glossary/">Glossary</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/terms-of-service/">Terms of Service</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/license/">License</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
+        <p>
+          KK Version Control System is distributed under the Modified GNU
+          General Public License, Version 2.0.
+        </p>
+        <p>
+          "KK", "KK Version Control System", and "kk" are trademarks of
+          Godynheil A. Quisto.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
