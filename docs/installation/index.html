@@ -404,6 +404,33 @@ kk setup gdrive
 #     Share the project folder ID with teammates so they can clone:
 #     kk clone drive:1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u
 # Remote ready.</code></pre>
+      <div class="warning-box">
+        <p>
+          <strong>⚠️ Note on Push Performance:</strong> The first push will be slow because it must upload all large files for the first time. By default, the Google Drive remote's <code>verify_mode</code> is set to <code>"local-hash"</code>. You can change this to <code>"none"</code> or <code>"download"</code> in your <code>.kk/config.json</code>:
+        </p>
+        <ul>
+          <li><code>"local-hash"</code> (default): Verifies files using cached local hashes.</li>
+          <li><code>"none"</code>: Skips downloading/hashing and performs a quick metadata existence check (only checking if the file is present on Drive).</li>
+          <li><code>"download"</code>: Downloads the full bytes of every object during checks to verify its SHA-256 hash. <em>Note: If you have large files, this mode is very slow.</em></li>
+        </ul>
+        <p>
+          To update the remote settings:
+        </p>
+        <pre><code>kk remote remove gdrive
+kk remote add drive gdrive --drive-folder-id &lt;id&gt; --drive-auth-path &lt;path&gt; --verify-mode none</code></pre>
+        <p>
+          (Alternatively, you can manually edit the <code>"verify_mode"</code> value under the <code>gdrive</code> entry in your <code>.kk/config.json</code> file).
+        </p>
+        <p class="mt-1">
+          <strong>Once a push completes successfully:</strong>
+        </p>
+        <ol>
+          <li>The successfully pushed <code>HEAD</code> commit is saved locally in <code>.kk/push-state.json</code>.</li>
+          <li>On your next push, <code>kk</code> checks if the last pushed commit is an ancestor of the current commit.</li>
+          <li>If it is, <code>kk</code> queries Git only for the changes since that commit.</li>
+          <li>It will sync and verify only the specific file(s) and object(s) you changed (e.g., just the 1 modified file/object), making subsequent pushes near-instantaneous.</li>
+        </ol>
+      </div>
 
       <h3>Multiple Drive Remotes</h3>
 

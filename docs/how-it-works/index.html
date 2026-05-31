@@ -77,7 +77,8 @@
           class="nav-toggle"
           aria-expanded="false"
           aria-controls="nav-menu"
-          aria-label="Toggle navigation menu">
+          aria-label="Toggle navigation menu"
+        >
           <span class="hamburger-icon" aria-hidden="true">
             <span></span>
             <span></span>
@@ -202,6 +203,14 @@ size &lt;bytes&gt;</code></pre>
         content-addressed path.
       </p>
 
+      <h3>Default Tracking Behavior</h3>
+      <p>
+        By default, if no custom tracking patterns are configured in <code>.kk/tracks.json</code>, KK automatically tracks <strong>all files that are not recognized as code</strong> (e.g., <code>.unitypackage</code>, <code>.uasset</code>, <code>.fbx</code>, <code>.png</code>, <code>.wav</code>, etc.). Code files (such as <code>.go</code>, <code>.cs</code>, <code>.cpp</code>, <code>.h</code>, <code>.html</code>, etc.) always stay as regular files in Git.
+      </p>
+      <p>
+        If you define custom tracking patterns using <code>kk track &lt;pattern&gt;</code>, KK will switch to only tracking files that match your custom patterns, while still keeping code files exempt.
+      </p>
+
       <h2>Download on demand</h2>
 
       <p>
@@ -249,7 +258,7 @@ kk remote add rclone gdrive --remote gdrive:KK/MyGame --push true --pull true</c
       <h2>Adding a Git remote (GitHub / GitLab / Gitea)</h2>
 
       <h3>Add a git remote</h3>
-      <pre><code>kk remote add git github https://github.com/org/repo.git</code></pre>
+      <pre><code>kk remote add git github https://github.com/your-username/MyGame.git</code></pre>
 
       <p>
         KK will then automatically push the lightweight pointer history to that

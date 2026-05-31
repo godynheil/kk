@@ -77,7 +77,8 @@
           class="nav-toggle"
           aria-expanded="false"
           aria-controls="nav-menu"
-          aria-label="Toggle navigation menu">
+          aria-label="Toggle navigation menu"
+        >
           <span class="hamburger-icon" aria-hidden="true">
             <span></span>
             <span></span>
@@ -127,6 +128,16 @@
             <a href="#code-files-vs-large-files">Code Files vs Large Files</a>
           </li>
           <li><a href="#repository-structure">Repository Structure</a></li>
+          <li>
+            <a href="#how-to-setup-git-and-gdrive"
+              >How To: Set Up Git Remote + Google Drive</a
+            >
+          </li>
+          <li>
+            <a href="#using-rclone"
+              >Alternative: Use rclone for Cloud Storage</a
+            >
+          </li>
           <li><a href="#common-workflows">Common Workflows</a></li>
           <li>
             <a href="#migrating-between-history-modes"
@@ -278,12 +289,12 @@ kk clone local:/path/to/project</code></pre>
       <p>With git remotes, KK uses a hybrid approach:</p>
 
       <pre><code>kk init
-kk remote add git origin https://github.com/org/repo.git
+kk remote add git origin https://github.com/your-username/MyGame.git
 kk setup gdrive        # Object remote for large files</code></pre>
 
       <h3>Adding a Git Remote</h3>
 
-      <pre><code>kk remote add git origin https://github.com/org/repo.git</code></pre>
+      <pre><code>kk remote add git origin https://github.com/your-username/MyGame.git</code></pre>
 
       <p>KK will:</p>
       <ol>
@@ -371,10 +382,10 @@ kk setup gdrive        # Object remote for large files</code></pre>
 
       <h3>Cloning From Git</h3>
 
-      <pre><code>kk clone git:https://github.com/org/repo.git
-kk clone git:https://github.com/org/repo.git --pull
-kk clone git:https://github.com/org/repo.git --account myprofile --pull
-kk clone git:https://gitlab.com/org/repo.git --branch kk-test --pull</code></pre>
+      <pre><code>kk clone git:https://github.com/your-username/MyGame.git
+kk clone git:https://github.com/your-username/MyGame.git --pull
+kk clone git:https://github.com/your-username/MyGame.git --account myprofile --pull
+kk clone git:https://gitlab.com/your-username/MyGame.git --branch kk-test --pull</code></pre>
 
       <p><strong>Process:</strong></p>
       <ol>
@@ -596,6 +607,822 @@ kk add Assets/video.mp4
 
       <hr />
 
+      <h2 id="how-to-setup-git-and-gdrive">
+        How To: Set Up Git Remote + Google Drive
+      </h2>
+
+      <p>
+        This step-by-step guide shows you how to set up KK with both a Git
+        hosting service (GitHub, GitLab, or Gitea) for code/history and Google
+        Drive for large files. This is the most common setup for teams.
+      </p>
+
+      <div class="info-box">
+        <strong>Why this combination?</strong>
+        <ul class="mt-05">
+          <li>
+            <strong>Git hosting (GitHub/GitLab/Gitea):</strong> Stores your
+            source code, pointer files, and commit history. Collaborators can
+            review code, open issues, and use all standard Git features.
+          </li>
+          <li>
+            <strong>Google Drive:</strong> Stores the actual large files
+            (videos, 3D models, textures) that would be too big for Git.
+          </li>
+        </ul>
+      </div>
+
+      <h3>Prerequisites</h3>
+
+      <p>Before you start, make sure you have:</p>
+      <ul>
+        <li>
+          <strong>KK installed</strong> — See
+          <a href="/docs/installation/">Installation Guide</a>
+        </li>
+        <li>
+          <strong>A Git hosting account</strong> — GitHub, GitLab, or a
+          self-hosted Gitea instance
+        </li>
+        <li><strong>A Google account</strong> — For Google Drive storage</li>
+        <li>
+          <strong>Git installed</strong> — KK uses Git under the hood for
+          version control
+        </li>
+      </ul>
+
+      <h3>Step 1: Create your Git repository</h3>
+
+      <p>First, create an empty repository on your Git hosting service:</p>
+
+      <h4>For GitHub:</h4>
+      <ol>
+        <li>Go to <a href="https://github.com/new">github.com/new</a></li>
+        <li>Name your repository (e.g., <code>my-game</code>)</li>
+        <li>
+          <strong>Important:</strong> Don't initialize with README, .gitignore,
+          or license — KK will handle this
+        </li>
+        <li>Click "Create repository"</li>
+        <li>
+          Copy the repository URL (e.g.,
+          <code>https://github.com/username/my-game.git</code>)
+        </li>
+      </ol>
+
+      <h4>For GitLab:</h4>
+      <ol>
+        <li>Go to your project's "New project" page</li>
+        <li>Create a blank project</li>
+        <li>Copy the repository URL</li>
+      </ol>
+
+      <h4>For Gitea (self-hosted):</h4>
+      <ol>
+        <li>Create a new repository on your Gitea instance</li>
+        <li>Copy the repository URL</li>
+      </ol>
+
+      <h3>Step 2: Initialize your KK project</h3>
+
+      <pre><code># Navigate to your project directory
+cd my-game
+
+# Initialize KK
+kk init</code></pre>
+
+      <p>
+        This creates the <code>.kk/</code> directory structure with embedded Git
+        database.
+      </p>
+
+      <h3>Step 3: Add the Git remote</h3>
+
+      <p>Add the Git repository you created in Step 1:</p>
+
+      <pre><code># For GitHub
+kk remote add git origin https://github.com/your-username/my-game.git
+
+# For GitLab
+kk remote add git origin https://gitlab.com/your-username/my-game.git
+
+# For Gitea (self-hosted)
+kk remote add git origin https://git.example.com/your-username/my-game.git</code></pre>
+
+      <p><strong>What this does:</strong></p>
+      <ul>
+        <li>Verifies the Git remote is accessible</li>
+        <li>Adds the remote to KK's internal Git configuration</li>
+        <li>Stores the remote metadata in <code>.kk/config.json</code></li>
+      </ul>
+
+      <div class="info-box">
+        <strong>Using SSH instead of HTTPS?</strong>
+        <pre><code>kk remote add git origin git@github.com:your-username/my-game.git</code></pre>
+        Make sure your SSH key is configured on your Git hosting service first.
+      </div>
+
+      <h3>Step 4: Set up Google Drive</h3>
+
+      <pre><code>kk setup gdrive</code></pre>
+
+      <p>This will:</p>
+      <ol>
+        <li>Open your browser for Google OAuth authorization</li>
+        <li>Ask you to sign in with your Google account</li>
+        <li>Request permission to access Google Drive</li>
+        <li>Create a project folder in your Google Drive</li>
+      </ol>
+
+      <p>
+        <strong>After successful authorization, you'll see:</strong>
+      </p>
+      <pre><code>kk: Google Drive auth saved to ~/.config/KK/gdrive/default.json
+kk: Drive remote 'gdrive' configured with folder-id: 1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u
+kk: Run 'kk push' to upload your project to Drive.
+kk: Remote ready.</code></pre>
+
+      <div class="info-box">
+        <p><strong>Tip: Save that folder ID!</strong></p>
+        <p>
+          The folder ID (<code>1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u</code>) is what
+          you'll share with teammates so they can clone your project. You can
+          also find it later in Google Drive's URL.
+        </p>
+      </div>
+
+      <h3>Step 5: Track large file types (Optional)</h3>
+
+      <p>
+        <strong>Note: This step is optional!</strong> By default, if no custom tracking patterns are configured, KK automatically tracks <strong>all files that are not recognized as code</strong> (such as <code>.unitypackage</code>, <code>.uasset</code>, <code>.fbx</code>, <code>.png</code>, <code>.wav</code>, etc.) as pointers.
+      </p>
+      <p>
+        Explicitly running <code>kk track</code> is only required if you want to define custom, narrow tracking patterns (which will turn off the default "track all non-code" behavior). If you wish to specify custom patterns, use the commands below:
+      </p>
+
+      <pre><code># Common game development assets
+kk track "*.mp4" "*.wav" "*.mp3"    # Audio/video
+kk track "*.png" "*.jpg" "*.psd"    # Images/textures
+kk track "*.fbx" "*.obj" "*.blend"  # 3D models
+kk track "*.zip" "*.tar.gz"         # Archives</code></pre>
+
+      <p>
+        <strong>What gets tracked:</strong> Files matching these patterns will
+        be converted to pointer files in Git, with the actual content stored on
+        Google Drive.
+      </p>
+
+      <p>
+        <strong>What stays as regular files:</strong> Source code (.go, .py,
+        .js, etc.), config files (.json, .yaml), and text files are stored
+        directly in Git as regular files.
+      </p>
+
+      <h3>Step 6: Add and commit your files</h3>
+
+      <pre><code># Add all files in your project
+kk add .
+
+# Commit your changes
+kk commit -m "Initial commit"</code></pre>
+
+      <p><strong>What happens during commit:</strong></p>
+      <ul>
+        <li>Code files are stored directly in Git</li>
+        <li>
+          Large files are converted to pointers and stored in
+          <code>.kk/objects/</code>
+        </li>
+        <li>The pointer references are committed to Git</li>
+      </ul>
+
+      <h3>Step 7: Push to both remotes</h3>
+
+      <pre><code>kk push</code></pre>
+
+      <p>
+        This single command does <strong>both</strong> of the following
+        simultaneously:
+      </p>
+      <ul>
+        <li>
+          <strong>Pushes to Git:</strong> Sends code, pointers, and history to
+          GitHub/GitLab/Gitea via <code>git push</code>
+        </li>
+        <li>
+          <strong>Pushes to Drive:</strong> Uploads large file binaries to your
+          Google Drive folder
+        </li>
+      </ul>
+      <div class="warning-box">
+        <p>
+          <strong>⚠️ Note on Push Performance:</strong> The first push will be slow because it must upload all large files for the first time. By default, the Google Drive remote's <code>verify_mode</code> is set to <code>"local-hash"</code>. You can change this to <code>"none"</code> or <code>"download"</code> in your <code>.kk/config.json</code>:
+        </p>
+        <ul>
+          <li><code>"local-hash"</code> (default): Verifies files using cached local hashes.</li>
+          <li><code>"none"</code>: Skips downloading/hashing and performs a quick metadata existence check (only checking if the file is present on Drive).</li>
+          <li><code>"download"</code>: Downloads the full bytes of every object during checks to verify its SHA-256 hash. <em>Note: If you have large files, this mode is very slow.</em></li>
+        </ul>
+        <p>
+          To update the remote settings:
+        </p>
+        <pre><code>kk remote remove gdrive
+kk remote add drive gdrive --drive-folder-id &lt;id&gt; --drive-auth-path &lt;path&gt; --verify-mode none</code></pre>
+        <p>
+          (Alternatively, you can manually edit the <code>"verify_mode"</code> value under the <code>gdrive</code> entry in your <code>.kk/config.json</code> file).
+        </p>
+        <p class="mt-1">
+          <strong>Once a push completes successfully:</strong>
+        </p>
+        <ol>
+          <li>The successfully pushed <code>HEAD</code> commit is saved locally in <code>.kk/push-state.json</code>.</li>
+          <li>On your next push, <code>kk</code> checks if the last pushed commit is an ancestor of the current commit.</li>
+          <li>If it is, <code>kk</code> queries Git only for the changes since that commit.</li>
+          <li>It will sync and verify only the specific file(s) and object(s) you changed (e.g., just the 1 modified file/object), making subsequent pushes near-instantaneous.</li>
+        </ol>
+      </div>
+
+      <h3>Step 8: Share with teammates</h3>
+
+      <h4>A. Share the Git repository</h4>
+
+      <p>
+        Invite collaborators to your Git repository through your Git hosting
+        service's interface (GitHub Settings → Collaborators, GitLab Members,
+        etc.).
+      </p>
+
+      <h4>B. Share the Google Drive folder</h4>
+
+      <div class="warning-box">
+        <strong>Important:</strong> Google Drive folders created by KK are
+        <strong>owned by your Google account</strong>. For teammates to access
+        the large files, you must explicitly share the folder with them.
+      </div>
+
+      <ol>
+        <li>Open Google Drive and find the KK project folder</li>
+        <li>Right-click the folder → "Share"</li>
+        <li>Add teammates' Google account emails with "Editor" permissions</li>
+        <li>Share the folder ID with your team</li>
+      </ol>
+
+      <h4>C. Teammates clone the project</h4>
+
+      <pre><code># Teammate runs this command
+kk clone git:https://github.com/your-username/my-game.git --pull</code></pre>
+
+      <p>This will:</p>
+      <ol>
+        <li>Clone the Git repository (code + pointers)</li>
+        <li>Download large files from Google Drive (if shared)</li>
+        <li>Set up both remotes automatically</li>
+      </ol>
+
+      <div class="info-box">
+        <p>
+          <strong
+            >If teammates get "Folder not found" or "Permission denied":</strong
+          >
+        </p>
+        <p>
+          This means the Google Drive folder isn't shared with them, or they're
+          using the wrong Google account. They need to:
+        </p>
+        <ol>
+          <li>Make sure you've shared the Drive folder with their email</li>
+          <li>
+            Use <code>kk setup gdrive --account work</code> with the shared
+            account
+          </li>
+          <li>
+            For externally shared folders, may need
+            <code>--scope full</code> (see below)
+          </li>
+        </ol>
+      </div>
+
+      <h3>Complete Working Example</h3>
+
+      <p>Here's the complete sequence from start to finish:</p>
+
+      <pre><code># 1. Navigate to project
+cd ~/Projects/my-game
+
+# 2. Initialize KK
+kk init
+
+# 3. Add Git remote (GitHub example)
+kk remote add git origin https://github.com/johndoe/my-game.git
+
+# 4. Set up Google Drive (opens browser for OAuth)
+kk setup gdrive
+
+# 5. Track large file types
+kk track "*.mp4" "*.wav" "*.png" "*.fbx" "*.blend"
+
+# 6. Add files and commit
+kk add .
+kk commit -m "Initial commit with game assets"
+
+# 7. Push to both remotes
+kk push
+
+# 8. Share with team
+# - Share GitHub repo via GitHub's interface
+# - Share Drive folder via Google Drive's interface
+# - Tell teammates: kk clone git:https://github.com/johndoe/my-game.git --pull</code></pre>
+
+      <h3>Daily Workflow</h3>
+
+      <p>After initial setup, your daily workflow is simple:</p>
+
+      <pre><code># Make changes to your files...
+
+# Add new or changed files
+kk add .
+
+# Commit changes
+kk commit -m "Add new character model"
+
+# Push to both Git and Drive
+kk push</code></pre>
+
+      <h3>Troubleshooting Common Issues</h3>
+
+      <div class="info-box">
+        <h4>Issue: "Git remote authentication failed"</h4>
+        <p>
+          <strong>Cause:</strong> Git needs your credentials for the hosting
+          service.
+        </p>
+        <p><strong>Fix:</strong></p>
+        <ul>
+          <li>
+            For HTTPS: Use a Personal Access Token (recommended) or
+            GitHub/GitLab password
+          </li>
+          <li>For SSH: Make sure your SSH key is added to your Git account</li>
+          <li>
+            Configure Git credentials:
+            <code>git config --global credential.helper store</code>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>Issue: "Google Drive folder not found"</h4>
+        <p>
+          <strong>Cause:</strong> The Drive folder isn't shared with the
+          teammate's account.
+        </p>
+        <p><strong>Fix:</strong></p>
+        <ol>
+          <li>Verify you shared the folder with their exact Google email</li>
+          <li>Teammate should run: <code>kk remote check gdrive</code></li>
+          <li>
+            For shared folders created by others, teammate may need:
+            <code>kk setup gdrive --scope full --account work</code>
+          </li>
+        </ol>
+        <div class="warning-box">
+          <strong>⚠️ Security Warning:</strong> The
+          <code>--scope full</code> flag grants KK access to ALL files in your
+          Google Drive. Only use with official KK binaries from
+          <a href="https://github.com/godynheil/kk">trusted sources</a>.
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h4>Issue: "Some files didn't download after clone"</h4>
+        <p><strong>Cause:</strong> Large files may not have downloaded yet.</p>
+        <p>
+          <strong>Fix:</strong> Run <code>kk pull</code> after cloning to
+          download missing objects.
+        </p>
+      </div>
+
+      <div class="info-box">
+        <h4>Issue: "Repository size is still large"</h4>
+        <p>
+          <strong>Cause:</strong> Large files are being tracked as regular Git
+          files instead of pointers.
+        </p>
+        <p><strong>Fix:</strong></p>
+        <ol>
+          <li>Check your tracking patterns: <code>kk track list</code></li>
+          <li>
+            Add the file extensions you want tracked:
+            <code>kk track "*.mp4" "*.fbx"</code>
+          </li>
+          <li>Re-add the files: <code>kk add Assets/</code></li>
+        </ol>
+      </div>
+
+      <h3 id="using-rclone">Alternative: Use rclone for Cloud Storage</h3>
+
+      <p>
+        If you prefer to use <strong>rclone</strong> instead of native Google
+        Drive, or want to use other cloud providers like Dropbox, MEGA, S3,
+        OneDrive, or any rclone-supported service, follow this guide.
+      </p>
+
+      <div class="info-box">
+        <strong>Why use rclone?</strong>
+        <ul class="mt-05">
+          <li>
+            <strong>More providers:</strong> Supports 70+ cloud storage services
+            (Dropbox, MEGA, S3, OneDrive, Backblaze, etc.)
+          </li>
+          <li>
+            <strong>Existing setup:</strong> If you already use rclone, you can
+            reuse your configuration
+          </li>
+          <li>
+            <strong>Flexibility:</strong> Fine-grained control over sync options
+          </li>
+        </ul>
+      </div>
+
+      <h4>Step 1: Install rclone</h4>
+
+      <p>
+        <strong>Important:</strong> KK looks for <code>rclone</code> (or
+        <code>rclone.exe</code> on Windows) in your system PATH. You can also
+        specify a custom path when adding the remote.
+      </p>
+
+      <h5>Windows (Recommended for regular users)</h5>
+      <ol>
+        <li>
+          Download rclone from
+          <a href="https://rclone.org/downloads/">rclone.org/downloads</a>
+        </li>
+        <li>
+          Find the <strong>Windows amd64</strong> download link (looks like
+          <code>rclone-x.x.x-windows-amd64.zip</code>)
+        </li>
+        <li>Download and unzip the file</li>
+        <li>Copy <code>rclone.exe</code> to one of these locations:</li>
+      </ol>
+
+      <div class="info-box">
+        <p><strong>Where to put rclone.exe:</strong></p>
+        <p>Choose ONE of these options:</p>
+        <ul class="mt-05">
+          <li>
+            <code>C:\Users\YourName\AppData\Local\Programs\KK\</code> — Same
+            folder as kk.exe (recommended)
+          </li>
+          <li>
+            <code>C:\Users\YourName\bin\</code> — A user bin folder on your PATH
+          </li>
+          <li>
+            <code>C:\Tools\rclone\</code> — Any folder, then add it to your PATH
+          </li>
+        </ul>
+        <p class="mt-05">
+          <strong>Test installation:</strong> Open a new terminal and run:
+        </p>
+        <pre class="my-05"><code>rclone version</code></pre>
+        <p>
+          If you see version information, rclone is installed correctly. If you
+          get "command not found", check that rclone.exe is in a folder on your
+          PATH.
+        </p>
+      </div>
+
+      <h5>Quick install with package managers:</h5>
+      <pre><code># Windows with Chocolatey (if installed)
+choco install rclone
+
+# Windows with Scoop (if installed)
+scoop install rclone
+
+# macOS
+brew install rclone
+
+# Linux
+curl https://rclone.org/install.sh | sudo bash</code></pre>
+
+      <h4>Step 2: Configure your cloud provider in rclone</h4>
+
+      <p>
+        Run the rclone configuration wizard. This is a one-time setup per
+        provider:
+      </p>
+
+      <pre><code>rclone config</code></pre>
+
+      <p>You'll see an interactive prompt. Follow these steps:</p>
+      <ol>
+        <li>Type <code>n</code> for "New remote"</li>
+        <li>
+          Enter a name (e.g., <code>gdrive</code>, <code>dropbox</code>,
+          <code>mega</code>)
+        </li>
+        <li>Choose the storage type from the list (number)</li>
+        <li>
+          Follow provider-specific instructions (often opens a browser for
+          OAuth)
+        </li>
+        <li>
+          Choose <code>n</code> for "No advanced config" (keep it simple!)
+        </li>
+        <li>Type <code>y</code> to confirm, then <code>q</code> to quit</li>
+      </ol>
+
+      <h5>Common provider numbers in rclone:</h5>
+      <table>
+        <thead>
+          <tr>
+            <th>Provider</th>
+            <th>Type number</th>
+            <th>Name suggestion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Google Drive</td>
+            <td><code>drive</code> (or type <code>3</code>)</td>
+            <td><code>gdrive</code></td>
+          </tr>
+          <tr>
+            <td>Dropbox</td>
+            <td><code>dropbox</code> (or type <code>6</code>)</td>
+            <td><code>dropbox</code></td>
+          </tr>
+          <tr>
+            <td>MEGA</td>
+            <td><code>mega</code> (or type <code>8</code>)</td>
+            <td><code>mega</code></td>
+          </tr>
+          <tr>
+            <td>Amazon S3</td>
+            <td><code>s3</code> (or type <code>4</code>)</td>
+            <td><code>s3</code></td>
+          </tr>
+          <tr>
+            <td>OneDrive</td>
+            <td><code>onedrive</code> (or type <code>23</code>)</td>
+            <td><code>onedrive</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Step 3: Test rclone connection</h4>
+
+      <p>Before adding to KK, verify rclone can access your cloud storage:</p>
+
+      <pre><code># List root directories (tests connection)
+rclone lsd gdrive:
+
+# Create a test folder
+rclone mkdir gdrive:KK-Test</code></pre>
+
+      <p>If you see your folders listed, rclone is configured correctly!</p>
+
+      <h4>Step 4: Add rclone remote to KK</h4>
+
+      <p>With rclone configured and tested, add it to KK:</p>
+
+      <pre><code># Basic form (simplest)
+kk remote add rclone mycloud --remote gdrive:KK/MyGame --push true --pull true</code></pre>
+
+      <p>
+        <strong>What the parameters mean:</strong>
+      </p>
+      <ul>
+        <li>
+          <code>mycloud</code> — A name you choose to reference this remote
+        </li>
+        <li>
+          <code>--remote</code> — The rclone path (provider-name:folder-path)
+        </li>
+        <li><code>--push true</code> — Allow uploading files to this remote</li>
+        <li>
+          <code>--pull true</code> — Allow downloading files from this remote
+        </li>
+      </ul>
+
+      <h5>Full form with all options:</h5>
+      <pre><code>kk remote add rclone gdrive \
+  --display-name "Google Drive" \
+  --role backup \
+  --provider google-drive \
+  --remote gdrive:KK/MyGame \
+  --verify-mode download \
+  --priority 20 \
+  --push true \
+  --pull true</code></pre>
+
+      <h5>Custom rclone binary location (Windows):</h5>
+      <p>
+        If rclone.exe is not on your PATH, specify the full path to the binary
+        when adding the remote:
+      </p>
+
+      <pre><code># Windows example with full path
+kk remote add rclone mycloud \
+  --remote "mega:KK/MyGame" \
+  --binary "C:\Tools\rclone\rclone.exe" \
+  --push true \
+  --pull true</code></pre>
+
+      <div class="info-box">
+        <p>
+          <strong>Tip:</strong> You can also specify just "rclone.exe" if it's
+          in the same folder as kk.exe:
+        </p>
+        <pre class="my-05"><code>--binary rclone.exe</code></pre>
+      </div>
+
+      <h4>Complete Example: GitHub + Dropbox (via rclone)</h4>
+
+      <p>
+        Here's a complete workflow using GitHub for code and Dropbox for files:
+      </p>
+
+      <pre><code># 1. Initialize KK
+cd ~/Projects/my-game
+kk init
+
+# 2. Add GitHub remote for code
+kk remote add git origin https://github.com/your-username/my-game.git
+
+# 3. Configure Dropbox in rclone (one-time setup)
+rclone config
+# → Choose "dropbox" storage type
+# → Follow OAuth in browser
+# → Name it "dropbox"
+
+# 4. Test Dropbox connection
+rclone lsd dropbox:
+
+# 5. Add Dropbox to KK
+kk remote add rclone dropbox --remote dropbox:KK-Projects/MyGame --push true --pull true
+
+# 6. Track large files
+kk track "*.mp4" "*.wav" "*.fbx" "*.blend"
+
+# 7. Add and commit
+kk add .
+kk commit -m "Initial commit"
+
+# 8. Push to both GitHub and Dropbox
+kk push</code></pre>
+
+      <h4>Complete Example: GitHub + MEGA (via rclone)</h4>
+
+      <pre><code># 1. Initialize
+kk init
+
+# 2. Add GitHub
+kk remote add git origin https://github.com/your-username/my-game.git
+
+# 3. Configure MEGA in rclone
+rclone config
+# → Choose "mega" storage type
+# → Enter your MEGA credentials
+# → Name it "mega"
+
+# 4. Test MEGA
+rclone lsd mega:
+
+# 5. Add MEGA to KK
+kk remote add rclone mega --remote mega:KK/MyGame --push true --pull true
+
+# 6. Set up and push
+kk track "*.psd" "*.fbx" "*.mp4"
+kk add .
+kk commit -m "Add game assets"
+kk push</code></pre>
+
+      <h4>Complete Example: GitHub + S3 (via rclone)</h4>
+
+      <pre><code># 1. Initialize
+kk init
+
+# 2. Add GitHub
+kk remote add git origin https://github.com/your-username/my-game.git
+
+# 3. Configure S3 in rclone
+rclone config
+# → Choose "s3" storage type
+# → Choose your S3 provider (AWS, Wasabi, Backblaze, etc.)
+# → Enter access key and secret
+# → Name it "s3"
+
+# 4. Test S3
+rclone lsd s3:
+
+# 5. Add S3 to KK
+kk remote add rclone s3backup --remote s3:my-kk-bucket/MyGame --push true --pull true
+
+# 6. Set up and push
+kk track "*.zip" "*.tar.gz" "*.mp4"
+kk add .
+kk commit -m "Initial commit"
+kk push</code></pre>
+
+      <h4>Multiple remotes with rclone (redundancy)</h4>
+
+      <p>You can use multiple rclone remotes for backup and redundancy:</p>
+
+      <pre><code># Add primary storage (Dropbox)
+kk remote add rclone dropbox-primary \
+  --remote dropbox:KK/MyGame \
+  --priority 10 \
+  --push true \
+  --pull true
+
+# Add backup storage (MEGA)
+kk remote add rclone mega-backup \
+  --remote mega:KK/MyGame \
+  --priority 50 \
+  --push true \
+  --pull true
+
+# Set default remote
+kk remote set-default dropbox-primary
+
+# Push to all remotes
+kk push --all-remotes</code></pre>
+
+      <h4>Troubleshooting rclone issues</h4>
+
+      <div class="info-box">
+        <h4>Issue: "rclone not found" or "command not found"</h4>
+        <p><strong>Cause:</strong> KK can't find rclone.exe in your PATH.</p>
+        <p><strong>Fix:</strong></p>
+        <ul>
+          <li>
+            Make sure rclone.exe is on your PATH (run
+            <code>rclone version</code> to test)
+          </li>
+          <li>
+            Or specify the full path:
+            <code>--binary "C:\full\path\to\rclone.exe"</code>
+          </li>
+          <li>
+            Or put rclone.exe in the same folder as kk.exe and use
+            <code>--binary rclone.exe</code>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>Issue: "Failed to list remote"</h4>
+        <p>
+          <strong>Cause:</strong> rclone can't connect to your cloud provider.
+        </p>
+        <p><strong>Fix:</strong></p>
+        <ul>
+          <li>
+            Test rclone directly: <code>rclone lsd your-remote-name:</code>
+          </li>
+          <li>
+            Reconfigure rclone if credentials expired:
+            <code>rclone config</code>
+          </li>
+          <li>Check internet connection</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>Issue: "Permission denied" when creating folders</h4>
+        <p>
+          <strong>Cause:</strong> The rclone remote doesn't have write
+          permissions.
+        </p>
+        <p><strong>Fix:</strong></p>
+        <ul>
+          <li>Make sure the OAuth token has write permissions</li>
+          <li>For S3, check bucket permissions and IAM policies</li>
+          <li>
+            Reconfigure with proper permissions in <code>rclone config</code>
+          </li>
+        </ul>
+      </div>
+
+      <h3>Next Steps</h3>
+
+      <ul>
+        <li>
+          <a href="/docs/how-it-works/">How It Works</a> — Learn more about KK's
+          internals
+        </li>
+        <li>
+          <a href="/docs/how-to/">How To Guide</a> — More guides for advanced
+          workflows
+        </li>
+        <li>
+          <a href="/docs/glossary/">Glossary</a> — Understand KK terminology
+        </li>
+      </ul>
+
+      <hr />
+
       <h2 id="common-workflows">Common Workflows</h2>
 
       <h3>Scenario 1: Solo Developer, Local Storage</h3>
@@ -671,6 +1498,35 @@ kk push</code></pre>
       <h2 id="migrating-between-history-modes">
         Migrating Between History Modes
       </h2>
+
+      <div class="warning-box">
+        <strong style="color: #dc2626">⚠️ EXPERIMENTAL FEATURE WARNING</strong>
+        <p style="color: #dc2626; margin-top: 0.5rem">
+          The <code>kk remote migrate</code> command is
+          <strong style="color: #dc2626">HIGHLY EXPERIMENTAL</strong> and may
+          not work correctly in all situations.
+        </p>
+        <p style="color: #dc2626; margin-top: 0.5rem">
+          <strong>Use with caution:</strong> This feature may cause data loss or
+          corruption. Always backup your repository before attempting migration.
+        </p>
+        <p style="color: #dc2626; margin-top: 0.5rem">
+          <strong>Known limitations:</strong>
+        </p>
+        <ul style="color: #dc2626; margin-top: 0.25rem; margin-left: 1.5rem">
+          <li>Migration between modes may not preserve all commit metadata</li>
+          <li>Complex branch structures may not migrate correctly</li>
+          <li>
+            Team coordination is required — all members must be aware of mode
+            changes
+          </li>
+          <li>Rolling back a migration may require manual intervention</li>
+        </ul>
+        <p style="margin-top: 0.5rem">
+          <strong>Recommended:</strong> Test migration on a copy of your
+          repository first before migrating your production project.
+        </p>
+      </div>
 
       <p>
         KK stores commit history in exactly one of two modes. You can switch at
@@ -897,7 +1753,7 @@ kk remote migrate to-storage --yes</code></pre>
   "remotes": {
     "origin": {
       "type": "git",
-      "url": "https://github.com/org/repo.git",
+      "url": "https://github.com/your-username/MyGame.git",
       "provider": "github",
       "pull": true,
       "push": true,

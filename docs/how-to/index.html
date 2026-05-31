@@ -77,7 +77,8 @@
           class="nav-toggle"
           aria-expanded="false"
           aria-controls="nav-menu"
-          aria-label="Toggle navigation menu">
+          aria-label="Toggle navigation menu"
+        >
           <span class="hamburger-icon" aria-hidden="true">
             <span></span>
             <span></span>
@@ -239,7 +240,13 @@ kk init</code></pre>
         </p>
       </div>
 
-      <h3>Step 3: Track large files</h3>
+      <h3>Step 3: Track large files (Optional)</h3>
+      <p>
+        By default, KK automatically tracks <strong>all files that are not recognized as code</strong> (such as <code>.unitypackage</code>, <code>.uasset</code>, <code>.fbx</code>, <code>.png</code>, <code>.wav</code>, etc.) as pointer files. Therefore, you can skip this step!
+      </p>
+      <p>
+        Explicitly running <code>kk track</code> is only necessary if you want to configure custom tracking patterns:
+      </p>
       <pre><code>kk track "*.mp4" "*.png" "*.fbx" "*.zip"</code></pre>
 
       <h3>Step 4: Work normally</h3>
@@ -251,6 +258,33 @@ kk commit -m "add cinematic"
 
 # Push to Drive
 kk push</code></pre>
+      <div class="warning-box">
+        <p>
+          <strong>⚠️ Note on Push Performance:</strong> The first push will be slow because it must upload all large files for the first time. By default, the Google Drive remote's <code>verify_mode</code> is set to <code>"local-hash"</code>. You can change this to <code>"none"</code> or <code>"download"</code> in your <code>.kk/config.json</code>:
+        </p>
+        <ul>
+          <li><code>"local-hash"</code> (default): Verifies files using cached local hashes.</li>
+          <li><code>"none"</code>: Skips downloading/hashing and performs a quick metadata existence check (only checking if the file is present on Drive).</li>
+          <li><code>"download"</code>: Downloads the full bytes of every object during checks to verify its SHA-256 hash. <em>Note: If you have large files, this mode is very slow.</em></li>
+        </ul>
+        <p>
+          To update the remote settings:
+        </p>
+        <pre><code>kk remote remove gdrive
+kk remote add drive gdrive --drive-folder-id &lt;id&gt; --drive-auth-path &lt;path&gt; --verify-mode none</code></pre>
+        <p>
+          (Alternatively, you can manually edit the <code>"verify_mode"</code> value under the <code>gdrive</code> entry in your <code>.kk/config.json</code> file).
+        </p>
+        <p class="mt-1">
+          <strong>Once a push completes successfully:</strong>
+        </p>
+        <ol>
+          <li>The successfully pushed <code>HEAD</code> commit is saved locally in <code>.kk/push-state.json</code>.</li>
+          <li>On your next push, <code>kk</code> checks if the last pushed commit is an ancestor of the current commit.</li>
+          <li>If it is, <code>kk</code> queries Git only for the changes since that commit.</li>
+          <li>It will sync and verify only the specific file(s) and object(s) you changed (e.g., just the 1 modified file/object), making subsequent pushes near-instantaneous.</li>
+        </ol>
+      </div>
 
       <h3>Step 5: Share with teammates</h3>
       <p>
@@ -287,16 +321,14 @@ kk push</code></pre>
           <strong>full drive scope</strong> to clone it.
         </p>
         <p><strong>Teammates must run:</strong></p>
-        <pre
-          class="my-05"
-        ><code>kk setup gdrive --scope full</code></pre>
+        <pre class="my-05"><code>kk setup gdrive --scope full</code></pre>
 
         <div class="warning-box">
           <strong>🔴 CRITICAL SECURITY WARNING</strong>
           <p>
             The <code>--scope full</code> flag grants KK access to
-            <strong>ALL files in your entire Google Drive</strong>, not just
-            KK folders.
+            <strong>ALL files in your entire Google Drive</strong>, not just KK
+            folders.
           </p>
           <p><strong>Only use if you:</strong></p>
           <ul>
@@ -354,21 +386,294 @@ kk push</code></pre>
 
       <p>
         Use multiple storage providers for redundancy - one Drive remote, one
-        rclone remote (could be Dropbox, MEGA, S3, etc.).
+        rclone remote (could be Dropbox, MEGA, S3, OneDrive, etc.).
       </p>
 
-      <h4>Step 1: Configure Google Drive</h4>
+      <div class="info-box">
+        <strong>What is rclone?</strong>
+        <p class="mt-05">
+          rclone is a command-line tool that syncs files to and from 70+ cloud
+          storage providers. If you already use rclone, or want to use a
+          provider that KK doesn't support natively, this is your option.
+        </p>
+        <p>
+          <strong>Supported providers:</strong> Dropbox, MEGA, Amazon S3,
+          Wasabi, Backblaze B2, OneDrive, Google Drive, Box, pCloud, and many
+          more.
+        </p>
+      </div>
+
+      <h3>Step 0: Install rclone (one-time setup)</h3>
+
+      <p>
+        <strong>Important:</strong> KK looks for <code>rclone</code> (or
+        <code>rclone.exe</code> on Windows) in your system PATH. You can also
+        specify the exact binary location when adding the remote.
+      </p>
+
+      <h4>Windows (for regular users)</h4>
+      <ol>
+        <li>
+          Go to
+          <a href="https://rclone.org/downloads/" rel="noopener noreferrer"
+            >rclone.org/downloads</a
+          >
+        </li>
+        <li>Download the <strong>Windows amd64</strong> zip file</li>
+        <li>Unzip the downloaded file</li>
+        <li>Copy <code>rclone.exe</code> to one of these locations:</li>
+      </ol>
+
+      <div class="info-box">
+        <p><strong>Where to put rclone.exe on Windows:</strong></p>
+        <p class="mb-05">Choose ONE of these options:</p>
+        <ul>
+          <li>
+            <code>C:\Users\YourName\AppData\Local\Programs\KK\</code> — Same
+            folder as kk.exe (recommended!)
+          </li>
+          <li><code>C:\Users\YourName\bin\</code> — A user bin folder</li>
+          <li>
+            <code>C:\Tools\rclone\</code> — Any folder you create, then add to
+            PATH
+          </li>
+        </ul>
+        <p class="mt-05">
+          <strong>Test it works:</strong> Open a NEW terminal (important!) and
+          run:
+        </p>
+        <pre class="my-05"><code>rclone version</code></pre>
+        <p>
+          If you see version info, you're all set! If you get "command not
+          found", make sure rclone.exe is in a folder on your PATH.
+        </p>
+      </div>
+
+      <h4>Quick install with package managers:</h4>
+      <pre><code># Windows with Chocolatey
+choco install rclone
+
+# Windows with Scoop
+scoop install rclone
+
+# macOS
+brew install rclone
+
+# Linux
+sudo apt install rclone     # Debian/Ubuntu
+sudo yum install rclone     # RHEL/CentOS/Fedora</code></pre>
+
+      <h3>Step 1: Configure Google Drive</h3>
       <pre><code>kk setup gdrive --name personal</code></pre>
 
-      <h4>Step 2: Configure rclone</h4>
-      <p>First, set up your rclone remote (one-time):</p>
-      <pre><code>rclone config
-# Follow prompts to create a remote named "mega" for MEGA, "s3" for S3, etc.</code></pre>
+      <h3>Step 2: Configure rclone</h3>
 
-      <p>Then add it to KK:</p>
+      <p>
+        First, set up your cloud provider in rclone. This is a one-time setup
+        per provider:
+      </p>
+
+      <pre><code>rclone config</code></pre>
+
+      <p>You'll see an interactive menu. Here's how to use it:</p>
+
+      <ol>
+        <li>Type <code>n</code> and press Enter (for "New remote")</li>
+        <li>
+          Enter a name like <code>mega</code>, <code>dropbox</code>, or
+          <code>s3</code>
+        </li>
+        <li>
+          Choose the storage type by number or name (see list below for common
+          providers)
+        </li>
+        <li>Follow the provider-specific instructions</li>
+        <li>Type <code>n</code> for "No advanced config" (keep it simple!)</li>
+        <li>
+          Type <code>y</code> to confirm, then <code>q</code> to quit when done
+        </li>
+      </ol>
+
+      <h5>Common rclone storage types:</h5>
+      <table>
+        <thead>
+          <tr>
+            <th>Provider</th>
+            <th>Type to enter</th>
+            <th>Suggested name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Dropbox</td>
+            <td><code>dropbox</code> or type <code>6</code></td>
+            <td><code>dropbox</code></td>
+          </tr>
+          <tr>
+            <td>MEGA</td>
+            <td><code>mega</code> or type <code>8</code></td>
+            <td><code>mega</code></td>
+          </tr>
+          <tr>
+            <td>Amazon S3</td>
+            <td><code>s3</code> or type <code>4</code></td>
+            <td><code>s3</code></td>
+          </tr>
+          <tr>
+            <td>Wasabi</td>
+            <td><code>s3</code> → choose "Wasabi"</td>
+            <td><code>wasabi</code></td>
+          </tr>
+          <tr>
+            <td>Backblaze B2</td>
+            <td><code>b2</code> or type <code>9</code></td>
+            <td><code>b2</code></td>
+          </tr>
+          <tr>
+            <td>OneDrive</td>
+            <td><code>onedrive</code> or type <code>23</code></td>
+            <td><code>onedrive</code></td>
+          </tr>
+          <tr>
+            <td>pCloud</td>
+            <td><code>pcloud</code> or type <code>22</code></td>
+            <td><code>pcloud</code></td>
+          </tr>
+          <tr>
+            <td>Box</td>
+            <td><code>box</code> or type <code>10</code></td>
+            <td><code>box</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h5>Test your rclone configuration:</h5>
+      <pre><code># Test connection - list root folders
+rclone lsd mega:
+
+# Create a test folder
+rclone mkdir mega:KK-Test
+
+# Verify it was created
+rclone lsd mega:KK-Test</code></pre>
+
+      <h3>Step 3: Add rclone remote to KK</h3>
+
+      <p>With rclone configured, add it as a KK remote:</p>
+
+      <h4>Basic form (simplest):</h4>
       <pre><code>kk remote add rclone mega --remote mega:KK/MyGame --push true --pull true</code></pre>
 
-      <h4>Step 3: Configure default remote and priority</h4>
+      <h4>With custom rclone binary location (Windows):</h4>
+      <p>
+        If rclone.exe is <strong>not</strong> on your PATH, specify the full
+        path:
+      </p>
+      <pre><code># Full path to rclone.exe
+kk remote add rclone mega \
+  --remote mega:KK/MyGame \
+  --binary "C:\Tools\rclone\rclone.exe" \
+  --push true \
+  --pull true</code></pre>
+
+      <p>Or if rclone.exe is in the same folder as kk.exe:</p>
+      <pre><code>kk remote add rclone mega \
+  --remote mega:KK/MyGame \
+  --binary rclone.exe \
+  --push true \
+  --pull true</code></pre>
+
+      <h4>Full form with all options:</h4>
+      <pre><code>kk remote add rclone mega \
+  --display-name "MEGA Backup" \
+  --role backup \
+  --provider mega \
+  --remote mega:KK/MyGame \
+  --binary rclone \
+  --verify-mode download \
+  --priority 50 \
+  --push true \
+  --pull true</code></pre>
+
+      <h3>Complete Examples by Provider</h3>
+
+      <h4>Example: Dropbox + Google Drive</h4>
+      <pre><code># 1. Set up Google Drive
+kk setup gdrive --name personal
+
+# 2. Configure Dropbox in rclone
+rclone config
+# → Choose "dropbox" storage
+# → Follow OAuth in browser
+# → Name it "dropbox"
+
+# 3. Test Dropbox
+rclone lsd dropbox:
+
+# 4. Add Dropbox to KK
+kk remote add rclone dropbox --remote dropbox:KK-Projects/MyGame --push true --pull true
+
+# 5. Set priority (Drive is faster, use it first)
+kk remote set-default personal</code></pre>
+
+      <h4>Example: MEGA + Google Drive</h4>
+      <pre><code># 1. Set up Google Drive
+kk setup gdrive --name personal
+
+# 2. Configure MEGA in rclone
+rclone config
+# → Choose "mega" storage
+# → Enter MEGA username/password
+# → Name it "mega"
+
+# 3. Test MEGA
+rclone lsd mega:
+
+# 4. Add MEGA to KK
+kk remote add rclone mega --remote mega:KK/MyGame --push true --pull true
+
+# 5. Push to both
+kk push --all-remotes</code></pre>
+
+      <h4>Example: Wasabi S3 + Google Drive</h4>
+      <pre><code># 1. Set up Google Drive
+kk setup gdrive --name personal
+
+# 2. Configure Wasabi in rclone
+rclone config
+# → Choose "s3" storage
+# → Choose "Wasabi" as the S3 provider
+# → Enter Wasabi access key and secret
+# → Enter bucket name or let rclone create one
+# → Name it "wasabi"
+
+# 3. Test Wasabi
+rclone lsd wasabi:
+
+# 4. Add Wasabi to KK
+kk remote add rclone wasabi --remote wasabi:my-bucket/MyGame --push true --pull true
+
+# 5. Set priorities (Drive is primary, Wasabi is backup)
+kk remote set-default personal</code></pre>
+
+      <h4>Example: OneDrive + Google Drive</h4>
+      <pre><code># 1. Set up Google Drive
+kk setup gdrive --name personal
+
+# 2. Configure OneDrive in rclone
+rclone config
+# → Choose "onedrive" storage
+# → Follow OneDrive OAuth in browser
+# → Choose "OneDrive Personal" or "Business"
+# → Name it "onedrive"
+
+# 3. Test OneDrive
+rclone lsd onedrive:
+
+# 4. Add OneDrive to KK
+kk remote add rclone onedrive --remote onedrive:KK/MyGame --push true --pull true</code></pre>
+
+      <h3>Step 4: Configure default remote and priority</h3>
       <pre><code># Set primary storage
 kk remote set-default personal
 
@@ -386,10 +691,39 @@ kk remote list</code></pre>
         fails.
       </p>
 
-      <h4>Step 4: Push to all remotes</h4>
+      <h3>Step 5: Push to all remotes</h3>
       <pre><code>kk push --all-remotes</code></pre>
 
       <p>This uploads to all push-enabled remotes.</p>
+
+      <h3>Rclone Troubleshooting</h3>
+
+      <div class="info-box">
+        <h4>Issue: "rclone not found" or "command not found"</h4>
+        <p><strong>Cause:</strong> KK can't find rclone in your PATH.</p>
+        <p><strong>Fix:</strong></p>
+        <ul>
+          <li>Test if rclone is installed: <code>rclone version</code></li>
+          <li>If not found, put rclone.exe in the same folder as kk.exe</li>
+          <li>
+            Or specify the full path when adding the remote:
+            <code>--binary "C:\path\to\rclone.exe"</code>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>Issue: "Failed to list remote" or "connection failed"</h4>
+        <p><strong>Cause:</strong> rclone can't connect to the provider.</p>
+        <p><strong>Fix:</strong></p>
+        <ul>
+          <li>Test connection: <code>rclone lsd remote-name:</code></li>
+          <li>
+            If credentials expired, reconfigure: <code>rclone config</code>
+          </li>
+          <li>Check internet connection</li>
+        </ul>
+      </div>
 
       <hr id="multiple-drive-remotes" />
 
@@ -489,16 +823,15 @@ kk clone git:https://gitlab.com/user/repo.git --branch feature-or-test --pull</c
               >official releases</a
             >
             or reviewed the
-            <a
-              href="https://github.com/quisto-ph/kk"
-              rel="noopener noreferrer"
+            <a href="https://github.com/quisto-ph/kk" rel="noopener noreferrer"
               >source code</a
             >
           </li>
         </ul>
         <p>
-          <strong>Never use binaries from untrusted sources with this
-          flag.</strong>
+          <strong
+            >Never use binaries from untrusted sources with this flag.</strong
+          >
           See
           <a href="/privacy-policy/#google-drive-oauth">Privacy Policy</a> for
           security details.
@@ -537,6 +870,35 @@ kk accounts</code></pre>
       <hr id="migrate-modes" />
 
       <h2>Migrate between Git remote and storage-bundle modes</h2>
+
+      <div class="warning-box">
+        <strong style="color: #dc2626">⚠️ EXPERIMENTAL FEATURE WARNING</strong>
+        <p style="color: #dc2626; margin-top: 0.5rem">
+          The <code>kk remote migrate</code> command is
+          <strong style="color: #dc2626">HIGHLY EXPERIMENTAL</strong> and may
+          not work correctly in all situations.
+        </p>
+        <p style="color: #dc2626; margin-top: 0.5rem">
+          <strong>Use with caution:</strong> This feature may cause data loss or
+          corruption. Always backup your repository before attempting migration.
+        </p>
+        <p style="color: #dc2626; margin-top: 0.5rem">
+          <strong>Known limitations:</strong>
+        </p>
+        <ul style="color: #dc2626; margin-top: 0.25rem; margin-left: 1.5rem">
+          <li>Migration between modes may not preserve all commit metadata</li>
+          <li>Complex branch structures may not migrate correctly</li>
+          <li>
+            Team coordination is required — all members must be aware of mode
+            changes
+          </li>
+          <li>Rolling back a migration may require manual intervention</li>
+        </ul>
+        <p style="margin-top: 0.5rem">
+          <strong>Recommended:</strong> Test migration on a copy of your
+          repository first before migrating your production project.
+        </p>
+      </div>
 
       <p>
         KK supports two distinct modes for managing and syncing commit history.
