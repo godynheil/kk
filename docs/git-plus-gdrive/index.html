@@ -1,0 +1,1307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Step-by-step guide to set up KK with GitHub/GitLab/Gitea for code and Google Drive for large files. Perfect for teams and individuals."
+    />
+    <meta name="author" content="Godynheil A. Quisto" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#191a1b" />
+    <link rel="canonical" href="https://kkvcs.com/docs/git-plus-gdrive/" />
+    <link rel="icon" href="/icon/favicon.ico" sizes="any" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/icon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/icon/favicon-16x16.png"
+    />
+    <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" />
+    <link rel="manifest" href="/icon/site.webmanifest" />
+    <link rel="prefetch" href="/docs/installation/" />
+    <link rel="prefetch" href="/docs/how-to/" />
+    <link rel="prefetch" href="/docs/glossary/" />
+    <link rel="prefetch" href="/docs/how-it-works/" />
+    <link rel="prefetch" href="/docs/git-remote/" />
+    <link rel="prefetch" href="/" />
+    <link rel="prefetch" href="/docs/" />
+    <link rel="stylesheet" href="/css/core.css" />
+    <link rel="stylesheet" href="/css/navigation.css" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Setup Guide: Git Remote + Google Drive | KK Version Control System"
+    />
+    <meta
+      property="og:description"
+      content="Learn how to set up KK with GitHub/GitLab/Gitea for code history and Google Drive for large file storage."
+    />
+    <meta property="og:url" content="https://kkvcs.com/docs/git-plus-gdrive/" />
+    <meta
+      property="og:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <meta property="og:site_name" content="KK Version Control System" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Setup Guide: Git Remote + Google Drive | KK Version Control System"
+    />
+    <meta
+      name="twitter:description"
+      content="Learn how to set up KK with GitHub/GitLab/Gitea for code history and Google Drive for large file storage."
+    />
+    <meta
+      name="twitter:image"
+      content="https://kkvcs.com/icon/android-chrome-512x512.png"
+    />
+    <title>Setup Guide: Git Remote + Google Drive | KK Version Control System</title>
+    <link rel="stylesheet" href="/css/pages/docs-git-plus-gdrive.css" />
+    <script src="/js/copy-code.js" defer></script>
+    <script src="/js/mobile-nav.js" defer></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav aria-label="Main navigation">
+      <div class="container">
+        <a href="/" class="logo">KK Version Control System</a>
+        <button
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+          aria-label="Toggle navigation menu">
+          <span class="hamburger-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="nav-toggle-text">Menu</span>
+        </button>
+        <ul id="nav-menu" class="nav-menu">
+          <li><a href="/#how-it-works">How It Works</a></li>
+          <li><a href="/#features">Features</a></li>
+          <li><a href="/#backends">Backends</a></li>
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="/docs/" class="active">Documentation</a></li>
+          <li>
+            <a href="https://github.com/godynheil/kk" rel="noopener noreferrer"
+              >GitHub</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div class="nav-menu-backdrop" aria-hidden="true"></div>
+    </nav>
+
+    <main id="main-content">
+      <h1>Setup Guide: Git Remote + Google Drive</h1>
+
+      <p>
+        A complete step-by-step guide to setting up KK with a Git hosting service
+        (GitHub, GitLab, or Gitea) for code and commit history, plus Google Drive
+        for large file storage. This is the recommended setup for most teams.
+      </p>
+
+      <div class="toc">
+        <h3>Table of Contents</h3>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#what-you-need">What You Need</a></li>
+          <li><a href="#step-1-create-git-repo">Step 1: Create Git Repository</a></li>
+          <li><a href="#step-2-initialize-kk">Step 2: Initialize KK</a></li>
+          <li><a href="#step-3-add-git-remote">Step 3: Add Git Remote</a></li>
+          <li>
+            <a href="#step-4-setup-google-drive">Step 4: Set Up Google Drive</a
+            >
+          </li>
+          <li>
+            <a href="#step-5-track-large-files">Step 5: Track Large Files</a>
+          </li>
+          <li>
+            <a href="#step-6-commit-push">Step 6: Add, Commit, and Push</a>
+          </li>
+          <li><a href="#step-7-share-team">Step 7: Share with Team</a></li>
+          <li>
+            <a href="#teammate-clone">Teammate: Clone the Project</a>
+          </li>
+          <li><a href="#daily-workflow">Daily Workflow</a></li>
+          <li><a href="#troubleshooting">Troubleshooting</a></li>
+        </ul>
+      </div>
+
+      <hr id="overview" />
+
+      <h2>Overview</h2>
+
+      <p>
+        This setup gives you the best of both worlds for your game or media
+        project:
+      </p>
+
+      <div class="info-box">
+        <strong>What you get with this setup:</strong>
+        <ul class="mt-05">
+          <li>
+            <strong>GitHub/GitLab/Gitea:</strong> All your source code, commit
+            history, and pull requests are visible and manageable in one place
+          </li>
+          <li>
+            <strong>Google Drive:</strong> Large files (videos, 3D models, textures)
+            are stored separately, keeping your Git repository fast and small
+          </li>
+          <li>
+            <strong>One command:</strong> <code>kk push</code> syncs to both
+            places simultaneously
+          </li>
+          <li>
+            <strong>Team-friendly:</strong> Collaborators can clone, review code,
+            and download assets with simple commands
+          </li>
+        </ul>
+      </div>
+
+      <h3>How it works</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Content Type</th>
+            <th>Stored In</th>
+            <th>Example Files</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Source code</td>
+            <td>Git (GitHub/GitLab/Gitea)</td>
+            <td><code>.go</code>, <code>.py</code>, <code>.js</code>, <code>.cs</code></td>
+          </tr>
+          <tr>
+            <td>Config files</td>
+            <td>Git (GitHub/GitLab/Gitea)</td>
+            <td><code>.json</code>, <code>.yaml</code>, <code>.xml</code></td>
+          </tr>
+          <tr>
+            <td>Pointers to large files</td>
+            <td>Git (GitHub/GitLab/Gitea)</td>
+            <td>Small text references to real files</td>
+          </tr>
+          <tr>
+            <td>Large files (actual content)</td>
+            <td>Google Drive</td>
+            <td><code>.mp4</code>, <code>.fbx</code>, <code>.psd</code>, <code>.blend</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <hr id="what-you-need" />
+
+      <h2>What You Need</h2>
+
+      <p>Before starting, make sure you have:</p>
+
+      <ul>
+        <li>
+          <strong>KK installed</strong> — See
+          <a href="/docs/installation/">Installation Guide</a>
+        </li>
+        <li>
+          <strong>Git installed</strong> — Required for version control
+          (<a href="https://git-scm.com/downloads">git-scm.com</a>)
+        </li>
+        <li>
+          <strong>A Git hosting account</strong> — GitHub, GitLab, or Gitea
+        </li>
+        <li>
+          <strong>A Google account</strong> — For Google Drive storage
+        </li>
+      </ul>
+
+      <div class="info-box">
+        <p>
+          <strong>Quick check:</strong> Open a terminal and verify you have these
+          tools:
+        </p>
+        <pre><code>git --version
+kk version</code></pre>
+        <p>
+          If both commands work, you're ready to go!
+        </p>
+      </div>
+
+      <hr id="step-1-create-git-repo" />
+
+      <h2>Step 1: Create Your Git Repository</h2>
+
+      <p>
+        First, create an empty repository on your Git hosting service. This is
+        where your code and commit history will live.
+      </p>
+
+      <h3 id="create-github-repo">Option A: GitHub</h3>
+
+      <ol>
+        <li>
+          Go to
+          <a href="https://github.com/new" rel="noopener noreferrer"
+            >github.com/new</a
+          >
+        </li>
+        <li>
+          Enter a repository name (e.g., <code>my-game</code> or
+          <code>my-project</code>)
+        </li>
+        <li>
+          <strong>Important:</strong> Leave all initialization options
+          <strong>unchecked</strong>:
+        </li>
+      </ol>
+
+      <div class="info-box">
+        <p>❌ Do NOT check these boxes:</p>
+        <ul>
+          <li>Add a README file</li>
+          <li>Add .gitignore</li>
+          <li>Choose a license</li>
+        </ul>
+        <p>✅ KK will handle all of this for you!</p>
+      </div>
+
+      <ol start="4">
+        <li>Set visibility to <strong>Public</strong> or <strong>Private</strong></li>
+        <li>Click <strong>Create repository</strong></li>
+        <li>Copy the repository URL from the next page</li>
+      </ol>
+
+      <p>
+        <strong>Your URL will look like:</strong>
+      </p>
+      <pre><code>https://github.com/your-username/MyGame.git</code></pre>
+
+      <h3 id="create-gitlab-repo">Option B: GitLab</h3>
+
+      <ol>
+        <li>
+          Go to your GitLab instance and click <strong>New project</strong>
+        </li>
+        <li>Choose <strong>Create blank project</strong></li>
+        <li>Enter project name and slug</li>
+        <li>
+          <strong>Important:</strong> Do not initialize with README or .gitignore
+        </li>
+        <li>Click <strong>Create project</strong></li>
+        <li>Copy the repository URL</li>
+      </ol>
+
+      <p>
+        <strong>Your URL will look like:</strong>
+      </p>
+      <pre><code>https://gitlab.com/your-username/MyGame.git</code></pre>
+
+      <h3 id="create-gitea-repo">Option C: Gitea (self-hosted)</h3>
+
+      <ol>
+        <li>
+          Go to your Gitea instance and create a new repository
+        </li>
+        <li>Enter repository name and description</li>
+        <li>
+          <strong>Important:</strong> Initialize as <strong>empty</strong> repository
+        </li>
+        <li>Click <strong>Create</strong></li>
+        <li>Copy the repository URL</li>
+      </ol>
+
+      <p>
+        <strong>Your URL will look like:</strong>
+      </p>
+      <pre><code>https://git.example.com/your-username/MyGame.git</code></pre>
+
+      <hr id="step-2-initialize-kk" />
+
+      <h2>Step 2: Initialize KK</h2>
+
+      <p>
+        Now create your KK project on your computer. Navigate to your project
+        folder and run:
+      </p>
+
+      <pre><code># Navigate to your project directory
+cd ~/Projects/my-game
+
+# Initialize KK
+kk init</code></pre>
+
+      <p>
+        <strong>On Windows:</strong>
+      </p>
+      <pre><code># Navigate to your project directory
+cd C:\Users\YourName\Projects\my-game
+
+# Initialize KK
+kk init</code></pre>
+
+      <p>
+        KK will create the project structure:
+      </p>
+
+      <pre><code>MyGame/
+├── .kk/                    # KK metadata (like .git/ but KK-managed)
+│   ├── git/                # KK's internal Git database
+│   ├── objects/            # Local cache for large files
+│   ├── config.json         # Your remotes and settings
+│   ├── tracks.json         # File patterns to track
+│   └── repo.json           # Project identity
+└── .kkignore               # Files KK should ignore</code></pre>
+
+      <p>
+        <strong>What just happened:</strong> KK created a special Git database
+        inside <code>.kk/git/</code> instead of a regular <code>.git/</code>
+        folder. This lets KK manage large files separately while keeping all Git's
+        power for version control.
+      </p>
+
+      <hr id="step-3-add-git-remote" />
+
+      <h2>Step 3: Add the Git Remote</h2>
+
+      <p>
+        Tell KK about the Git repository you created in Step 1. This is where your
+        code and commit history will be synced.
+      </p>
+
+      <h3>For GitHub</h3>
+      <pre><code>kk remote add git origin https://github.com/your-username/MyGame.git</code></pre>
+
+      <h3>For GitLab</h3>
+      <pre><code>kk remote add git origin https://gitlab.com/your-username/MyGame.git</code></pre>
+
+      <h3>For Gitea (self-hosted)</h3>
+      <pre><code>kk remote add git origin https://git.example.com/your-username/MyGame.git</code></pre>
+
+      <h3>Using SSH instead of HTTPS</h3>
+
+      <p>
+        If you prefer SSH keys (recommended for frequent pushing), use the SSH
+        URL:
+      </p>
+
+      <pre><code># GitHub SSH
+kk remote add git origin git@github.com:your-username/MyGame.git
+
+# GitLab SSH
+kk remote add git origin git@gitlab.com:your-username/MyGame.git</code></pre>
+
+      <div class="info-box">
+        <p>
+          <strong>What this command does:</strong>
+        </p>
+        <ul>
+          <li>Verifies the Git remote is accessible</li>
+          <li>Adds the remote to KK's internal Git configuration</li>
+          <li>Stores the remote info in <code>.kk/config.json</code></li>
+        </ul>
+        <p>
+          <strong>You should see:</strong>
+        </p>
+        <pre><code>kk: git remote 'origin' added successfully
+kk: remote configured: https://github.com/your-username/MyGame.git</code></pre>
+      </div>
+
+      <h3>Verify the remote was added</h3>
+      <pre><code>kk remote list</code></pre>
+
+      <p>
+        <strong>You should see:</strong>
+      </p>
+      <pre><code>default: origin
+origin  type=git  provider=github  url=https://github.com/your-username/MyGame.git  push=true pull=true</code></pre>
+
+      <hr id="step-4-setup-google-drive" />
+
+      <h2>Step 4: Set Up Google Drive</h2>
+
+      <p>
+        Now set up Google Drive to store your large files. This keeps your Git
+        repository fast and small while giving you cloud storage for assets.
+      </p>
+
+      <h3>Authorize with Google</h3>
+
+      <pre><code>kk setup gdrive</code></pre>
+
+      <p>
+        <strong>What happens:</strong>
+      </p>
+
+      <ol>
+        <li>
+          A browser window opens (or you'll see a link to click in terminal)
+        </li>
+        <li>Sign in with your Google account</li>
+        <li>Review permissions (KK requests access to Google Drive only)</li>
+        <li>Click "Allow" to authorize</li>
+        <li>KK creates a project folder in your Google Drive</li>
+      </ol>
+
+      <p>
+        <strong>You should see:</strong>
+      </p>
+      <pre><code>kk: Opening browser for Google OAuth...
+kk: Google Drive auth saved to ~/.config/KK/gdrive/default.json
+kk: Drive remote 'gdrive' configured with folder-id: 1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u
+kk: Run 'kk push' to upload your project to Drive.
+kk:     Share the project folder ID with teammates so they can clone:
+kk:     kk clone drive:1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u
+kk: Remote ready.</code></pre>
+
+      <div class="info-box">
+        <p>
+          <strong>💾 Save that folder ID!</strong>
+        </p>
+        <p>
+          The folder ID (<code>1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u</code>) is what
+          you'll share with teammates. You can also find it later:
+        </p>
+        <ol>
+          <li>Open the folder in Google Drive</li>
+          <li>Look at the URL: <code>https://drive.google.com/drive/folders/&lt;FOLDER_ID&gt;</code></li>
+          <li>The long string after <code>/folders/</code> is your folder ID</li>
+        </ol>
+      </div>
+
+      <h3>Using multiple Google accounts</h3>
+
+      <p>
+        If you want to use a specific Google account or profile:
+      </p>
+
+      <pre><code># Use a specific account profile
+kk setup gdrive --account work
+
+# Or name the remote specifically
+kk setup gdrive --name drive-work --account work</code></pre>
+
+      <h3>Verify Drive is configured</h3>
+      <pre><code>kk remote list</code></pre>
+
+      <p>
+        <strong>You should see both remotes:</strong>
+      </p>
+      <pre><code>default: origin
+origin  type=git  provider=github  url=https://github.com/your-username/MyGame.git  push=true pull=true
+gdrive  type=drive provider=google-drive  push=true pull=true</code></pre>
+
+      <hr id="step-5-track-large-files" />
+
+      <h2>Step 5: Track Large File Types (Optional)</h2>
+
+      <p>
+        <strong>Note: This step is optional!</strong> By default, if no custom tracking patterns are configured, KK automatically tracks <strong>all files that are not recognized as code</strong> (such as <code>.unitypackage</code>, <code>.uasset</code>, <code>.fbx</code>, <code>.png</code>, <code>.wav</code>, etc.) as pointers.
+      </p>
+      <p>
+        Explicitly running <code>kk track</code> is only required if you want to define custom, narrow tracking patterns (which will turn off the default "track all non-code" behavior). If you wish to specify custom patterns, use the commands below:
+      </p>
+
+      <h3>Common game development file types</h3>
+
+      <pre><code># Video files
+kk track "*.mp4" "*.mov" "*.avi" "*.mkv"
+
+# Audio files
+kk track "*.wav" "*.mp3" "*.ogg" "*.flac"
+
+# Image and texture files
+kk track "*.png" "*.jpg" "*.jpeg" "*.psd" "*.tga" "*.exr"
+
+# 3D model files
+kk track "*.fbx" "*.obj" "*.blend" "*.ma" "*.mb"
+
+# Asset bundles
+kk track "*.zip" "*.tar.gz" "*.7z" "*.rar"</code></pre>
+
+      <p>
+        <strong>All in one command:</strong>
+      </p>
+      <pre><code>kk track "*.mp4" "*.wav" "*.mp3" "*.png" "*.jpg" "*.psd" "*.fbx" "*.obj" "*.blend" "*.zip" "*.tar.gz"</code></pre>
+
+      <div class="info-box">
+        <p>
+          <strong>What gets tracked vs. what stays regular:</strong>
+        </p>
+        <ul>
+          <li>
+            <strong>Tracked (→ pointers on Drive):</strong> .mp4, .fbx, .blend,
+            .psd, .zip, etc.
+          </li>
+          <li>
+            <strong>Regular files (→ in Git):</strong> Source code (.go, .py, .js,
+            .cs), configs (.json, .xml), text files (.md, .txt)
+          </li>
+        </ul>
+        <p>
+          KK automatically knows which files should be regular based on their
+          extension. Use <code>kk track</code> for the big files!
+        </p>
+      </div>
+
+      <h3>See what's being tracked</h3>
+      <pre><code>kk track list</code></pre>
+
+      <p>
+        <strong>Output example:</strong>
+      </p>
+      <pre><code>Tracked patterns:
+  *.mp4
+  *.wav
+  *.fbx
+  *.blend
+  *.zip</code></pre>
+
+      <hr id="step-6-commit-push" />
+
+      <h2>Step 6: Add, Commit, and Push</h2>
+
+      <p>
+        Now add your files to KK, commit them, and push to both Git and Google
+        Drive.
+      </p>
+
+      <h3>Add your files</h3>
+
+      <pre><code># Add all files in current directory
+kk add .
+
+# Or add specific files
+kk add src/main.go Assets/character.fbx Assets/background.png</code></pre>
+
+      <p>
+        <strong>What happens:</strong>
+      </p>
+      <ul>
+        <li>Code files are staged normally in Git</li>
+        <li>Large files are hashed and stored in <code>.kk/objects/</code></li>
+        <li>Pointer files are created and staged in Git</li>
+      </ul>
+
+      <p>
+        <strong>You should see:</strong>
+      </p>
+      <pre><code>code src/main.go (storing as regular file)
+large Assets/character.fbx -> sha256:9f86... (12.5 MB)
+large Assets/background.png -> sha256:1a2b... (2.3 MB)</code></pre>
+
+      <h3>Commit your changes</h3>
+
+      <pre><code>kk commit -m "Initial commit"</code></pre>
+
+      <p>
+        This creates a commit in KK's Git database with all your files.
+      </p>
+
+      <h3>Push to both Git and Drive</h3>
+
+      <pre><code>kk push</code></pre>
+
+      <p>
+        <strong>This one command does BOTH:</strong>
+      </p>
+
+      <ul>
+        <li>
+          <strong>Git push:</strong> Sends code, pointers, and history to GitHub
+        </li>
+        <li>
+          <strong>Drive upload:</strong> Uploads large file binaries to Google
+          Drive
+        </li>
+      </ul>
+
+      <p>
+        <strong>You should see:</strong>
+      </p>
+      <pre><code>kk: [origin] syncing pointer history to git remote...
+kk: [origin] pointer history synced
+kk: [gdrive] uploading objects...
+kk: [gdrive] uploaded 3 objects (14.8 MB)
+kk: Push complete!</code></pre>
+
+      <div class="info-box">
+        <p>
+          <strong>🎉 Congratulations!</strong> Your project is now set up with
+          GitHub/GitLab/Gitea for code and Google Drive for large files!
+        </p>
+        <p>
+          You can verify on your Git hosting service — you'll see your source code
+          and small pointer files. The large files are safely stored on Google
+          Drive.
+        </p>
+      </div>      <div class="warning-box">
+        <p>
+          <strong>⚠️ Note on Push Performance:</strong> The first push will be slow because it must upload all large files for the first time. By default, the Google Drive remote's <code>verify_mode</code> is set to <code>"local-hash"</code>. You can change this to <code>"none"</code> or <code>"download"</code> in your <code>.kk/config.json</code>:
+        </p>
+        <ul>
+          <li><code>"local-hash"</code> (default): Verifies files using cached local hashes.</li>
+          <li><code>"none"</code>: Skips downloading/hashing and performs a quick metadata existence check (only checking if the file is present on Drive).</li>
+          <li><code>"download"</code>: Downloads the full bytes of every object during checks to verify its SHA-256 hash. <em>Note: If you have large files, this mode is very slow.</em></li>
+        </ul>
+        <p>
+          To update the remote settings:
+        </p>
+        <pre><code>kk remote remove gdrive
+kk remote add drive gdrive --drive-folder-id &lt;id&gt; --drive-auth-path &lt;path&gt; --verify-mode none</code></pre>
+        <p>
+          (Alternatively, you can manually edit the <code>"verify_mode"</code> value under the <code>gdrive</code> entry in your <code>.kk/config.json</code> file).
+        </p>
+        <p class="mt-1">
+          <strong>Once a push completes successfully:</strong>
+        </p>
+        <ol>
+          <li>The successfully pushed <code>HEAD</code> commit is saved locally in <code>.kk/push-state.json</code>.</li>
+          <li>On your next push, <code>kk</code> checks if the last pushed commit is an ancestor of the current commit.</li>
+          <li>If it is, <code>kk</code> queries Git only for the changes since that commit.</li>
+          <li>It will sync and verify only the specific file(s) and object(s) you changed (e.g., just the 1 modified file/object), making subsequent pushes near-instantaneous.</li>
+        </ol>
+      </div>
+
+      <hr id="step-7-share-team" />
+
+      <h2>Step 7: Share with Your Team</h2>
+
+      <p>
+        Now that your project is set up, here's how to share it with teammates.
+      </p>
+
+      <h3>A. Share the Git repository</h3>
+
+      <p>
+        Add collaborators through your Git hosting service:
+      </p>
+
+      <ul>
+        <li>
+          <strong>GitHub:</strong> Settings → Collaborators → Add people
+        </li>
+        <li>
+          <strong>GitLab:</strong> Project → Members → Invite members
+        </li>
+        <li>
+          <strong>Gitea:</strong> Settings → Collaborators
+        </li>
+      </ul>
+
+      <h3>B. Share the Google Drive folder</h3>
+
+      <div class="warning-box">
+        <p>
+          <strong>⚠️ Important:</strong> The Google Drive folder is owned by your
+          Google account. Teammates <strong>cannot</strong> access the large files
+          until you explicitly share the folder with them.
+        </p>
+      </div>
+
+      <ol>
+        <li>Open Google Drive and find the KK project folder</li>
+        <li>Right-click the folder → <strong>Share</strong></li>
+        <li>
+          Add teammates' Google account emails with <strong>Editor</strong>
+          permissions
+        </li>
+        <li>Click <strong>Send</strong></li>
+      </ol>
+
+      <p>
+        <strong>Share the folder ID with your team</strong> so they can clone.
+      </p>
+
+      <h3>What to tell your teammates</h3>
+
+      <p>
+        Send your teammates these steps to clone and set up the project:
+      </p>
+
+      <div class="info-box">
+        <ol>
+          <li class="mb-05">
+            <strong>Clone the repository:</strong> Get the source code and pointers:
+            <pre><code>kk clone git:https://github.com/your-username/MyGame.git --pull</code></pre>
+          </li>
+          <li class="mb-05">
+            <strong>Authorize Google Drive with full scope:</strong> Since the shared folder is externally owned, teammates need full scope:
+            <pre><code>kk setup gdrive --scope full --account work</code></pre>
+          </li>
+          <li class="mb-05">
+            <strong>Connect the shared Google Drive folder:</strong>
+            <pre><code>kk setup gdrive --name shared --folder 1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u --account work</code></pre>
+            <p class="mt-05">
+              Replace <code>1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u</code> with our actual Google Drive folder ID.
+            </p>
+          </li>
+          <li>
+            <strong>Download the large assets:</strong>
+            <pre><code>kk pull-file .</code></pre>
+          </li>
+        </ol>
+
+        <p class="mt-05">
+          <strong>They will need:</strong>
+        </p>
+        <ul>
+          <li>Access to the Git repository (you added them as a collaborator)</li>
+          <li>Access to the Google Drive folder (you shared it with Editor permissions)</li>
+        </ul>
+      </div>
+
+      <hr id="teammate-clone" />
+
+      <h2>Teammate: Clone the Project</h2>
+
+      <p>
+        This section is for teammates who need to clone an existing KK project that
+        uses GitHub/GitLab/Gitea for code and Google Drive for large files.
+      </p>
+
+      <h3>What you need before cloning</h3>
+
+      <p>
+        Before you can clone the project, make sure you have:
+      </p>
+
+      <ul>
+        <li>
+          <strong>KK installed</strong> — Download from
+          <a href="/docs/installation/">Installation Guide</a>
+        </li>
+        <li>
+          <strong>Git installed</strong> — Required for version control
+          (<a href="https://git-scm.com/downloads">git-scm.com</a>)
+        </li>
+        <li>
+          <strong>Access to the Git repository</strong> — The project owner must
+          add you as a collaborator
+        </li>
+        <li>
+          <strong>Access to the Google Drive folder</strong> — The project owner
+          must share the Drive folder with your Google account
+        </li>
+      </ul>
+
+      <div class="info-box">
+        <p>
+          <strong>Quick check:</strong> Verify you have the required tools:
+        </p>
+        <pre><code>git --version
+kk version</code></pre>
+        <p>
+          If both commands work, you're ready to clone!
+        </p>
+      </div>
+
+      <h3>Step 1: Get the project information</h3>
+
+      <p>
+        Ask your project owner for these details:
+      </p>
+
+      <ul>
+        <li>
+          <strong>Git repository URL</strong> — The HTTPS or SSH URL to clone from
+        </li>
+        <li>
+          <strong>Google Drive folder ID</strong> — The ID of the shared Drive
+          folder (optional if the folder is already accessible)
+        </li>
+      </ul>
+
+      <p>
+        <strong>Example Git URLs:</strong>
+      </p>
+      <pre><code># GitHub (HTTPS)
+https://github.com/your-username/MyGame.git
+
+# GitHub (SSH)
+git@github.com:your-username/MyGame.git
+
+# GitLab (HTTPS)
+https://gitlab.com/your-username/MyGame.git</code></pre>
+
+      <h3>Step 2: Verify Git repository access</h3>
+
+      <p>
+        Before using KK, verify you can access the Git repository:
+      </p>
+
+      <pre><code># Test access (replace with your actual URL)
+git ls-remote https://github.com/your-username/MyGame.git</code></pre>
+
+      <p>
+        <strong>If you see a list of branches:</strong> You have access! ✅
+      </p>
+      <p>
+        <strong>If you see "Permission denied" or "Repository not found":</strong>
+        Ask the project owner to add you to the repository.
+      </p>
+
+      <h3>Step 3: Verify Google Drive access</h3>
+
+      <p>
+        Check if you can see the shared Google Drive folder:
+      </p>
+
+      <ol>
+        <li>Open Google Drive in your browser</li>
+        <li>Look for "Shared with me" on the left sidebar</li>
+        <li>Find the project folder (usually named after the project)</li>
+      </ol>
+
+      <p>
+        <strong>If you can see the folder:</strong> Great! You have access. ✅
+      </p>
+      <p>
+        <strong>If you don't see the folder:</strong> Ask the project owner to
+        share it with your Google account email.
+      </p>
+
+      <h3>Step 4: Authorize Google Drive &amp; Connect Shared Folder</h3>
+
+      <p>
+        Since Google Drive needs full scope for other teammates to access folders owned by the project owner
+        or other teammates, you must authorize KK with full scope and connect the shared folder before cloning:
+      </p>
+
+      <pre><code># Step 4a: Authorize with full scope
+kk setup gdrive --scope full --account work
+
+# Step 4b: Connect to the shared folder
+kk setup gdrive --name shared --folder 1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u --account work</code></pre>
+
+      <p class="mt-05">
+        Replace <code>1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u</code> with the actual
+        folder ID from your project owner.
+      </p>
+
+      <div class="warning-box font-small mt-05">
+        <p>
+          <strong>⚠️ Security Warning:</strong> <code>--scope full</code> grants KK
+          access to ALL files in your Google Drive. Only use with official KK
+          binaries from <a href="https://github.com/godynheil/kk">trusted sources</a>.
+        </p>
+      </div>
+
+      <h3>Step 5: Clone the project with KK</h3>
+
+      <p>
+        Now clone the project using KK. Navigate to where you want the project and
+        run:
+      </p>
+
+      <h4>On macOS/Linux:</h4>
+      <pre><code># Navigate to your projects directory
+cd ~/Projects
+
+# Clone from Git and download large files
+kk clone git:https://github.com/your-username/MyGame.git --pull</code></pre>
+
+      <h4>On Windows:</h4>
+      <pre><code># Navigate to your projects directory
+cd C:\Users\YourName\Projects
+
+# Clone from Git and download large files
+kk clone git:https://github.com/your-username/MyGame.git --pull</code></pre>
+
+      <h4>Using SSH instead of HTTPS:</h4>
+      <pre><code>kk clone git:git@github.com:your-username/MyGame.git --pull</code></pre>
+
+      <p>
+        <strong>What the <code>--pull</code> flag does:</strong>
+      </p>
+      <ul>
+        <li>
+          <strong>Clones from Git:</strong> Gets all source code and pointer files
+        </li>
+        <li>
+          <strong>Downloads from Drive:</strong> Fetches large files from Google
+          Drive
+        </li>
+        <li>
+          <strong>Materializes files:</strong> Expands pointer files to actual
+          content
+        </li>
+      </ul>
+
+      <div class="info-box">
+        <p>
+          <strong>💡 Tip:</strong> If you omit <code>--pull</code>, KK will clone
+          the repository but <strong>not</strong> download large files. You can
+          download them later with <code>kk pull</code> or <code>kk pull-file .</code>
+        </p>
+      </div>
+
+      <h3>Step 6: What happens during cloning</h3>
+
+      <p>
+        KK will show you progress as it clones:
+      </p>
+
+      <pre><code>kk: cloning from git remote...
+kk: repository cloned successfully
+kk: downloading objects from remotes...
+kk: [gdrive] scanning for missing objects...
+kk: [gdrive] downloading 12 objects (45.2 MB)
+kk: [=============>           ] 60% (27.1 MB / 45.2 MB)
+kk: [gdrive] download complete
+kk: materializing pointer files...
+kk: Clone complete!</code></pre>
+
+      <p>
+        <strong>What you get after cloning:</strong>
+      </p>
+      <ul>
+        <li>A project folder with all source code files</li>
+        <li>All large files downloaded and ready to use</li>
+        <li>
+          Both Git and Google Drive remotes already configured (no setup needed!)
+        </li>
+      </ul>
+
+      <h3>Step 7: Enter the project and verify</h3>
+
+      <pre><code># Navigate into the project
+cd MyGame
+ 
+# Check the status
+kk status
+
+# List configured remotes
+kk remote list</code></pre>
+
+      <p>
+        <strong>You should see:</strong>
+      </p>
+      <pre><code>On branch main
+Your branch is up to date with 'origin/main'.
+
+default: origin
+origin  type=git  provider=github  url=https://github.com/your-username/MyGame.git
+gdrive  type=drive provider=google-drive</code></pre>
+
+      <h3>Step 8: Start working!</h3>
+
+      <p>
+        Now you can start working on the project:
+      </p>
+
+      <pre><code># Make changes to files...
+
+# Add your changes
+kk add .
+
+# Commit your changes
+kk commit -m "Add new feature"
+
+# Push to both Git and Drive
+kk push</code></pre>
+
+      <hr />
+
+      <h3>Troubleshooting Clone Issues</h3>
+
+      <h4>Issue: "Permission denied" or "Repository not found"</h4>
+
+      <div class="info-box">
+        <p><strong>Cause:</strong> You don't have access to the Git repository.</p>
+        <p><strong>Solution:</strong></p>
+        <ol>
+          <li>Ask the project owner to add you as a collaborator</li>
+          <li>Verify you're using the correct Git account</li>
+          <li>
+            For GitHub: Check your Settings → Collaborators to confirm you're
+            listed
+          </li>
+        </ol>
+      </div>
+
+      <h4>Issue: "Google Drive folder not found" or "Permission denied"</h4>
+
+      <div class="info-box">
+        <p>
+          <strong>Cause:</strong> The Google Drive folder isn't shared with your
+          account, or you're using the wrong Google account.
+        </p>
+        <p><strong>Solution:</strong></p>
+        <ol>
+          <li>Check Google Drive → "Shared with me" for the folder</li>
+          <li>Ask the project owner to share the folder with your email</li>
+          <li>Make sure you're signed in with the correct Google account</li>
+          <li>
+            For externally shared folders, run these two commands:
+          </li>
+        </ol>
+        <pre><code># Step 1: Authorize with full scope
+kk setup gdrive --scope full --account work
+
+# Step 2: Connect to the shared folder
+kk setup gdrive --name shared --folder 1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u --account work</code></pre>
+        <p class="mt-05">
+          Replace <code>1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u</code> with the actual
+          folder ID from your project owner.
+        </p>
+      </div>
+
+      <div class="warning-box">
+        <p>
+          <strong>⚠️ Security Warning:</strong> <code>--scope full</code> grants KK
+          access to ALL files in your Google Drive. Only use with official KK
+          binaries from
+          <a href="https://github.com/godynheil/kk">trusted sources</a>.
+        </p>
+      </div>
+
+      <h4>Issue: Clone succeeded but large files are missing</h4>
+
+      <div class="info-box">
+        <p><strong>Cause:</strong> Large files weren't downloaded during clone.</p>
+        <p><strong>Solution:</strong></p>
+        <pre><code># Navigate to project
+cd MyGame
+
+# Download all large files
+kk pull-file .</code></pre>
+        <p>
+          This downloads and materializes all pointer files in the current
+          directory and subdirectories.
+        </p>
+      </div>
+
+      <h4>Issue: "git remote not found" error</h4>
+
+      <div class="info-box">
+        <p><strong>Cause:</strong> Git credentials aren't configured.</p>
+        <p><strong>Solution:</strong></p>
+        <ul>
+          <li>
+            For HTTPS: Set up a Personal Access Token (recommended) or configure
+            Git credentials
+          </li>
+          <li>
+            For SSH: Make sure your SSH key is added to your Git account
+          </li>
+        </ul>
+        <pre><code># Configure Git credentials (HTTPS)
+git config --global credential.helper store
+
+# Then clone again — you'll be prompted for credentials</code></pre>
+      </div>
+
+      <h4>Issue: Clone command not found</h4>
+
+      <div class="info-box">
+        <p><strong>Cause:</strong> KK isn't installed or not on your PATH.</p>
+        <p><strong>Solution:</strong></p>
+        <ul>
+          <li>
+            Follow the
+            <a href="/docs/installation/">Installation Guide</a>
+            to install KK
+          </li>
+          <li>Make sure KK is on your system PATH</li>
+          <li>
+            On Windows, try using the full path to kk.exe if it's not on PATH
+          </li>
+        </ul>
+      </div>
+
+
+      <hr id="daily-workflow" />
+
+      <h2>Daily Workflow</h2>
+
+      <p>
+        After initial setup, your daily workflow is simple:
+      </p>
+
+      <h3>Making changes</h3>
+
+      <pre><code># Make changes to your files...
+
+# Add new or changed files
+kk add .
+
+# Commit changes
+kk commit -m "Add new character model"
+
+# Push to both Git and Drive
+kk push</code></pre>
+
+      <h3>Pulling updates from teammates</h3>
+
+      <pre><code># Pull latest code and pointers from Git
+kk pull
+
+# Download any new large files
+kk pull-file .</code></pre>
+
+      <h3>Creating branches</h3>
+
+      <pre><code># Create a new branch
+kk branch feature/new-enemy
+
+# Make changes...
+kk add Assets/enemy.fbx
+kk commit -m "Add enemy model"
+
+# Push branch to Git
+kk push</code></pre>
+
+      <h3>Merging branches</h3>
+
+      <pre><code># Switch back to main branch
+kk checkout main
+
+# Pull latest changes
+kk pull
+
+# Merge the feature branch
+kk merge feature/new-enemy
+
+# Push merge
+kk push</code></pre>
+
+      <hr id="troubleshooting" />
+
+      <h2>Troubleshooting</h2>
+
+      <div class="info-box">
+        <h4>Issue: "Git remote authentication failed"</h4>
+        <p><strong>Cause:</strong> Git needs your credentials.</p>
+        <p><strong>Fix:</strong></p>
+        <ul>
+          <li>
+            For HTTPS: Use a Personal Access Token (recommended) or configure
+            Git credentials
+          </li>
+          <li>
+            For SSH: Make sure your SSH key is added to your Git account
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <h4>Issue: "Google Drive folder not found" or "Permission denied"</h4>
+        <p>
+          <strong>Cause:</strong> The Google Drive folder isn't shared with your
+          account, or you're using the wrong Google account.
+        </p>
+        <p><strong>Fix:</strong></p>
+        <ol>
+          <li>Check Google Drive → "Shared with me" for the folder</li>
+          <li>Ask the project owner to share the folder with your email</li>
+          <li>Make sure you're signed in with the correct Google account</li>
+          <li>For externally shared folders, run these two commands:</li>
+        </ol>
+        <pre><code># Step 1: Authorize with full scope
+kk setup gdrive --scope full --account work
+
+# Step 2: Connect to the shared folder
+kk setup gdrive --name shared --folder 1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u --account work</code></pre>
+        <p class="mt-05">
+          Replace <code>1a2B3cD4eF5gH6iJ7kL8mN9oP0qR1sT2u</code> with the actual
+          folder ID from your project owner.
+        </p>
+        <div class="warning-box">
+          <p>
+            <strong>⚠️ Security Warning:</strong> <code>--scope full</code> grants KK
+            access to ALL files in your Google Drive. Only use with official KK
+            binaries from <a href="https://github.com/godynheil/kk">trusted sources</a>.
+          </p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <h4>Issue: "Some files didn't download"</h4>
+        <p><strong>Cause:</strong> Large files may not have downloaded yet.</p>
+        <p><strong>Fix:</strong> Run <code>kk pull-file .</code> after cloning.</p>
+      </div>
+
+      <div class="info-box">
+        <h4>Issue: "Repository size is too large"</h4>
+        <p><strong>Cause:</strong> Large files are being tracked as regular files.</p>
+        <p><strong>Fix:</strong></p>
+        <ul>
+          <li>Check tracking patterns: <code>kk track list</code></li>
+          <li>Add file extensions: <code>kk track "*.mp4" "*.fbx"</code></li>
+          <li>Re-add files: <code>kk add Assets/</code></li>
+        </ul>
+      </div>
+
+      <h2>Further Reading</h2>
+
+      <ul>
+        <li>
+          <a href="/docs/how-it-works/">How It Works</a> — Learn more about KK's
+          internals
+        </li>
+        <li>
+          <a href="/docs/how-to/">How To Guide</a> — More guides for advanced
+          workflows
+        </li>
+        <li>
+          <a href="/docs/glossary/">Glossary</a> — Understand KK terminology
+        </li>
+        <li>
+          <a href="/docs/git-remote/">Git Remote Integration</a> — Deep dive into
+          Git remotes
+        </li>
+      </ul>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="/#features">Features</a></li>
+            <li><a href="/#how-it-works">How It Works</a></li>
+            <li><a href="https://github.com/godynheil/kk">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Documentation</h4>
+          <ul>
+            <li><a href="/docs/installation/">Installation</a></li>
+            <li><a href="/docs/how-to/">How To Guide</a></li>
+            <li><a href="/docs/glossary/">Glossary</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="/terms-of-service/">Terms of Service</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/license/">License</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
+        <p>
+          KK Version Control System is distributed under the Modified GNU General
+          Public License, Version 2.0.
+        </p>
+        <p>
+          "KK", "KK Version Control System", and "kk" are trademarks of Godynheil
+          A. Quisto.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
