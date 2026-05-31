@@ -54,12 +54,25 @@
     <title>Glossary | KK Version Control System</title>
     <link rel="stylesheet" href="/css/pages/docs-glossary.css" />
     <script src="/js/copy-code.js" defer></script>
+    <script src="/js/mobile-nav.js" defer></script>
   </head>
   <body>
     <nav aria-label="Main navigation">
       <div class="container">
         <a href="/" class="logo">KK Version Control System</a>
-        <ul>
+        <button
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-controls="nav-menu"
+          aria-label="Toggle navigation menu">
+          <span class="hamburger-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="nav-toggle-text">Menu</span>
+        </button>
+        <ul id="nav-menu" class="nav-menu">
           <li><a href="/#how-it-works">How It Works</a></li>
           <li><a href="/#features">Features</a></li>
           <li><a href="/#backends">Backends</a></li>
@@ -73,6 +86,7 @@
           </li>
         </ul>
       </div>
+      <div class="nav-menu-backdrop" aria-hidden="true"></div>
     </nav>
 
     <main>

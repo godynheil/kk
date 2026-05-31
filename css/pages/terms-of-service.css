@@ -189,6 +189,16 @@ footer {
   }
 }
 
+@media (max-width: 400px) {
+  main {
+    padding: 2rem 1.75rem;
+  }
+
+  footer {
+    padding: 2rem 1.75rem;
+  }
+}
+
 @media print {
   footer {
     display: none;

@@ -497,6 +497,20 @@ code {
   }
 }
 
+@media (max-width: 400px) {
+  .hero {
+    padding: 5rem 1.75rem 4rem;
+  }
+
+  section {
+    padding: 3rem 1.75rem;
+  }
+
+  footer {
+    padding: 2rem 1.75rem;
+  }
+}
+
 @media print {
   footer {
     display: none;
