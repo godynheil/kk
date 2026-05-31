@@ -1,0 +1,24 @@
+run:
+  timeout: 5m
+
+linters:
+  enable:
+    - errcheck
+    - gofmt
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+
+formatters:
+  settings:
+    gofmt:
+      Default: true
+      simplify: false
+      rewrite-rules:
+        - pattern: 'interface{}'
+          replacement: 'any'
+        - pattern: 'a[b:len(a)]'
+          replacement: 'a[b:]'
+issues:
+  exclude-use-default: false

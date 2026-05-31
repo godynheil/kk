@@ -1,1 +1,11 @@
 /.idea/
+/thirdparty/
+/.gocache/
+/.tmp-appdata/
+/.tmp-appdata-test/
+/INTERNAL_DOC.md
+/.env
+/kk.exe
+/tmp-repro/
+/dist/
+/internal_tests/
