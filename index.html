@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="KK is a source-available, Git-compatible CLI for solo game developers and teams that stores large assets in cloud or local storage with verification and deduplication."
+      content="KK is an AGPL-3.0-or-later, Git-compatible CLI for solo game developers and teams that stores large assets in cloud or local storage with verification and deduplication."
     />
     <meta
       name="keywords"
@@ -52,7 +52,7 @@
     <meta property="og:title" content="KK VCS - Version Control System" />
     <meta
       property="og:description"
-      content="KK VCS is a Git-compatible large-file version control system for solo game developers and teams, with verified cloud or local storage."
+      content="KK VCS is an AGPL-3.0-or-later Git-compatible large-file version control system for solo game developers and teams, with verified cloud or local storage."
     />
     <meta property="og:url" content="https://kkvcs.com/" />
     <meta
@@ -71,7 +71,7 @@
     <meta name="twitter:title" content="KK VCS - Version Control System" />
     <meta
       name="twitter:description"
-      content="KK VCS is a Git-compatible large-file version control system for solo game developers and teams, with verified cloud or local storage."
+      content="KK VCS is an AGPL-3.0-or-later Git-compatible large-file version control system for solo game developers and teams, with verified cloud or local storage."
     />
     <meta
       name="twitter:image"
@@ -106,8 +106,9 @@
         "@type": "SoftwareApplication",
         "name": "KK Version Control System",
         "alternateName": ["KK VCS", "KK"],
-        "description": "Source-available, Git-compatible CLI for solo game developers and teams that stores large assets in cloud or local storage with verification and deduplication",
+        "description": "AGPL-3.0-or-later, Git-compatible CLI for solo game developers and teams that stores large assets in cloud or local storage with verification and deduplication",
         "url": "https://kkvcs.com",
+        "license": "AGPL-3.0-or-later",
         "applicationCategory": "DeveloperApplication",
         "operatingSystem": "Windows, macOS, Linux",
         "offers": {
@@ -152,7 +153,7 @@
             "name": "Is KK open source?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "KK is source-available under the Modified GNU General Public License, Version 2.0 (Modified GPL 2.0). Non-production use is free. Each version converts to Apache 2.0 four years after its release. Commercial Production Use requires a separate license."
+              "text": "KK is licensed under AGPL-3.0-or-later. Personal, educational, academic, development, testing, and noncommercial indie use are free under the AGPL. Commercial Production Use and proprietary modifications require a separate commercial license."
             }
           },
           {
@@ -223,6 +224,10 @@
     <main id="main-content">
       <section class="hero">
         <h1>KK VCS: Large-File Version Control<br />Built for Game Developers</h1>
+        <p class="tagline">
+          Turn your extra online storage (Google Drive, OneDrive, Mega.nz, etc.)
+          into your large file version control system.
+        </p>
         <p>
           KK (KK Version Control System) keeps your source code in Git and your
           large binary assets - textures, models, audio, video - safely stored,
@@ -445,12 +450,10 @@
       </section>
 
       <section id="pricing">
-        <h2>
-          Free for Personal and Indie Use. Commercial Use Requires a License.
-        </h2>
+        <h2>Free for Personal and Indie Use. Commercial Use Requires a License.</h2>
         <div class="pricing-grid">
           <div class="pricing-card">
-            <h3>Free - Non-Production Use</h3>
+            <h3>Free - AGPL-3.0 License</h3>
             <ul>
               <li>Personal projects</li>
               <li>Learning and education</li>
@@ -458,36 +461,28 @@
               <li>Development and testing</li>
               <li>Noncommercial indie development</li>
               <li>Full source code available</li>
-              <li>Not for commercial production use</li>
+              <li>Must share modifications under AGPL-3.0</li>
+              <li>Network use requires source disclosure</li>
             </ul>
-            <a
-              href="https://github.com/godynheil/kk/releases/tag/release-ver-1.0.0"
-              class="btn btn-primary"
-              rel="noopener noreferrer"
-              >Download Free</a
-            >
+            <a href="https://github.com/godynheil/kk/releases/tag/release-ver-1.0.0" class="btn btn-primary" rel="noopener noreferrer">Download Free</a>
           </div>
           <div class="pricing-card">
-            <h3>Commercial License - Studios & Teams</h3>
+            <h3>Commercial License - AGPL Exception</h3>
             <ul>
               <li>All Free tier features</li>
               <li>Commercial Production Use permitted</li>
               <li>Production pipelines and studio workflows</li>
               <li>Client work and revenue-generating projects</li>
+              <li>Proprietary modifications allowed</li>
+              <li>No AGPL copyleft obligations</li>
               <li>Custom terms available</li>
               <li>Priority contact</li>
             </ul>
-            <a href="mailto:godynheil@quisto.ph" class="btn btn-secondary"
-              >Contact for Licensing -></a
-            >
+            <a href="mailto:godynheil@quisto.ph" class="btn btn-secondary">Contact for Licensing -></a>
           </div>
           <div class="pricing-card">
-            <h3>Future: Apache 2.0</h3>
-            <p>
-              Each version of KK automatically becomes available under the
-              Apache License 2.0 - four years after its first public release. No
-              action required.
-            </p>
+            <h3>Perpetual AGPL License</h3>
+            <p>KK is licensed under AGPL-3.0-or-later in perpetuity. Commercial licenses are available for teams requiring proprietary use.</p>
           </div>
         </div>
       </section>
@@ -540,10 +535,10 @@
           <div class="faq-item">
             <dt>Q: Is KK open source?</dt>
             <dd>
-              KK is source-available under the Modified GNU General Public
-              License, Version 2.0 (Modified GPL 2.0). Non-production use is
-              free. Each version converts to Apache 2.0 four years after its
-              release. Commercial Production Use requires a separate license.
+              KK is licensed under AGPL-3.0-or-later. Personal, educational,
+              academic, development, testing, and noncommercial indie use are
+              free under the AGPL. Commercial Production Use and proprietary
+              modifications require a separate commercial license.
             </dd>
           </div>
           <div class="faq-item">
@@ -708,6 +703,9 @@
           <h4>Contact</h4>
           <ul>
             <li>
+              <a href="https://quisto.ph" rel="noopener noreferrer">quisto.ph</a>
+            </li>
+            <li>
               <a href="mailto:godynheil@quisto.ph">godynheil@quisto.ph</a>
             </li>
             <li>
@@ -719,8 +717,7 @@
       <div class="footer-bottom">
         <p>&copy; 2026 Godynheil A. Quisto. All rights reserved.</p>
         <p>
-          KK Version Control System is distributed under the Modified GNU
-          General Public License, Version 2.0.
+          KK Version Control System is distributed under the GNU Affero General Public License, Version 3.0-or-later (AGPL-3.0).
         </p>
         <p>
           "KK", "KK Version Control System", and "kk" are trademarks of
