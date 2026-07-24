@@ -1319,11 +1319,9 @@ Avoid putting UI-specific behavior into `internal/core`.
 
 ## License note
 
-KK is source-available and licensed under a **Modified GNU General Public License, Version 2.0 (Modified GPL 2.0)**. 
+KK is free software licensed under **AGPL-3.0-or-later**.
 
-Because it restricts commercial use (specifically prohibiting selling the software or charging for distribution/support services without a business license), it is not an OSI-approved open-source license.
-
-If the project should be true open source, replace the license with an OSI-approved license such as MIT, Apache-2.0, BSD-3-Clause, standard GPL-2.0, GPL-3.0, LGPL, etc.
+See [LICENSE.MD](LICENSE.MD) for the complete GNU Affero General Public License text and [DCO.md](DCO.md) for contribution certification requirements.
 
 ## Privacy Policy
 
