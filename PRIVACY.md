@@ -4,7 +4,7 @@
 **Licensor:** Godynheil A. Quisto — godynheil@quisto.ph
 
 ## 1. Overview
-KK ("KK Version Control System") is a source-available command-line tool for large-file version control, distributed under a **Modified GNU General Public License, Version 2.0 (Modified GPL 2.0)**. It operates entirely on your local machine and your chosen storage drivers. There is no centralized "KK Service," and the Licensor does not collect, transmit, or store any personal data, repository data, or usage information.
+KK ("KK Version Control System") is a free software command-line tool for large-file version control, distributed under **AGPL-3.0-or-later**. It operates entirely on your local machine and your chosen storage drivers. There is no centralized "KK Service," and the Licensor does not collect, transmit, or store any personal data, repository data, or usage information.
 
 ---
 
@@ -78,7 +78,7 @@ You are solely responsible for securing credentials (OAuth tokens, passwords, SS
 ---
 
 ## 6. Your Responsibilities
-Consistent with the Modified GPL 2.0 **NO WARRANTY** and **Limitation of Liability** clauses, you acknowledge that:
+Consistent with the AGPL-3.0-or-later **NO WARRANTY** and **Limitation of Liability** clauses, you acknowledge that:
 - You are solely responsible for backing up your data and verifying that the Software performs correctly in your environment.
 - Unauthorized access to your remote environments caused by compromised local tokens or misconfigured access controls is your responsibility.
 - The Licensor has no ability to recover, restore, or access your data.

@@ -13,7 +13,7 @@ By executing the KK binary, cloning the repository, or otherwise making use of t
 ---
 
 ## 2. Description of Software
-KK ("KK Version Control System") is a **source-available** command-line tool for large-file version control, distributed under a **Modified GNU General Public License, Version 2.0 (Modified GPL 2.0)**. It manages a local embedded Git repository, SHA-256-addressed object storage, and synchronization with user-configured remote storage drivers (Google Drive, local/NAS paths, rclone-supported destinations, and in a future version, SSH).
+KK ("KK Version Control System") is a free software command-line tool for large-file version control, distributed under **AGPL-3.0-or-later**. It manages a local embedded Git repository, SHA-256-addressed object storage, and synchronization with user-configured remote storage drivers (Google Drive, local/NAS paths, rclone-supported destinations, and in a future version, SSH).
 
 There is no hosted "KK Service." All operations run on your local machine and communicate directly with the remote drivers you configure. The Licensor provides no cloud infrastructure.
 
@@ -21,23 +21,14 @@ There is no hosted "KK Service." All operations run on your local machine and co
 
 ## 3. License and Permitted Use
 
-### 3.1 Non-Commercial Use
-KK is distributed under the **Modified GPL 2.0**. The following uses are permitted at no charge:
-- Personal use
-- Educational and academic use
-- Research and evaluation use
-- Development, testing, and non-production experimentation
-- Noncommercial indie development, **provided** the Licensed Work is not used by a company, studio, agency, contractor, publisher, client project, paid production team, or other commercial production environment
+### 3.1 AGPL-3.0-or-later License
+KK is distributed under **AGPL-3.0-or-later**. You may use, copy, modify, and distribute the Software under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-### 3.2 Commercial Use — Restricted
-**Commercial use of the Software, specifically selling the software or charging for providing distribution or support services, is prohibited under the Modified GPL 2.0.**
-
-If you wish to charge others, sell the software, or provide paid distribution/support services, you must ask for and obtain a separate business/commercial license from the original developer (Licensor).
-
-Unauthorized commercial use is a violation of these Terms and the Modified GPL 2.0, and may expose you to legal liability.
+### 3.2 Network Use and Source Availability
+If you modify KK and allow users to interact with that modified version remotely through a computer network, you must provide those users access to the Corresponding Source as required by AGPL-3.0-or-later.
 
 ### 3.3 Attribution and License Retention
-Any permitted distribution or modification of the Licensed Work must retain the original copyright notice, the `LICENSE.MD` file, and a clear reference to the source repository.
+Any distribution or modification of the Licensed Work must retain the original copyright notice, the `LICENSE.MD` file, applicable SPDX notices, and a clear reference to the source repository.
 
 ---
 
@@ -71,7 +62,7 @@ You assume **all risk** associated with installing, configuring, modifying, inte
 You agree **not** to use the Software to:
 - Store, transmit, or distribute illegal, infringing, or harmful content.
 - Circumvent any security or access control mechanism of a third-party service.
-- Circumvent, remove, or disable the Commercial Use restriction in violation of the Modified GPL 2.0.
+- Violate, circumvent, remove, or disable license notices or source-availability obligations required by AGPL-3.0-or-later.
 - Use the bundled Google OAuth Client ID for any purpose other than authorizing your own KK installation against Google Drive.
 
 ---
@@ -114,7 +105,7 @@ This limitation includes, but is not limited to, liability for:
 ## 11. Indemnification
 You agree to indemnify, defend, and hold harmless the Licensor and Contributors from and against any and all third-party claims, liabilities, damages, losses, penalties, costs, and expenses (including reasonable attorneys' fees) arising out of or related to:
 - Your use or misuse of the Software.
-- Your violation of these Terms or the Modified GPL 2.0.
+- Your violation of these Terms or AGPL-3.0-or-later.
 - Your violation of any third-party service provider's terms or policies.
 - Any content or data you store, process, or transmit using the Software.
 
@@ -140,9 +131,9 @@ KK's source code may incorporate open-source libraries governed by their own res
 ---
 
 ## 14. Termination
-Any use of the Licensed Work in violation of these Terms or the Modified GPL 2.0 automatically terminates your rights under this License.
+Any use of the Licensed Work in violation of these Terms or AGPL-3.0-or-later automatically terminates your rights under this License.
 
-Upon termination, you must stop using the Licensed Work and destroy any copies in your possession or control, unless you have obtained a separate commercial license from the Licensor.
+Upon termination, you must stop using the Licensed Work and destroy any copies in your possession or control unless your rights are reinstated under AGPL-3.0-or-later.
 
 Sections 4 (Trademarks), 6 (Assumption of Risk), 9 (No Warranties), 10 (Limitation of Liability), 11 (Indemnification), and 14 (Termination) survive termination.
 
@@ -170,7 +161,7 @@ These Terms, together with the `LICENSE.MD` file and `PRIVACY.md`, constitute th
 ---
 
 ## 19. Contact
-For commercial licensing, royalty terms, studio licensing, enterprise licensing, support terms, or any legal notices:
+For legal notices:
 
 **Godynheil A. Quisto**  
 godynheil@quisto.ph
